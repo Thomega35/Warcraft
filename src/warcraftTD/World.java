@@ -32,7 +32,7 @@ public class World {
 	boolean end = false;
 	
 	/**
-	 * Initialisation du monde en fonction de la largeur, la hauteur et le nombre de cases données
+	 * Initialisation du monde en fonction de la largeur, la hauteur et le nombre de cases donn�es
 	 * @param width
 	 * @param height
 	 * @param nbSquareX
@@ -53,10 +53,10 @@ public class World {
 	}
 	
 	/**
-	 * Définit le décors du plateau de jeu.
+	 * D�finit le d�cors du plateau de jeu.
 	 */
 	 public void drawBackground() {	
-		 StdDraw.setPenColor(StdDraw.LIGHT_GREEN);
+		 StdDraw.setPenColor(StdDraw.GREEN);
 		 for (int i = 0; i < nbSquareX; i++)
 			 for (int j = 0; j < nbSquareY; j++)
 				 StdDraw.filledRectangle(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2, squareWidth , squareHeight);
@@ -64,10 +64,13 @@ public class World {
 	 }
 	 
 	 /**
-	  * Initialise le chemin sur la position du point de départ des monstres. Cette fonction permet d'afficher une route qui sera différente du décors.
+	  * Initialise le chemin sur la position 
+	  * du point de départ des monstres. Cette fonction permet d'afficher une route qui sera différente du décors.
 	  */
 	 public void drawPath() {
 		 Position p = new Position(spawn);
+		 StdDraw.setPenColor(StdDraw.ORANGE);
+		 StdDraw.filledRectangle(p.x, p.y, squareWidth / 2, squareHeight / 2);
 		 StdDraw.setPenColor(StdDraw.YELLOW);
 		 StdDraw.filledRectangle(p.x, p.y, squareWidth / 2, squareHeight / 2);
 	 }

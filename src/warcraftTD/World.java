@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+@SuppressWarnings("unused")
 public class World {
 	// l'ensemble des monstres, pour gerer (notamment) l'affichage
 	List<Monster> monsters = new ArrayList<Monster>();

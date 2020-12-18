@@ -8,7 +8,7 @@ public class BaseMonster extends Monster {
 	
 	/**
 	 * Affiche un monstre qui change de couleur au cours du temps
-	 * Le monstre est représenté par un cercle de couleur bleue ou grise
+	 * Le monstre est represente par un cercle de couleur bleue ou grise
 	 */
 	public void draw() {
 		StdDraw.setPenColor(StdDraw.BLUE);

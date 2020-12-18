@@ -32,7 +32,7 @@ public class World {
 	boolean end = false;
 	
 	/**
-	 * Initialisation du monde en fonction de la largeur, la hauteur et le nombre de cases donn�es
+	 * Initialisation du monde en fonction de la largeur, la hauteur et le nombre de cases donn馥s
 	 * @param width
 	 * @param height
 	 * @param nbSquareX
@@ -53,7 +53,7 @@ public class World {
 	}
 	
 	/**
-	 * D�finit le d�cors du plateau de jeu.
+	 * Definit le decor du plateau de jeu.
 	 */
 	 public void drawBackground() {	
 		 StdDraw.setPenColor(StdDraw.GREEN);
@@ -65,7 +65,7 @@ public class World {
 	 
 	 /**
 	  * Initialise le chemin sur la position 
-	  * du point de départ des monstres. Cette fonction permet d'afficher une route qui sera différente du décors.
+	  * du point de depart des monstres. Cette fonction permet d'afficher une route qui sera differente du decor.
 	  */
 	 public void drawPath() {
 		 Position p = new Position(spawn);
@@ -76,14 +76,14 @@ public class World {
 	 }
 	 
 	 /**
-	  * Affiche certaines informations sur l'écran telles que les points de vie du joueur ou son or
+	  * Affiche certaines informations sur l'ecran telles que les points de vie du joueur ou son or
 	  */
 	 public void drawInfos() {
 		 StdDraw.setPenColor(StdDraw.BLACK);
 	 }
 	 
 	 /**
-	  * Fonction qui récupère le positionnement de la souris et permet d'afficher une image de tour en temps réél
+	  * Fonction qui rﾃｩcupﾃｨre le positionnement de la souris et permet d'afficher une image de tour en temps rﾃｩﾃｩl
 	  *	lorsque le joueur appuie sur une des touches permettant la construction d'une tour.
 	  */
 	 public void drawMouse() {
@@ -92,10 +92,10 @@ public class World {
 		String image = null;
 		switch (key) {
 		case 'a' : 
-			 // TODO Ajouter une image pour représenter une tour d'archers
+			 // TODO Ajouter une image pour representer une tour d'archers
 			 break;
 		case 'b' :
-			// TODO Ajouter une image pour représenter une tour à canon
+			// TODO Ajouter une image pour representer une tour a canon
 			 break;
 		}
 		 if (image != null)
@@ -104,7 +104,7 @@ public class World {
 		 
 	 /**
 	  * Pour chaque monstre de la liste de monstres de la vague, utilise la fonction update() qui appelle les fonctions run() et draw() de Monster.
-	  * Modifie la position du monstre au cours du temps à l'aide du paramètre nextP.
+	  * Modifie la position du monstre au cours du temps ﾃ� l'aide du paramﾃｨtre nextP.
 	  */
 	 public void updateMonsters() {
 	 
@@ -120,7 +120,7 @@ public class World {
 	 }
 	 
 	 /**
-	  * Met à jour toutes les informations du plateau de jeu ainsi que les déplacements des monstres et les attaques des tours.
+	  * Met a jour toutes les informations du plateau de jeu ainsi que les deplacements des monstres et les attaques des tours.
 	  * @return les points de vie restants du joueur
 	  */
 	 public int update() {
@@ -133,8 +133,8 @@ public class World {
 	 }
 	 
 	/**
-	 * Récupère la touche appuyée par l'utilisateur et affiche les informations pour la touche séléctionnée
-	 * @param key la touche utilisée par le joueur
+	 * Recupere la touche appuyee par l'utilisateur et affiche les informations pour la touche selectionnﾃｩe
+	 * @param key la touche utilisee par le joueur
 	 */
 	public void keyPress(char key) {
 		key = Character.toLowerCase(key);
@@ -143,7 +143,7 @@ public class World {
 		case 'a':
 			System.out.println("Arrow Tower selected (50g).");
 			break;
-		case 'b':
+		case 'z':
 			System.out.println("Bomb Tower selected (60g).");
 			break;
 		case 'e':
@@ -157,10 +157,10 @@ public class World {
 	}
 	
 	/**
-	 * Vérifie lorsque l'utilisateur clique sur sa souris qu'il peut: 
-	 * 		- Ajouter une tour à la position indiquée par la souris.
-	 * 		- Améliorer une tour existante.
-	 * Puis l'ajouter à la liste des tours
+	 * Vﾃｩrifie lorsque l'utilisateur clique sur sa souris qu'il peut: 
+	 * 		- Ajouter une tour ﾃ� la position indiquﾃｩe par la souris.
+	 * 		- Amﾃｩliorer une tour existante.
+	 * Puis l'ajouter ﾃ� la liste des tours
 	 * @param x
 	 * @param y
 	 */
@@ -170,20 +170,20 @@ public class World {
 		Position p = new Position(normalizedX, normalizedY);
 		switch (key) {
 		case 'a':
-			System.out.println("il faut ajouter une tour d'archers si l'utilisateur à de l'or !!");
+			System.out.println("il faut ajouter une tour d'archers si l'utilisateur ﾃ� de l'or !!");
 			break;
 		case 'b':
 			System.out.println("Ici il faut ajouter une tour de bombes");
 			break;
 		case 'e':
-			System.out.println("Ici il est possible de faire évolué une des tours");
+			System.out.println("Ici il est possible de faire ﾃｩvoluﾃｩ une des tours");
 			break;
 		}
 	}
 	
 	/**
-	 * Comme son nom l'indique, cette fonction permet d'afficher dans le terminal les différentes possibilités 
-	 * offertes au joueur pour intéragir avec le clavier
+	 * Comme son nom l'indique, cette fonction permet d'afficher dans le terminal les diffﾃｩrentes possibilitﾃｩs 
+	 * offertes au joueur pour intﾃｩragir avec le clavier
 	 */
 	public void printCommands() {
 		System.out.println("Press A to select Arrow Tower (cost 50g).");
@@ -194,7 +194,7 @@ public class World {
 	}
 	
 	/**
-	 * Récupère la touche entrée au clavier ainsi que la position de la souris et met à jour le plateau en fonction de ces interractions
+	 * Rﾃｩcupﾃｨre la touche entrﾃｩe au clavier ainsi que la position de la souris et met ﾃ� jour le plateau en fonction de ces interractions
 	 */
 	public void run() {
 		printCommands();

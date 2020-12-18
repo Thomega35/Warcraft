@@ -97,7 +97,7 @@ public class World {
 	 }
 	 
 	 /**
-	  * Fonction qui rﾃｩcupﾃｨre le positionnement de la souris et permet d'afficher une image de tour en temps rﾃｩﾃｩl
+	  * Fonction qui recupere le positionnement de la souris et permet d'afficher une image de tour en temps reel
 	  *	lorsque le joueur appuie sur une des touches permettant la construction d'une tour.
 	  */
 	 public void drawMouse() {
@@ -108,7 +108,7 @@ public class World {
 		case 'a' : 
 			 // TODO Ajouter une image pour representer une tour d'archers
 			 break;
-		case 'b' :
+		case 'z' :
 			// TODO Ajouter une image pour representer une tour a canon
 			 break;
 		}
@@ -118,7 +118,7 @@ public class World {
 		 
 	 /**
 	  * Pour chaque monstre de la liste de monstres de la vague, utilise la fonction update() qui appelle les fonctions run() et draw() de Monster.
-	  * Modifie la position du monstre au cours du temps ﾃ� l'aide du paramﾃｨtre nextP.
+	  * Modifie la position du monstre au cours du temps a l'aide du parametre nextP.
 	  */
 	 public void updateMonsters() {
 	 
@@ -127,8 +127,8 @@ public class World {
 		while (i.hasNext()) {
 			 m = i.next();
 			 m.update();
-			 if(m.p.y < 0) {
-				 m.p.y = 1;
+			 if(m.position.y < 0) {
+				 m.position.y = 1;
 			 }
 		 }
 	 }

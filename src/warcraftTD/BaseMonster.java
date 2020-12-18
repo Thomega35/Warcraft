@@ -2,8 +2,8 @@ package warcraftTD;
 
 public class BaseMonster extends Monster {
 
-	public BaseMonster(Position p) {
-		super(p);
+	public BaseMonster(Position position) {
+		super(position);
 	}
 	
 	/**
@@ -12,6 +12,6 @@ public class BaseMonster extends Monster {
 	 */
 	public void draw() {
 		StdDraw.setPenColor(StdDraw.BLUE);
-		StdDraw.filledCircle(p.x, p.y, 0.01);
+		StdDraw.filledCircle(position.x, position.y, 0.01);
 	}
 }

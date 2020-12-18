@@ -14,7 +14,7 @@ public class Main {
 		
 		// Ajout d'un monstre "a la main" pour afficher comment un monstre se deplace. Vous ne devez pas faire pareil, mais ajouter une vague comportant plusieurs monstres 
 		Monster monster = new BaseMonster(new Position(startX * w.squareWidth + w.squareWidth / 2, startY * w.squareHeight + w.squareHeight / 2));
-		monster.nextP = new Position(startX * w.squareWidth + w.squareWidth / 2, 0);
+		monster.nextPosition = new Position(startX * w.squareWidth + w.squareWidth / 2, 0);
 		monster.speed = 0.01;
 		w.monsters.add(monster);
 		

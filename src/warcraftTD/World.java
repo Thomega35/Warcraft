@@ -36,7 +36,7 @@ public class World {
 		//ex
 	// Ajout d'un monstre "à la main" pour afficher comment un monstre se déplaçe. Vous ne devez pas faire pareil, mais ajouter une vague comportant plusieurs monstres 
 			Monster monster = new BaseMonster(new Position(spawn.x * this.squareWidth + this.squareWidth / 2, spawn.y * this.squareHeight + this.squareHeight / 2));
-			monster.nextP = new Position(spawn.x * this.squareWidth + this.squareWidth / 2, 0);
+			monster.nextPosition = new Position(spawn.x * this.squareWidth + this.squareWidth / 2, 0);
 			monster.speed = 0.01;
 			this.monsters.add(monster);
 	}

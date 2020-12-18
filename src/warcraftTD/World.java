@@ -68,11 +68,11 @@ public class World {
 	  * du point de depart des monstres. Cette fonction permet d'afficher une route qui sera differente du decor.
 	  */
 	 public void drawPath() {
-		 Position p = new Position(spawn);
+		 Position position = new Position(spawn);
 		 StdDraw.setPenColor(StdDraw.ORANGE);
-		 StdDraw.filledRectangle(p.x, p.y, squareWidth / 2, squareHeight / 2);
+		 StdDraw.filledRectangle(position.x, position.y, squareWidth / 2, squareHeight / 2);
 		 StdDraw.setPenColor(StdDraw.YELLOW);
-		 StdDraw.filledRectangle(p.x, p.y, squareWidth / 2, squareHeight / 2);
+		 StdDraw.filledRectangle(position.x, position.y, squareWidth / 2, squareHeight / 2);
 	 }
 	 
 	 /**
@@ -108,13 +108,13 @@ public class World {
 	  */
 	 public void updateMonsters() {
 	 
-		Iterator<Monster> i = monsters.iterator();
-		Monster m;
-		while (i.hasNext()) {
-			 m = i.next();
-			 m.update();
-			 if(m.position.y < 0) {
-				 m.position.y = 1;
+		Iterator<Monster> iterator = monsters.iterator();
+		Monster monster;
+		while (iterator.hasNext()) {
+			 monster = iterator.next();
+			 monster.update();
+			 if(monster.position.y < 0) {
+				 monster.position.y = 1;
 			 }
 		 }
 	 }
@@ -167,23 +167,23 @@ public class World {
 	public void mouseClick(double x, double y) {
 		double normalizedX = (int)(x / squareWidth) * squareWidth + squareWidth / 2;
 		double normalizedY = (int)(y / squareHeight) * squareHeight + squareHeight / 2;
-		Position p = new Position(normalizedX, normalizedY);
+		Position position = new Position(normalizedX, normalizedY);
 		switch (key) {
 		case 'a':
-			System.out.println("il faut ajouter une tour d'archers si l'utilisateur ﾃ� de l'or !!");
+			System.out.println("il faut ajouter une tour d'archers si l'utilisateur a de l'or !!");
 			break;
-		case 'b':
+		case 'z':
 			System.out.println("Ici il faut ajouter une tour de bombes");
 			break;
 		case 'e':
-			System.out.println("Ici il est possible de faire ﾃｩvoluﾃｩ une des tours");
+			System.out.println("Ici il est possible de faire evoluer une des tours");
 			break;
 		}
 	}
 	
 	/**
-	 * Comme son nom l'indique, cette fonction permet d'afficher dans le terminal les diffﾃｩrentes possibilitﾃｩs 
-	 * offertes au joueur pour intﾃｩragir avec le clavier
+	 * Comme son nom l'indique, cette fonction permet d'afficher dans le terminal les differentes possibilites 
+	 * offertes au joueur pour interagir avec le clavier
 	 */
 	public void printCommands() {
 		System.out.println("Press A to select Arrow Tower (cost 50g).");
@@ -194,7 +194,7 @@ public class World {
 	}
 	
 	/**
-	 * Rﾃｩcupﾃｨre la touche entrﾃｩe au clavier ainsi que la position de la souris et met ﾃ� jour le plateau en fonction de ces interractions
+	 * Recupere la touche entree au clavier ainsi que la position de la souris et met a jour le plateau en fonction de ces interactions
 	 */
 	public void run() {
 		printCommands();

@@ -21,6 +21,7 @@ public class World {
 	int nbSquareY;
 	double squareWidth;
 	double squareHeight;
+	int[][] board;
 	
 	// Nombre de points de vie du joueur
 	int life = 20;
@@ -31,6 +32,14 @@ public class World {
 	// Condition pour terminer la partie
 	boolean end = false;
 	
+	public void wave() {
+		//ex
+	// Ajout d'un monstre "à la main" pour afficher comment un monstre se déplaçe. Vous ne devez pas faire pareil, mais ajouter une vague comportant plusieurs monstres 
+			Monster monster = new BaseMonster(new Position(spawn.x * this.squareWidth + this.squareWidth / 2, spawn.y * this.squareHeight + this.squareHeight / 2));
+			monster.nextP = new Position(spawn.x * this.squareWidth + this.squareWidth / 2, 0);
+			monster.speed = 0.01;
+			this.monsters.add(monster);
+	}
 	/**
 	 * Initialisation du monde en fonction de la largeur, la hauteur et le nombre de cases donn�es
 	 * @param width
@@ -40,14 +49,14 @@ public class World {
 	 * @param startSquareX
 	 * @param startSquareY
 	 */
-	public World(int width, int height, int nbSquareX, int nbSquareY, int startSquareX, int startSquareY) {
+	public World(int width, int height, int nbSquareX, int nbSquareY) {
 		this.width = width;
 		this.height = height;
 		this.nbSquareX = nbSquareX;
 		this.nbSquareY = nbSquareY;
 		squareWidth = (double) 1 / nbSquareX;
 		squareHeight = (double) 1 / nbSquareY;
-		spawn = new Position(startSquareX * squareWidth + squareWidth / 2, startSquareY * squareHeight + squareHeight / 2);
+		initPath();
 		StdDraw.setCanvasSize(width, height);
 		StdDraw.enableDoubleBuffering();
 	}
@@ -73,8 +82,13 @@ public class World {
 		 StdDraw.filledRectangle(p.x, p.y, squareWidth / 2, squareHeight / 2);
 		 StdDraw.setPenColor(StdDraw.YELLOW);
 		 StdDraw.filledRectangle(p.x, p.y, squareWidth / 2, squareHeight / 2);
+		 StdDraw.filledRectangle(0.1,0.1, squareWidth / 2, squareHeight / 2);
 	 }
 	 
+	 public void initPath() {
+		 //setup du spawn
+		 spawn = new Position(0.1 * squareWidth + squareWidth / 2, 0.3 * squareHeight + squareHeight / 2);
+	 }
 	 /**
 	  * Affiche certaines informations sur l'écran telles que les points de vie du joueur ou son or
 	  */

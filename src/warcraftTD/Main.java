@@ -10,6 +10,7 @@ public class Main {
 		
 		World w = new World(width, height, nbSquareX, nbSquareY);
 		
+		
 		// Lancement de la boucle principale du jeu
 		w.run();
 	}

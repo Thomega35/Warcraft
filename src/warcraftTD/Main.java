@@ -11,9 +11,8 @@ public class Main {
 
 		World world = new World(width, height, nbSquareX, nbSquareY);
 
-		World w = new World(width, height, nbSquareX, nbSquareY);
 
-		
+		world.initPath();
 		// Lancement de la boucle principale du jeu
 		world.run();
 	}

@@ -72,11 +72,14 @@ public class World {
 	 * Definit le decor du plateau de jeu.
 	 */
 	public void drawBackground() {
-		StdDraw.setPenColor(StdDraw.GREEN);
-		for (int i = 0; i < nbSquareX; i++)
-			for (int j = 0; j < nbSquareY; j++)
-				StdDraw.filledRectangle(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
-						squareWidth, squareHeight);
+		StdDraw.setPenColor(StdDraw.BOOK_BLUE);
+		for (int i = 0; i < nbSquareX; i++) {
+			for (int j = 0; j < nbSquareY; j++) {
+//				StdDraw.filledRectangle(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
+//						squareWidth, squareHeight);
+				StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2, "/Users/Moi/Downloads/grass.png",squareWidth, squareHeight);
+			}
+		}
 		// StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight +
 		// squareHeight / 2, "images/grass.jpg", squareWidth, squareHeight);
 	}
@@ -86,40 +89,32 @@ public class World {
 	 * fonction permet d'afficher une route qui sera differente du decor.
 	 */
 	public void drawPath() {
-		// Position position = new Position(spawn);
-		// dessin
-		// Spawn
-		StdDraw.setPenColor(StdDraw.RED);
-		StdDraw.filledRectangle(spawn.x, spawn.y, squareWidth / 2, squareHeight / 2);
-		// Path
+		// dessin de Board
 		StdDraw.setPenColor(StdDraw.YELLOW);
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board[i].length; j++) {
-				if (board[i][j] == 0) {
-					StdDraw.setPenColor(StdDraw.GREEN);
-				} else if (board[i][j] == 1) {
-					StdDraw.setPenColor(StdDraw.RED);
+				if (board[i][j] == 1) {
+					// Spawn
+//					StdDraw.setPenColor(StdDraw.RED);
+//					// Draw rectangle a bit larger
+//					StdDraw.filledRectangle(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
+//							squareWidth * 1.01 / 2, squareHeight * 1.01 / 2);
+					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,"/Users/Moi/Downloads/creep.png", squareWidth * 1.01 , squareHeight * 1.01 );
 				} else if (board[i][j] == 2) {
-					StdDraw.setPenColor(StdDraw.BLUE);
+					// Arrival
+//					StdDraw.setPenColor(StdDraw.BLUE);
+//					StdDraw.filledRectangle(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
+//							squareWidth * 1.01 / 2, squareHeight * 1.01 / 2);
+					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,"/Users/Moi/Downloads/arrival.png", squareWidth * 1.01 , squareHeight * 1.01 );
 				} else if (board[i][j] == 3) {
-					StdDraw.setPenColor(StdDraw.YELLOW);
+					// Path
+//					StdDraw.setPenColor(StdDraw.YELLOW);
+//					StdDraw.filledRectangle(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
+//							squareWidth * 1.01 / 2, squareHeight * 1.01 / 2);
+					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,"/Users/Moi/Downloads/dirt.jpg", squareWidth * 1.01 , squareHeight * 1.01 );
 				}
-				StdDraw.filledRectangle(j * squareWidth + squareWidth / 2, i * squareHeight + squareHeight / 2, squareWidth / 2, squareHeight / 2);
 			}
 		}
-
-		StdDraw.setPenColor(StdDraw.RED);
-		StdDraw.filledRectangle(8 * 1/11 + squareWidth / 2, 7 * squareHeight + squareHeight / 2, squareWidth / 2, squareHeight / 2);
-		// StdDraw.filledRectangle(0 * squareWidth + squareWidth / 2, 1 * squareHeight +
-		// squareHeight / 2, squareWidth / 2, squareHeight / 2);
-
-		// StdDraw.setPenColor(StdDraw.YELLOW);
-		// StdDraw.filledRectangle(position.x, position.y, squareWidth / 2, squareHeight
-		// / 2);
-
-		// StdDraw.filledRectangle(position.x, position.y, squareWidth / 2, squareHeight
-		// / 2);
-		// StdDraw.filledRectangle(0.1,0.1, squareWidth / 2, squareHeight / 2);
 
 	}
 
@@ -130,6 +125,7 @@ public class World {
 //		3 chemin
 		// initialisation du plateau
 		board = new int[nbSquareX][nbSquareY];
+		// parcour du tableau de tableau
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board[i].length; j++) {
 				board[i][j] = 0;
@@ -139,51 +135,56 @@ public class World {
 		int departX = 0 /* (int) (Math.random() * 10) */;
 		int departY = 0 /* (int) (Math.random() * 10) */;
 		spawn = new Position(departX * squareWidth + squareWidth / 2, departY * squareHeight + squareHeight / 2);
-		board[departX][departY] = 1;
-		board[nbSquareX - 1][nbSquareY - 1] = 2;
 
 		// setup points de passage + chemin
-		int precedentX = (int) spawn.x;
-		int precedentY = (int) spawn.y;
-		for (int i = 0; i < board.length; i = i + 2) {
-			int j = 0;
+		// ancien point de passage
+		int precedentX = departX;
+		int precedentY = departY;
+		for (int coordY = 0; coordY < board[0].length; coordY = coordY + 2) {
+			int aleatX = 0;
 			// génération nb aléatoire
 			do {
-				j = (int) (Math.random() * nbSquareY);
-			} while (j == precedentY);
-			// chemin sur les colonnes
-			for (int k = precedentX; k <= i; k++) {
-				if (k != precedentX) {
-					board[k][precedentY] = 3;
-				}
-			}
-			// chemin sur les lignes
-			System.out.println("i " + i + "board[0].length - 2 " + (board[0].length - 2) );
-			if (nbSquareY % 2 == 0 && i > board[0].length - 2) {
-				for (int k = precedentY; k < board.length - 1; k++) {
-					board[i][k] = 3;
-				}
-			} else {
-				for (int k = precedentY; (precedentY < j ? k <= j : k >= j);) {
-					if (k != precedentY && i < board.length - 1) {
-						board[i][k] = 3;
-					} else if (i >= board.length - 1) {
-						// derniere ligne
-						for (int l = precedentY; l < board.length - 1; l++) {
-							board[board.length - 1][l] = 3;
-						}
-					}
-					k = precedentY < j ? k + 1 : k - 1;
-				}
-			}
-			// angle du chemin
-			if (i != board.length - 1) {
-				board[i][j] = 3;
-			}
-			precedentX = i;
-			precedentY = j;
-		}
+				aleatX = (int) (Math.random() * nbSquareX);
+			} while (aleatX == precedentX);
 
+			// remplissage de board sur le chemin en colonnes
+			// parcour vertical pour completer les colonnes du chemin
+			for (int k = precedentY + 1; k <= coordY; k++) {
+				board[precedentX][k] = 3;
+			}
+			if (nbSquareY % 2 == 0 && coordY >= board[0].length-2) {
+				for (int lastX = precedentX; lastX<board.length; lastX++) {
+					board[lastX][board[0].length-1] = 3;
+				}
+			}
+			// remplissage de board sur le chemin en ligne
+				// parcour horizontal
+			for (int k = precedentX; (precedentX < aleatX ? k <= aleatX : k >= aleatX);) {
+				// cas commun (sauf fin)
+				if (k < board.length && coordY < board[0].length - 2) {
+					board[k][coordY] = 3;
+					// derniere ligne
+				} else if (nbSquareY % 2 == 1 && coordY == board[0].length - 1) {
+					for (int X = precedentX; X < board.length - 1; X++) {
+						board[X][board[0].length - 1] = 3;
+					}
+				} else if (nbSquareY % 2 == 0 && coordY == board[0].length - 2) {
+					// TODO
+				}
+				k = precedentX < aleatX ? k + 1 : k - 1;
+			}
+			// }
+			// angle du chemin
+			if (coordY < board[0].length - 2) {
+				board[aleatX][coordY] = 3;
+			}
+			precedentX = aleatX;
+			precedentY = coordY;
+		}
+		board[departX][departY] = 1;
+		board[nbSquareX - 1][nbSquareY - 1] = 2;
+		System.out.println(
+				"board[" + (nbSquareX - 1) + "][" + (nbSquareY - 1) + "] = " + board[nbSquareX - 1][nbSquareY - 1]);
 	}
 
 	/**
@@ -277,7 +278,7 @@ public class World {
 	/**
 	 * Vﾃｩrifie lorsque l'utilisateur clique sur sa souris qu'il peut: - Ajouter une
 	 * tour ﾃ� la position indiquﾃｩe par la souris. - Amﾃｩliorer une tour existante.
-	 * Puis l'ajouter ﾃ� la liste des tours
+	 * Puis l'ajouter à la liste des tours
 	 * 
 	 * @param x
 	 * @param y

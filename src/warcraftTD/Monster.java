@@ -10,11 +10,17 @@ public abstract class Monster {
 	// Boolean pour savoir si le monstre a atteint le chateau du joueur
 	boolean reached;
 	// Compteur de deplacement pour savoir si le monstre a atteint le chateau du joueur
+	//USELESS DUDE
 	int checkpoint = 0;
+	//Vitesse du mob
+	int vitesse = 3;
 	
-	public Monster(Position p) {
-		this.position = p;
-		this.nextPosition = new Position(p);
+	protected World world;
+	
+	public Monster(World w, Position startp) {
+		this.position = startp;
+		world = w;
+		this.nextPosition = new Position(startp.x + this.world.squareWidth / 2/*+ world.squareWidth*speed*/,startp.y);
 	}
 	
 	/**
@@ -33,12 +39,22 @@ public abstract class Monster {
 		}
 	}
 
+	//calcul la prochaine direction du mob
+	public void calcl() {
+		// TODO ATTENTION BULLSHIT
+		if (world.board[(int) ((nextPosition.x*2 - position.x)/world.squareWidth)][(int) (nextPosition.y/world.squareWidth)] == 3) {
+			nextPosition = new Position(nextPosition.x-position.x,nextPosition.y);
+		}
+		this.nextPosition = new Position(this.position.x + this.world.squareWidth / 2/*+ world.squareWidth*speed*/,this.position.y);
+	}
+	
 	public void update() {
 		move();
+		calcl();
 		draw();
 		checkpoint++;
 	}
-	
+
 	/**
 	 * Fonction abstraite qui sera instanciee dans les classes filles pour afficher le monstre sur le plateau de jeu.
 	 */

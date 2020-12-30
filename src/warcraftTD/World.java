@@ -10,7 +10,8 @@ import java.util.Iterator;
 public class World {
 	// l'ensemble des monstres, pour gerer (notamment) l'affichage
 	List<Monster> monsters = new ArrayList<Monster>();
-
+	int reserve;
+	
 	// Position par laquelle les monstres vont venir
 	Position spawn;
 
@@ -19,6 +20,8 @@ public class World {
 	int height;
 	int nbSquareX;
 	int nbSquareY;
+	int nbWave = 0;
+	Monster lastM = null;
 	double squareWidth;
 	double squareHeight;
 	// [x][y]
@@ -34,21 +37,20 @@ public class World {
 	// Condition pour terminer la partie
 	boolean end = false;
 
-	public void wave() {
+	public void waveadd() {
 		// ex
 		// Ajout d'un monstre "à la main" pour afficher comment un monstre se déplaçe.
 		// Vous ne devez pas faire pareil, mais ajouter une vague comportant plusieurs
 		// monstres
-		Monster monster = new BaseMonster(new Position(spawn.x * this.squareWidth + this.squareWidth / 2,
-				spawn.y * this.squareHeight + this.squareHeight / 2));
-		monster.nextPosition = new Position(spawn.x * this.squareWidth + this.squareWidth / 2, 0);
+		Monster monster = new Zerg(this, new Position(spawn.x,spawn.y));
 		monster.speed = 0.01;
 		this.monsters.add(monster);
+		lastM = monster;
 	}
 
 	/**
 	 * Initialisation du monde en fonction de la largeur, la hauteur et le nombre de
-	 * cases donn馥s
+	 * cases données
 	 * 
 	 * @param width
 	 * @param height
@@ -87,6 +89,7 @@ public class World {
 			}
 		}
 	}
+	
 	/**
 	 * Definit le decor du plateau de jeu.
 	 */
@@ -146,7 +149,6 @@ public class World {
 				}
 			}
 		}
-
 	}
 
 	public void initPath() {
@@ -166,7 +168,7 @@ public class World {
 		int departX = 0 /* (int) (Math.random() * 10) */;
 		int departY = 0 /* (int) (Math.random() * 10) */;
 		spawn = new Position(departX * squareWidth + squareWidth / 2, departY * squareHeight + squareHeight / 2);
-
+		System.out.println("SPAWN =" + spawn);
 		// setup points de passage + chemin
 		// ancien point de passage
 		int precedentX = departX;
@@ -203,8 +205,6 @@ public class World {
 					for (int X = precedentX; X < board.length - 1; X++) {
 						board[X][board[0].length - 1] = 3;
 					}
-				} else if (nbSquareY % 2 == 0 && coordY == board[0].length - 2) {
-					// TODO
 				}
 				k = precedentX < aleatX ? k + 1 : k - 1;
 			}
@@ -272,18 +272,32 @@ public class World {
 	 * position du monstre au cours du temps a l'aide du parametre nextP.
 	 */
 	public void updateMonsters() {
-
 		Iterator<Monster> iterator = monsters.iterator();
 		Monster monster;
 		while (iterator.hasNext()) {
 			monster = iterator.next();
 			monster.update();
-			if (monster.position.y < 0) {
-				monster.position.y = 1;
+			if(monster.position.x > 1 - squareWidth && monster.position.y > 1 - squareHeight) {
+				life--;
+				monster.reached = true;
 			}
 		}
+		monsters.removeIf(x -> (x.reached));
 	}
 
+	private void updateWave() {
+		if (monsters.size() == 0 && reserve == 0) {
+				nbWave++;
+				reserve = nbWave;
+		}
+		//TODO changer le spawn du monstre pour un spawn to les X ticks
+		if ((lastM == null || Math.sqrt(Math.pow(lastM.position.x+spawn.x,2)+Math.pow(lastM.position.y+spawn.y,2)) >= squareWidth*2) && reserve > 0) {
+			reserve--;
+			//monsters.add(new Zerg(this, spawn));
+			waveadd();
+		}
+	}
+	
 	/**
 	 * Met a jour toutes les informations du plateau de jeu ainsi que les
 	 * deplacements des monstres et les attaques des tours.
@@ -295,9 +309,11 @@ public class World {
 		drawPath();
 		drawInfos();
 		updateMonsters();
+		updateWave();
 		drawMouse();
 		return life;
 	}
+
 
 	/**
 	 * Recupere la touche appuyee par l'utilisateur et affiche les informations pour
@@ -380,7 +396,6 @@ public class World {
 				mouseClick(StdDraw.mouseX(), StdDraw.mouseY());
 				StdDraw.pause(50);
 			}
-
 			update();
 			StdDraw.show();
 			StdDraw.pause(20);

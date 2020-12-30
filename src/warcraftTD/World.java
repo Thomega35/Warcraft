@@ -131,14 +131,14 @@ public class World {
 //					StdDraw.filledRectangle(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
 //							squareWidth * 1.01 / 2, squareHeight * 1.01 / 2);
 					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
-							"/Users/Moi/Downloads/creep.png", squareWidth, squareHeight);
+							"/images/warp.png", squareWidth, squareHeight);
 				} else if (board[i][j] == 2) {
 					// Arrival
 //					StdDraw.setPenColor(StdDraw.BLUE);
 //					StdDraw.filledRectangle(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
 //							squareWidth * 1.01 / 2, squareHeight * 1.01 / 2);
 					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
-							"/Users/Moi/Downloads/arrival.png", squareWidth , squareHeight);
+							"/images/house.png", squareWidth , squareHeight);
 				} else if (board[i][j] == 3) {
 					// Path
 //					StdDraw.setPenColor(StdDraw.YELLOW);

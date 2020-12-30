@@ -42,9 +42,9 @@ public abstract class Monster {
 	//calcul la prochaine direction du mob
 	public void calcl() {
 		// TODO ATTENTION BULLSHIT
-		if (world.board[(int) ((nextPosition.x*2 - position.x)/world.squareWidth)][(int) (nextPosition.y/world.squareWidth)] == 3) {
+		/*if (world.board[(int) ((nextPosition.x*2 - position.x)/world.squareWidth)][(int) (nextPosition.y/world.squareWidth)] == 3) {
 			nextPosition = new Position(nextPosition.x-position.x,nextPosition.y);
-		}
+		}*/
 		this.nextPosition = new Position(this.position.x + this.world.squareWidth / 2/*+ world.squareWidth*speed*/,this.position.y);
 	}
 	

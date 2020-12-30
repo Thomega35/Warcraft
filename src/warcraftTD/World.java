@@ -23,6 +23,7 @@ public class World {
 	double squareHeight;
 	// [x][y]
 	int[][] board;
+	int[][] backboard;
 
 	// Nombre de points de vie du joueur
 	int life = 20;
@@ -64,20 +65,47 @@ public class World {
 		squareWidth = (double) 1 / nbSquareX;
 		squareHeight = (double) 1 / nbSquareY;
 		initPath();
+		initBackground();
 		StdDraw.setCanvasSize(width, height);
 		StdDraw.enableDoubleBuffering();
 	}
 
+	public void initBackground() {
+		backboard = new int[nbSquareX][nbSquareY];
+		for (int i = 0; i < nbSquareX; i++) {
+			for (int j = 0; j < nbSquareY; j++) {
+				int aleat = (int) (Math.random()*5);
+				if (aleat <= 1) {
+					backboard[i][j] = 0;
+				}else if (aleat == 2) {
+					backboard[i][j] = 1;
+				}else if(aleat == 3){
+					backboard[i][j] = 2;
+				}else if(aleat == 4){
+					backboard[i][j] = 3;
+				}
+			}
+		}
+	}
 	/**
 	 * Definit le decor du plateau de jeu.
 	 */
 	public void drawBackground() {
-		StdDraw.setPenColor(StdDraw.BOOK_BLUE);
 		for (int i = 0; i < nbSquareX; i++) {
 			for (int j = 0; j < nbSquareY; j++) {
-//				StdDraw.filledRectangle(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
-//						squareWidth, squareHeight);
-				StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2, "/Users/Moi/Downloads/grass.png",squareWidth, squareHeight);
+				if (backboard[i][j] == 0) {
+					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
+							"/images/Garden1.png", squareWidth, squareHeight);
+				}else if (backboard[i][j] == 1) {
+					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
+							"/images/Garden2.png", squareWidth, squareHeight);
+				}else if (backboard[i][j] == 2) {
+					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
+							"/images/Garden3.png", squareWidth, squareHeight);
+				}else if (backboard[i][j] == 3) {
+					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
+							"/images/Garden4.png", squareWidth, squareHeight);
+				}
 			}
 		}
 		// StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight +
@@ -99,19 +127,22 @@ public class World {
 //					// Draw rectangle a bit larger
 //					StdDraw.filledRectangle(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
 //							squareWidth * 1.01 / 2, squareHeight * 1.01 / 2);
-					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,"/Users/Moi/Downloads/creep.png", squareWidth * 1.01 , squareHeight * 1.01 );
+					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
+							"/Users/Moi/Downloads/creep.png", squareWidth, squareHeight);
 				} else if (board[i][j] == 2) {
 					// Arrival
 //					StdDraw.setPenColor(StdDraw.BLUE);
 //					StdDraw.filledRectangle(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
 //							squareWidth * 1.01 / 2, squareHeight * 1.01 / 2);
-					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,"/Users/Moi/Downloads/arrival.png", squareWidth * 1.01 , squareHeight * 1.01 );
+					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
+							"/Users/Moi/Downloads/arrival.png", squareWidth , squareHeight);
 				} else if (board[i][j] == 3) {
 					// Path
 //					StdDraw.setPenColor(StdDraw.YELLOW);
 //					StdDraw.filledRectangle(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
 //							squareWidth * 1.01 / 2, squareHeight * 1.01 / 2);
-					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,"/Users/Moi/Downloads/dirt.jpg", squareWidth * 1.01 , squareHeight * 1.01 );
+					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
+							"/images/Tile.png", squareWidth, squareHeight);
 				}
 			}
 		}
@@ -144,7 +175,11 @@ public class World {
 			int aleatX = 0;
 			// génération nb aléatoire
 			do {
-				aleatX = (int) (Math.random() * nbSquareX);
+				if (coordY == 0) {
+					aleatX = nbSquareX-1;
+				}else {
+					aleatX = (int) (Math.random() * nbSquareX);
+				}
 			} while (aleatX == precedentX);
 
 			// remplissage de board sur le chemin en colonnes
@@ -152,13 +187,13 @@ public class World {
 			for (int k = precedentY + 1; k <= coordY; k++) {
 				board[precedentX][k] = 3;
 			}
-			if (nbSquareY % 2 == 0 && coordY >= board[0].length-2) {
-				for (int lastX = precedentX; lastX<board.length; lastX++) {
-					board[lastX][board[0].length-1] = 3;
+			if (nbSquareY % 2 == 0 && coordY >= board[0].length - 2) {
+				for (int lastX = precedentX; lastX < board.length; lastX++) {
+					board[lastX][board[0].length - 1] = 3;
 				}
 			}
 			// remplissage de board sur le chemin en ligne
-				// parcour horizontal
+			// parcour horizontal
 			for (int k = precedentX; (precedentX < aleatX ? k <= aleatX : k >= aleatX);) {
 				// cas commun (sauf fin)
 				if (k < board.length && coordY < board[0].length - 2) {
@@ -183,8 +218,23 @@ public class World {
 		}
 		board[departX][departY] = 1;
 		board[nbSquareX - 1][nbSquareY - 1] = 2;
-		System.out.println(
-				"board[" + (nbSquareX - 1) + "][" + (nbSquareY - 1) + "] = " + board[nbSquareX - 1][nbSquareY - 1]);
+		for (int Y = 0; Y < board[0].length - 2; Y++) {
+			for (int X = 0; X < board.length - 2; X++) {
+				// fait un U si pas de chemin au dessus:
+				// X-0-0-0-X    X-0-0-0-X
+				// 0-0-0-0-0 => 0-3-3-3-X
+				// X-3-3-3-X    X-3-0-3-X
+				if (board[X][Y] == 3 && board[X + 1][Y] == 3 && board[X + 2][Y] == 3 && board[X][Y + 1] == 0
+						&& board[X + 1][Y + 1] == 0 && board[X + 2][Y + 1] == 0 && board[X][Y + 2] == 0
+						&& board[X + 1][Y + 2] == 0 && board[X + 2][Y + 2] == 0 && (X <= 0 || board[X - 1][Y + 1] == 0)
+						&& (X >= board.length - 3 || board[X + 3][Y + 1] == 0)) {
+					board[X + 1][Y] = 0;
+					board[X][Y + 1] = 3;
+					board[X + 1][Y + 1] = 3;
+					board[X + 2][Y + 1] = 3;
+				}
+			}
+		}
 	}
 
 	/**

@@ -37,13 +37,14 @@ public class World {
 	// Condition pour terminer la partie
 	boolean end = false;
 
+	//TODO changer l'ordre des fonctions pour plus de clarté
 	public void waveadd() {
 		// ex
 		// Ajout d'un monstre "à la main" pour afficher comment un monstre se déplaçe.
 		// Vous ne devez pas faire pareil, mais ajouter une vague comportant plusieurs
 		// monstres
 		Monster monster = new Zerg(this, new Position(spawn.x,spawn.y));
-		monster.speed = 0.01;
+		monster.setSpeed(0.5);
 		this.monsters.add(monster);
 		lastM = monster;
 	}

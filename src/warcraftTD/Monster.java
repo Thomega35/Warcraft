@@ -40,12 +40,19 @@ public abstract class Monster {
 		// Mesure sur quel axe le monstre se dirige.
 		double dx = nextPosition.x - position.x;
 		double dy = nextPosition.y - position.y;
+		double signedSW = dx>0?world.squareWidth:(dx<0?-world.squareWidth:0);
+		double signedSH = dy>0?world.squareHeight:(dy<0?-world.squareHeight:0);
 		double leftx = 0;
 		double lefty = 0;
-		int nplus1x = (int) ((nextPosition.x + dx)/world.squareWidth>=0?(nextPosition.x + dx*2)/world.squareWidth:-1);
-		int nplus1y = (int) ((nextPosition.y + dy)/world.squareHeight>=0?(nextPosition.y + dy)/world.squareHeight:-1);
-		System.out.println("[nplus1x = " + nplus1x + "][nplus1y = " + nplus1y + "]");
-		if (nplus1x >=0 && nplus1x < world.board.length && nplus1y >= 0 && nplus1y < world.board[0].length && (world.board[nplus1x][nplus1y]==3)) {
+		int nplus1x = world.myCasex(nextPosition.x + signedSW);
+		int nplus1y = world.myCasey(nextPosition.y + signedSH);
+		System.out.println("nplus1x = " +nplus1x +" || nplus1y =" + nplus1y);
+		StdDraw.filledCircle(nplus1x*world.squareWidth +world.squareWidth/2, nplus1y*world.squareHeight + world.squareHeight/2, 0.01);
+//		int nplus1x = (int) ((nextPosition.x + dx)/world.squareWidth>=0?(nextPosition.x + dx*2)/world.squareWidth:-1);
+//		int nplus1y = (int) ((nextPosition.y + dy)/world.squareHeight>=0?(nextPosition.y + dy)/world.squareHeight:-1);
+		//System.out.println("[nplus1x = " + nplus1x + "][nplus1y = " + nplus1y + "]");
+		//if (nplus1x >=0 && nplus1x < world.board.length && nplus1y >= 0 && nplus1y < world.board[0].length && (world.board[nplus1x][nplus1y]==3)) {
+		if (nplus1x >= 0 && nplus1y >= 0 && nplus1x < world.board.length && nplus1y < world.board[0].length && world.board[nplus1x][nplus1y] == 3) {
 			position.x = nextPosition.x;
 			position.y = nextPosition.y;
 			nextPosition.x += dx;

@@ -315,7 +315,21 @@ public class World {
 		return life;
 	}
 
-
+	public int myCasex(double p) {
+		return (int) (p * nbSquareX);
+	}
+	
+	public int myCasey(double p) {
+		return (int) (p * nbSquareY);
+	}
+	
+	public double posCasex (int n) {
+		return (double) (n*squareWidth) + squareWidth/2;
+	}
+	
+	public double posCasey (int n) {
+		return (double) (n*squareHeight) + squareHeight/2;
+	}
 	/**
 	 * Recupere la touche appuyee par l'utilisateur et affiche les informations pour
 	 * la touche selectionnﾃｩe
@@ -325,6 +339,7 @@ public class World {
 	public void keyPress(char key) {
 		key = Character.toLowerCase(key);
 		this.key = key;
+		StdDraw.pause(2000);
 		switch (key) {
 		case 'a':
 			System.out.println("Arrow Tower selected (50g).");

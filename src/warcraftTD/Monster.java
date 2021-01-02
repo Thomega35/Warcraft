@@ -86,7 +86,7 @@ public abstract class Monster {
 		
 	}
 
-	//calcul la prochaine direction du mob
+	//calcule la prochaine direction du monstre
 	public void calcl() {
 		// TODO ATTENTION BULLSHIT
 		/*if (world.board[(int) ((nextPosition.x*2 - position.x)/world.squareWidth)][(int) (nextPosition.y/world.squareWidth)] == 3) {

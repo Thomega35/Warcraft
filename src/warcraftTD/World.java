@@ -20,7 +20,7 @@ public class World {
 	int height;
 	int nbSquareX;
 	int nbSquareY;
-	int nbWave = 0;
+	int Wave = 0;
 	Monster lastM = null;
 	double squareWidth;
 	double squareHeight;
@@ -40,7 +40,7 @@ public class World {
 	//TODO changer l'ordre des fonctions pour plus de clarté
 	public void waveadd() {
 		// ex
-		// Ajout d'un monstre "à la main" pour afficher comment un monstre se déplaçe.
+		// Ajout d'un monstre "a la main" pour afficher comment un monstre se deplaçe.
 		// Vous ne devez pas faire pareil, mais ajouter une vague comportant plusieurs
 		// monstres
 		Monster monster = new Zerg(this, new Position(spawn.x,spawn.y));
@@ -51,7 +51,7 @@ public class World {
 
 	/**
 	 * Initialisation du monde en fonction de la largeur, la hauteur et le nombre de
-	 * cases données
+	 * cases donnees
 	 * 
 	 * @param width
 	 * @param height
@@ -159,7 +159,7 @@ public class World {
 //		3 chemin
 		// initialisation du plateau
 		board = new int[nbSquareX][nbSquareY];
-		// parcour du tableau de tableau
+		// parcours du tableau de tableau
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board[i].length; j++) {
 				board[i][j] = 0;
@@ -186,7 +186,7 @@ public class World {
 			} while (aleatX == precedentX);
 
 			// remplissage de board sur le chemin en colonnes
-			// parcour vertical pour completer les colonnes du chemin
+			// parcours vertical pour completer les colonnes du chemin
 			for (int k = precedentY + 1; k <= coordY; k++) {
 				board[precedentX][k] = 3;
 			}
@@ -196,7 +196,7 @@ public class World {
 				}
 			}
 			// remplissage de board sur le chemin en ligne
-			// parcour horizontal
+			// parcours horizontal
 			for (int k = precedentX; (precedentX < aleatX ? k <= aleatX : k >= aleatX);) {
 				// cas commun (sauf fin)
 				if (k < board.length && coordY < board[0].length - 2) {
@@ -288,8 +288,8 @@ public class World {
 
 	private void updateWave() {
 		if (monsters.size() == 0 && reserve == 0) {
-				nbWave++;
-				reserve = nbWave;
+				Wave++;
+				reserve = Wave;
 		}
 		//TODO changer le spawn du monstre pour un spawn to les X ticks
 		if ((lastM == null || Math.sqrt(Math.pow(lastM.position.x+spawn.x,2)+Math.pow(lastM.position.y+spawn.y,2)) >= squareWidth*2) && reserve > 0) {
@@ -332,7 +332,7 @@ public class World {
 	}
 	/**
 	 * Recupere la touche appuyee par l'utilisateur et affiche les informations pour
-	 * la touche selectionnﾃｩe
+	 * la touche selectionnee
 	 * 
 	 * @param key la touche utilisee par le joueur
 	 */
@@ -344,7 +344,7 @@ public class World {
 		case 'a':
 			System.out.println("Arrow Tower selected (50g).");
 			break;
-		case 'z':
+		case 'b':
 			System.out.println("Bomb Tower selected (60g).");
 			break;
 		case 'e':
@@ -358,9 +358,9 @@ public class World {
 	}
 
 	/**
-	 * Vﾃｩrifie lorsque l'utilisateur clique sur sa souris qu'il peut: - Ajouter une
-	 * tour ﾃ� la position indiquﾃｩe par la souris. - Amﾃｩliorer une tour existante.
-	 * Puis l'ajouter à la liste des tours
+	 * Verifie lorsque l'utilisateur clique sur sa souris qu'il peut: - Ajouter une
+	 * tour a la position indiquee par la souris. - Ameliorer une tour existante.
+	 * Puis l'ajouter a la liste des tours
 	 * 
 	 * @param x
 	 * @param y
@@ -373,7 +373,7 @@ public class World {
 		case 'a':
 			System.out.println("il faut ajouter une tour d'archers si l'utilisateur a de l'or !!");
 			break;
-		case 'z':
+		case 'b':
 			System.out.println("Ici il faut ajouter une tour de bombes");
 			break;
 		case 'e':

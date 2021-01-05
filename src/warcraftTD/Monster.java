@@ -5,6 +5,8 @@ public abstract class Monster {
 	Position position;
 	// Vitesse du monstre
 	private double speed;
+	//Points de vie du monstre
+	int healthPoints;
 	
 	public double getSpeed() {
 		return speed;

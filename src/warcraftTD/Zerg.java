@@ -4,6 +4,7 @@ public class Zerg extends Monster {
 
 	public Zerg(World w, Position p) {
 		super(w, p);
+		healthPoints = 20;
 		// TODO Auto-generated constructor stub
 	}
 

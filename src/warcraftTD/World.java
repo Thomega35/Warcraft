@@ -30,6 +30,11 @@ public class World {
 
 	// Nombre de points de vie du joueur
 	int life = 20;
+	int gold = 1000000000;
+	
+	//Informations sur les tours
+	int prixArcher = 50;
+	int prixBombe = 60;
 
 	// Commande sur laquelle le joueur appuie (sur le clavier)
 	char key;
@@ -44,7 +49,7 @@ public class World {
 		// Vous ne devez pas faire pareil, mais ajouter une vague comportant plusieurs
 		// monstres
 		Monster monster = new Zerg(this, new Position(spawn.x,spawn.y));
-		monster.setSpeed(0.5);
+		monster.setSpeed(0.1);
 		this.monsters.add(monster);
 		lastM = monster;
 	}
@@ -147,6 +152,8 @@ public class World {
 //							squareWidth * 1.01 / 2, squareHeight * 1.01 / 2);
 					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
 							"/images/Tile.png", squareWidth, squareHeight);
+				} else if (board[i][j] == 4) {
+					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2, "/images/house.png", squareWidth , squareHeight);
 				}
 			}
 		}
@@ -258,8 +265,9 @@ public class World {
 		switch (key) {
 		case 'a':
 			// TODO Ajouter une image pour representer une tour d'archers
-			break;
-		case 'z':
+			StdDraw.picture(normalizedX, normalizedY, "/images/house.png", squareWidth , squareHeight);
+			//break;
+		case 'b':
 			// TODO Ajouter une image pour representer une tour a canon
 			break;
 		}
@@ -371,7 +379,10 @@ public class World {
 		Position position = new Position(normalizedX, normalizedY);
 		switch (key) {
 		case 'a':
-			System.out.println("il faut ajouter une tour d'archers si l'utilisateur a de l'or !!");
+			if (board[myCasex(normalizedX)][myCasey(normalizedY)] == 0 && (gold > prixArcher)) {
+				gold -= prixArcher;
+				board[myCasex(normalizedX)][myCasey(normalizedY)] = 4;
+			}
 			break;
 		case 'b':
 			System.out.println("Ici il faut ajouter une tour de bombes");

@@ -6,7 +6,7 @@ public abstract class Monster {
 	// Vitesse du monstre
 	private double speed;
 	//Points de vie du monstre
-	int healthPoints;
+	int hp;
 	
 	public double getSpeed() {
 		return speed;
@@ -89,7 +89,7 @@ public abstract class Monster {
 	}
 
 	//calcule la prochaine direction du monstre
-	public void calcl() {
+	public void calcul() {
 		// TODO ATTENTION BULLSHIT
 		/*if (world.board[(int) ((nextPosition.x*2 - position.x)/world.squareWidth)][(int) (nextPosition.y/world.squareWidth)] == 3) {
 			nextPosition = new Position(nextPosition.x-position.x,nextPosition.y);

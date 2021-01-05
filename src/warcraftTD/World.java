@@ -30,7 +30,7 @@ public class World {
 
 	// Nombre de points de vie du joueur
 	int life = 20;
-	int gold = 1000000000;
+	int gold = 10000;
 	
 	//Informations sur les tours
 	int prixArcher = 50;
@@ -103,17 +103,13 @@ public class World {
 		for (int i = 0; i < nbSquareX; i++) {
 			for (int j = 0; j < nbSquareY; j++) {
 				if (backboard[i][j] == 0) {
-					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
-							"/images/Garden1.png", squareWidth, squareHeight);
+					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2, "/images/Garden1.png", squareWidth, squareHeight);
 				}else if (backboard[i][j] == 1) {
-					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
-							"/images/Garden2.png", squareWidth, squareHeight);
+					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2, "/images/Garden2.png", squareWidth, squareHeight);
 				}else if (backboard[i][j] == 2) {
-					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
-							"/images/Garden3.png", squareWidth, squareHeight);
+					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2, "/images/Garden3.png", squareWidth, squareHeight);
 				}else if (backboard[i][j] == 3) {
-					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
-							"/images/Garden4.png", squareWidth, squareHeight);
+					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2, "/images/Garden4.png", squareWidth, squareHeight);
 				}
 			}
 		}
@@ -136,22 +132,19 @@ public class World {
 //					// Draw rectangle a bit larger
 //					StdDraw.filledRectangle(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
 //							squareWidth * 1.01 / 2, squareHeight * 1.01 / 2);
-					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
-							"/images/warp.png", squareWidth, squareHeight);
+					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2, "/images/warp.png", squareWidth, squareHeight);
 				} else if (board[i][j] == 2) {
 					// Arrival
 //					StdDraw.setPenColor(StdDraw.BLUE);
 //					StdDraw.filledRectangle(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
 //							squareWidth * 1.01 / 2, squareHeight * 1.01 / 2);
-					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
-							"/images/house.png", squareWidth , squareHeight);
+					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2, "/images/house.png", squareWidth , squareHeight);
 				} else if (board[i][j] == 3) {
 					// Path
 //					StdDraw.setPenColor(StdDraw.YELLOW);
 //					StdDraw.filledRectangle(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
 //							squareWidth * 1.01 / 2, squareHeight * 1.01 / 2);
-					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
-							"/images/Tile.png", squareWidth, squareHeight);
+					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2, "/images/Tile.png", squareWidth, squareHeight);
 				} else if (board[i][j] == 4) {
 					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2, "/images/house.png", squareWidth , squareHeight);
 				}
@@ -251,6 +244,8 @@ public class World {
 	 */
 	public void drawInfos() {
 		StdDraw.setPenColor(StdDraw.BLACK);
+		StdDraw.text(0.06, 0.98, "gold :" + gold);
+		StdDraw.text(0.04, 0.96, "life :" + life);
 	}
 
 	/**
@@ -426,6 +421,8 @@ public class World {
 			update();
 			StdDraw.show();
 			StdDraw.pause(20);
+			
+			if(life <= 0) end = true;
 		}
 	}
 }

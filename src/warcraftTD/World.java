@@ -2,7 +2,7 @@ package warcraftTD;
 
 import java.util.List;
 import java.util.LinkedList;
-
+import java.time.chrono.ChronoZonedDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -11,7 +11,10 @@ public class World {
 	// l'ensemble des monstres, pour gerer (notamment) l'affichage
 	List<Monster> monsters = new ArrayList<Monster>();
 	int reserve;
-	
+
+	// l'ensemnle des points par lequels devront passer les monstres.
+	List<Position> checkpoints = new ArrayList<Position>();
+
 	// Position par laquelle les monstres vont venir
 	Position spawn;
 
@@ -31,8 +34,8 @@ public class World {
 	// Nombre de points de vie du joueur
 	int life = 20;
 	int gold = 10000;
-	
-	//Informations sur les tours
+
+	// Informations sur les tours
 	int prixArcher = 50;
 	int prixBombe = 60;
 
@@ -42,13 +45,13 @@ public class World {
 	// Condition pour terminer la partie
 	boolean end = false;
 
-	//TODO changer l'ordre des fonctions pour plus de clarté
+	// TODO changer l'ordre des fonctions pour plus de clarté
 	public void waveadd() {
 		// ex
 		// Ajout d'un monstre "a la main" pour afficher comment un monstre se deplaçe.
 		// Vous ne devez pas faire pareil, mais ajouter une vague comportant plusieurs
 		// monstres
-		Monster monster = new Zerg(this, new Position(spawn.x,spawn.y));
+		Monster monster = new Zerg(this, new Position(spawn.x, spawn.y));
 		monster.setSpeed(0.1);
 		this.monsters.add(monster);
 		lastM = monster;
@@ -74,6 +77,7 @@ public class World {
 		squareHeight = (double) 1 / nbSquareY;
 		initPath();
 		initBackground();
+		initCheckpoints();
 		StdDraw.setCanvasSize(width, height);
 		StdDraw.enableDoubleBuffering();
 	}
@@ -82,20 +86,20 @@ public class World {
 		backboard = new int[nbSquareX][nbSquareY];
 		for (int i = 0; i < nbSquareX; i++) {
 			for (int j = 0; j < nbSquareY; j++) {
-				int aleat = (int) (Math.random()*5);
+				int aleat = (int) (Math.random() * 5);
 				if (aleat <= 1) {
 					backboard[i][j] = 0;
-				}else if (aleat == 2) {
+				} else if (aleat == 2) {
 					backboard[i][j] = 1;
-				}else if(aleat == 3){
+				} else if (aleat == 3) {
 					backboard[i][j] = 2;
-				}else if(aleat == 4){
+				} else if (aleat == 4) {
 					backboard[i][j] = 3;
 				}
 			}
 		}
 	}
-	
+
 	/**
 	 * Definit le decor du plateau de jeu.
 	 */
@@ -103,13 +107,17 @@ public class World {
 		for (int i = 0; i < nbSquareX; i++) {
 			for (int j = 0; j < nbSquareY; j++) {
 				if (backboard[i][j] == 0) {
-					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2, "/images/Garden1.png", squareWidth, squareHeight);
-				}else if (backboard[i][j] == 1) {
-					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2, "/images/Garden2.png", squareWidth, squareHeight);
-				}else if (backboard[i][j] == 2) {
-					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2, "/images/Garden3.png", squareWidth, squareHeight);
-				}else if (backboard[i][j] == 3) {
-					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2, "/images/Garden4.png", squareWidth, squareHeight);
+					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
+							"/images/Garden1.png", squareWidth, squareHeight);
+				} else if (backboard[i][j] == 1) {
+					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
+							"/images/Garden2.png", squareWidth, squareHeight);
+				} else if (backboard[i][j] == 2) {
+					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
+							"/images/Garden3.png", squareWidth, squareHeight);
+				} else if (backboard[i][j] == 3) {
+					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
+							"/images/Garden4.png", squareWidth, squareHeight);
 				}
 			}
 		}
@@ -132,23 +140,30 @@ public class World {
 //					// Draw rectangle a bit larger
 //					StdDraw.filledRectangle(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
 //							squareWidth * 1.01 / 2, squareHeight * 1.01 / 2);
-					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2, "/images/warp.png", squareWidth, squareHeight);
+					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
+							"/images/warp.png", squareWidth, squareHeight);
 				} else if (board[i][j] == 2) {
 					// Arrival
 //					StdDraw.setPenColor(StdDraw.BLUE);
 //					StdDraw.filledRectangle(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
 //							squareWidth * 1.01 / 2, squareHeight * 1.01 / 2);
-					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2, "/images/house.png", squareWidth , squareHeight);
+					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
+							"/images/house.png", squareWidth, squareHeight);
 				} else if (board[i][j] == 3) {
 					// Path
 //					StdDraw.setPenColor(StdDraw.YELLOW);
 //					StdDraw.filledRectangle(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
 //							squareWidth * 1.01 / 2, squareHeight * 1.01 / 2);
-					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2, "/images/Tile.png", squareWidth, squareHeight);
+					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
+							"/images/Tile.png", squareWidth, squareHeight);
 				} else if (board[i][j] == 4) {
-					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2, "/images/house.png", squareWidth , squareHeight);
+					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
+							"/images/house.png", squareWidth, squareHeight);
 				}
 			}
+		}
+		for (Position p : checkpoints) {
+			StdDraw.filledCircle(p.x, p.y, 0.01);
 		}
 	}
 
@@ -179,8 +194,8 @@ public class World {
 			// génération nb aléatoire
 			do {
 				if (coordY == 0) {
-					aleatX = nbSquareX-1;
-				}else {
+					aleatX = nbSquareX - 1;
+				} else {
 					aleatX = (int) (Math.random() * nbSquareX);
 				}
 			} while (aleatX == precedentX);
@@ -222,9 +237,9 @@ public class World {
 		for (int Y = 0; Y < board[0].length - 2; Y++) {
 			for (int X = 0; X < board.length - 2; X++) {
 				// fait un U si pas de chemin au dessus:
-				// X-0-0-0-X    X-0-0-0-X
+				// X-0-0-0-X X-0-0-0-X
 				// 0-0-0-0-0 => 0-3-3-3-X
-				// X-3-3-3-X    X-3-0-3-X
+				// X-3-3-3-X X-3-0-3-X
 				if (board[X][Y] == 3 && board[X + 1][Y] == 3 && board[X + 2][Y] == 3 && board[X][Y + 1] == 0
 						&& board[X + 1][Y + 1] == 0 && board[X + 2][Y + 1] == 0 && board[X][Y + 2] == 0
 						&& board[X + 1][Y + 2] == 0 && board[X + 2][Y + 2] == 0 && (X <= 0 || board[X - 1][Y + 1] == 0)
@@ -236,6 +251,89 @@ public class World {
 				}
 			}
 		}
+	}
+
+	public void initCheckpoints() {
+		int i = 0; // X
+		int j = 0; // Y
+		int Lastdirection = 0; // 0 : -> // 1 : Down // 2 : <- // 3 : UP
+		while (i < board.length - 2|| j < board[i].length - 2) {
+			switch (Lastdirection) {
+			case 0: // ->
+				// non continue?
+				if (i + 1 == board.length || board[i + 1][j] != 3) {
+					checkpoints.add(new Position((double) (i) / nbSquareX + squareWidth/2, (double) (j) / nbSquareY + squareHeight/2));
+					// non Up?
+					if (j + 1 == board[i].length || board[i][j + 1] != 3) {
+						j--;
+						Lastdirection = 1;
+					} else {
+						// UP
+						j++;
+						Lastdirection = 3;
+					}
+				} else {
+					// continue
+					i++;
+				}
+				break;
+			case 1:// Down
+					// non continue?
+				if (j == 0 || board[i][j - 1] != 3) {
+					checkpoints.add(new Position((double) (i) / nbSquareX + squareWidth/2, (double) (j) / nbSquareY + squareHeight/2));
+					// non ->?
+					if (i + 1 == board.length || board[i + 1][j] != 3) {
+						i--;
+						Lastdirection = 2;
+					} else {
+						// ->
+						i++;
+						Lastdirection = 0;
+					}
+				} else {
+					// continue
+					j--;
+				}
+				break;
+			case 2:// <-
+					// non continue?
+				if (i == 0 || board[i - 1][j] != 3) {
+					checkpoints.add(new Position((double) (i) / nbSquareX + squareWidth/2, (double) (j) / nbSquareY + squareHeight/2));
+					// non Up?
+					if (j + 1 == board[i].length || board[i][j + 1] != 3) {
+						j--;
+						Lastdirection = 1;
+					} else {
+						// UP
+						j++;
+						Lastdirection = 3;
+					}
+				} else {
+					// continue
+					i--;
+				}
+				break;
+			case 3:// UP
+					// non continue?
+				if (j + 1 == board[i].length || board[i][j + 1] != 3) {
+					checkpoints.add(new Position((double) (i) / nbSquareX + squareWidth/2, (double) (j) / nbSquareY + squareHeight/2));
+					// non ->?
+					if (i + 1 == board.length || board[i + 1][j] != 3) {
+						i--;
+						Lastdirection = 2;
+					} else {
+						// ->
+						i++;
+						Lastdirection = 0;
+					}
+				} else {
+					// continue
+					j++;
+				}
+				break;
+			}
+		}
+		checkpoints.add(new Position((double) (board.length-0.5) * squareWidth, (double) (board[0].length-0.5) * squareHeight));
 	}
 
 	/**
@@ -260,8 +358,8 @@ public class World {
 		switch (key) {
 		case 'a':
 			// TODO Ajouter une image pour representer une tour d'archers
-			StdDraw.picture(normalizedX, normalizedY, "/images/house.png", squareWidth , squareHeight);
-			//break;
+			StdDraw.picture(normalizedX, normalizedY, "/images/house.png", squareWidth, squareHeight);
+			// break;
 		case 'b':
 			// TODO Ajouter une image pour representer une tour a canon
 			break;
@@ -281,7 +379,7 @@ public class World {
 		while (iterator.hasNext()) {
 			monster = iterator.next();
 			monster.update();
-			if(monster.position.x > 1 - squareWidth && monster.position.y > 1 - squareHeight) {
+			if (monster.position.x > 1 - squareWidth && monster.position.y > 1 - squareHeight) {
 				life--;
 				monster.reached = true;
 			}
@@ -291,17 +389,19 @@ public class World {
 
 	private void updateWave() {
 		if (monsters.size() == 0 && reserve == 0) {
-				Wave++;
-				reserve = Wave;
+			Wave++;
+			reserve = Wave;
 		}
-		//TODO changer le spawn du monstre pour un spawn to les X ticks
-		if ((lastM == null || Math.sqrt(Math.pow(lastM.position.x+spawn.x,2)+Math.pow(lastM.position.y+spawn.y,2)) >= squareWidth*2) && reserve > 0) {
+		// TODO changer le spawn du monstre pour un spawn to les X ticks
+		if ((lastM == null || Math.sqrt(
+				Math.pow(lastM.position.x + spawn.x, 2) + Math.pow(lastM.position.y + spawn.y, 2)) >= squareWidth * 2)
+				&& reserve > 0) {
 			reserve--;
-			//monsters.add(new Zerg(this, spawn));
+			// monsters.add(new Zerg(this, spawn));
 			waveadd();
 		}
 	}
-	
+
 	/**
 	 * Met a jour toutes les informations du plateau de jeu ainsi que les
 	 * deplacements des monstres et les attaques des tours.
@@ -321,18 +421,19 @@ public class World {
 	public int myCasex(double p) {
 		return (int) (p * nbSquareX);
 	}
-	
+
 	public int myCasey(double p) {
 		return (int) (p * nbSquareY);
 	}
-	
-	public double posCasex (int n) {
-		return (double) (n*squareWidth) + squareWidth/2;
+
+	public double posCasex(int n) {
+		return (double) (n * squareWidth) + squareWidth / 2;
 	}
-	
-	public double posCasey (int n) {
-		return (double) (n*squareHeight) + squareHeight/2;
+
+	public double posCasey(int n) {
+		return (double) (n * squareHeight) + squareHeight / 2;
 	}
+
 	/**
 	 * Recupere la touche appuyee par l'utilisateur et affiche les informations pour
 	 * la touche selectionnee
@@ -421,8 +522,9 @@ public class World {
 			update();
 			StdDraw.show();
 			StdDraw.pause(20);
-			
-			if(life <= 0) end = true;
+
+			if (life <= 0)
+				end = true;
 		}
 	}
 }

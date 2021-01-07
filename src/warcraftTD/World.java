@@ -381,12 +381,12 @@ public class World {
 		while (iterator.hasNext()) {
 			monster = iterator.next();
 			monster.update();
-			if (monster.position.x > 1 - squareWidth && monster.position.y > 1 - squareHeight) {
+			if (monster.reached) {
 				life--;
-				monster.reached = true;
 			}
 		}
 		monsters.removeIf(x -> (x.reached));
+		monsters.removeIf(x -> (x.hp == 0));
 	}
 
 	private void updateWave() {

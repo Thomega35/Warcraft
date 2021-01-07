@@ -10,9 +10,6 @@ public class Zerg extends Monster {
 
 	@Override
 	public void draw() {
-		if(this.hp == 0) {
-			this.world.gold += 20;
-		}
 		StdDraw.picture(position.x, position.y, "/images/Zerg.png", world.squareWidth, world.squareHeight);
 	}
 

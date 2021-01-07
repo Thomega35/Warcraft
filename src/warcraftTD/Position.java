@@ -26,6 +26,7 @@ public class Position {
 	public Position add(Position p) {
 		return new Position(x+p.x,y+p.y);
 	}
+	
 	/**
 	 * Mesure la distance euclidienne entre 2 positions.
 	 * @param p

@@ -6,7 +6,7 @@ public abstract class Monster {
 	// Vitesse du monstre
 	private double speed;
 	//Points de vie du monstre
-	int hp;
+	int hp = 20;
 	
 	public double getSpeed() {
 		return speed;
@@ -38,8 +38,41 @@ public abstract class Monster {
 	 * Deplace le monstre en fonction de sa vitesse sur l'axe des x et des y et de sa prochaine position.
 	 */
 	public void move() {
-		
-		
+		//TXT
+//		prend le checkpoint qui lui correspond dans la liste avec la variable checkpoint
+//		prend la position suivante
+//		calcule le vecteur entre "position" et "obj"
+//		NORMER LE VECTEUR?
+//		Si le vecteur mouvement est superieur alors, TP sur checkpoint et ++
+//		si plus de checkpoints arrivé
+		if (checkpoint < world.checkpoints.size()) {
+			Position obj = world.checkpoints.get(checkpoint);
+			//position = nextPosition;
+			Position dist = obj.add(new Position(-position.x,-position.y));
+			if (obj.equals(position)) {
+				System.out.print("[pb]");
+				obj = world.checkpoints.get(checkpoint++);
+			}
+			StdDraw.setPenColor(StdDraw.RED);
+			StdDraw.filledCircle(obj.x, obj.y, 0.01);
+			StdDraw.show();
+			
+			double norme = /*vec/*/new Position(obj.x*world.squareWidth,obj.y*world.squareHeight).dist(new Position(position.x*world.nbSquareX,position.y*world.nbSquareY)); 
+			//TODO
+			//Position vecNorme = new Position(vec.x/ norme, vec.y/ norme);
+			System.out.print(norme);
+			System.out.println(vecNorme);
+			//System.out.println(world.squareWidth + " " + world.squareHeight);
+			if (vecNorme.x >= norme || vecNorme.y >= norme){
+				nextPosition = obj;
+				checkpoint++;
+			}else {
+				nextPosition = position.add(vec);
+			}
+		}else {
+			//TODO Arrive
+			reached = true;
+		}
 		/*// Mesure sur quel axe le monstre se dirige.
 		double dx = nextPosition.x - position.x;
 		double dy = nextPosition.y - position.y;
@@ -101,7 +134,9 @@ public abstract class Monster {
 	public void update() {
 		move();
 		draw();
-		checkpoint++;
+		if(this.hp == 0) {
+			this.world.gold += 20;
+		}
 	}
 
 	/**

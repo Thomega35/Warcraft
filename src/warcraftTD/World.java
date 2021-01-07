@@ -2,6 +2,7 @@ package warcraftTD;
 
 import java.util.List;
 import java.util.LinkedList;
+import java.awt.geom.Arc2D.Float;
 import java.time.chrono.ChronoZonedDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -11,7 +12,8 @@ public class World {
 	// l'ensemble des monstres, pour gerer (notamment) l'affichage
 	List<Monster> monsters = new ArrayList<Monster>();
 	int reserve;
-
+//	List<Float> l = new ArrayList<Float>();
+//	float f;
 	// l'ensemnle des points par lequels devront passer les monstres.
 	List<Position> checkpoints = new ArrayList<Position>();
 
@@ -81,7 +83,6 @@ public class World {
 		StdDraw.setCanvasSize(width, height);
 		StdDraw.enableDoubleBuffering();
 	}
-
 	public void initBackground() {
 		backboard = new int[nbSquareX][nbSquareY];
 		for (int i = 0; i < nbSquareX; i++) {
@@ -165,6 +166,7 @@ public class World {
 		for (Position p : checkpoints) {
 			StdDraw.filledCircle(p.x, p.y, 0.01);
 		}
+		checkpoints.size();
 	}
 
 	public void initPath() {

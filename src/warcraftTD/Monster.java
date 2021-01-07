@@ -42,32 +42,36 @@ public abstract class Monster {
 //		prend le checkpoint qui lui correspond dans la liste avec la variable checkpoint
 //		prend la position suivante
 //		calcule le vecteur entre "position" et "obj"
-//		NORMER LE VECTEUR?
+//	PB	NORMER LE VECTEUR? TODO
 //		Si le vecteur mouvement est superieur alors, TP sur checkpoint et ++
 //		si plus de checkpoints arrivé
 		if (checkpoint < world.checkpoints.size()) {
 			Position obj = world.checkpoints.get(checkpoint);
-			//position = nextPosition;
+			position = nextPosition;
 			Position dist = obj.add(new Position(-position.x,-position.y));
-			if (obj.equals(position)) {
-				System.out.print("[pb]");
-				obj = world.checkpoints.get(checkpoint++);
-			}
-			StdDraw.setPenColor(StdDraw.RED);
-			StdDraw.filledCircle(obj.x, obj.y, 0.01);
-			StdDraw.show();
+			nextPosition = position.add(dist);
+//			if (obj.equals(position)) {
+//				System.out.print("[pb]");
+//				obj = world.checkpoints.get(checkpoint++);
+//			}
 			
-			double norme = /*vec/*/new Position(obj.x*world.squareWidth,obj.y*world.squareHeight).dist(new Position(position.x*world.nbSquareX,position.y*world.nbSquareY)); 
+//			StdDraw.setPenColor(StdDraw.RED);
+//			StdDraw.filledCircle(obj.x, obj.y, 0.01);
+//			StdDraw.show();
+			
+//	PB		double norme = /*vec/*/new Position(obj.x*world.squareWidth,obj.y*world.squareHeight).dist(new Position(position.x*world.nbSquareX,position.y*world.nbSquareY)); 
 			//TODO
 			//Position vecNorme = new Position(vec.x/ norme, vec.y/ norme);
-			System.out.print(norme);
-			System.out.println(vecNorme);
+//			System.out.print(norme);
+//			System.out.println(vecNorme);
 			//System.out.println(world.squareWidth + " " + world.squareHeight);
-			if (vecNorme.x >= norme || vecNorme.y >= norme){
+
+//Si vec trop grand
+			if (/*vecNorme.x >= norme || vecNorme.y >= norme*/true){
 				nextPosition = obj;
 				checkpoint++;
 			}else {
-				nextPosition = position.add(vec);
+				nextPosition = position.add(dist);
 			}
 		}else {
 			//TODO Arrive

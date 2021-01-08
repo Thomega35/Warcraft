@@ -67,7 +67,7 @@ public abstract class Monster {
 			//System.out.println(world.squareWidth + " " + world.squareHeight);
 
 //Si vec trop grand
-			if (/*vecNorme.x >= norme || vecNorme.y >= norme*/true){
+			if (position.equals(obj)){
 				nextPosition = obj;
 				checkpoint++;
 			}else {

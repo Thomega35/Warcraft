@@ -50,7 +50,11 @@ public abstract class Monster {
 		if (checkpoint < world.checkpoints.size()) {
 			Position obj = world.checkpoints.get(checkpoint);
 			position = nextPosition;
-			Position dist = obj.add(new Position(-position.x,-position.y));			
+			Position dist = obj.add(new Position(-position.x,-position.y));	
+			double norme = new Position(0,0).dist(dist);
+			System.out.println(norme);
+			System.out.println(dist.x/norme);
+			dist = new Position(dist.x/(norme*(double) world.nbSquareX*2.0),dist.y/(norme*(double) world.nbSquareY*2.0));
 //			if (obj.equals(position)) {
 //				System.out.print("[pb]");
 //				obj = world.checkpoints.get(checkpoint++);
@@ -68,14 +72,13 @@ public abstract class Monster {
 			//System.out.println(world.squareWidth + " " + world.squareHeight);
 
 //Si vec trop grand
-			if (Math.abs(dist.x)<world.squareWidth/3 && Math.abs(dist.y)<world.squareHeight/3){
+			if (position.dist(obj)<=world.squareWidth/2 && position.dist(obj)<=world.squareHeight/2){
 				nextPosition = obj;
 				checkpoint++;
 				
 			}else {
 				//nextPosition = position.add(dist);
-				nextPosition = position.add(new Position(dist.x/4,dist.y/4));
-				System.out.println("passé");
+				nextPosition = position.add(dist);
 			}
 		}else {
 			//TODO Arrive

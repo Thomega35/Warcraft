@@ -384,6 +384,7 @@ public class World {
 			if (monster.reached) {
 				life--;
 			}
+			if (monster.hp <= 0) gold += monster.goldValue;
 		}
 		monsters.removeIf(x -> (x.reached));
 		monsters.removeIf(x -> (x.hp == 0));
@@ -459,7 +460,7 @@ public class World {
 		case 's':
 			System.out.println("Starting game!");
 		case 'q':
-			System.out.println("Exiting.");
+			end = true;
 		}
 	}
 

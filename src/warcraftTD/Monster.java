@@ -7,6 +7,8 @@ public abstract class Monster {
 	private double speed;
 	//Points de vie du monstre
 	int hp = 20;
+	//Valeur en gold du monstre une fois tué
+	int goldValue;
 	
 	public double getSpeed() {
 		return speed;

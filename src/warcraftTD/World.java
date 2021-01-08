@@ -2,6 +2,7 @@ package warcraftTD;
 
 import java.util.List;
 import java.util.LinkedList;
+import java.awt.geom.Arc2D.Float;
 import java.time.chrono.ChronoZonedDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -11,7 +12,8 @@ public class World {
 	// l'ensemble des monstres, pour gerer (notamment) l'affichage
 	List<Monster> monsters = new ArrayList<Monster>();
 	int reserve;
-
+//	List<Float> l = new ArrayList<Float>();
+//	float f;
 	// l'ensemnle des points par lequels devront passer les monstres.
 	List<Position> checkpoints = new ArrayList<Position>();
 
@@ -81,7 +83,6 @@ public class World {
 		StdDraw.setCanvasSize(width, height);
 		StdDraw.enableDoubleBuffering();
 	}
-
 	public void initBackground() {
 		backboard = new int[nbSquareX][nbSquareY];
 		for (int i = 0; i < nbSquareX; i++) {
@@ -158,17 +159,14 @@ public class World {
 							"/images/Tile.png", squareWidth, squareHeight);
 				} else if (board[i][j] == 4) {
 					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
-							"/images/toureiffel.jpg", squareWidth, squareHeight);
-					
-				} else if (board[i][j] == 5) {
-					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
-							"/images/tourtokyo.jpg", squareWidth, squareHeight);
+							"/images/house.png", squareWidth, squareHeight);
 				}
 			}
 		}
 		for (Position p : checkpoints) {
 			StdDraw.filledCircle(p.x, p.y, 0.01);
 		}
+		checkpoints.size();
 	}
 
 	public void initPath() {
@@ -362,11 +360,10 @@ public class World {
 		switch (key) {
 		case 'a':
 			// TODO Ajouter une image pour representer une tour d'archers
-			StdDraw.picture(normalizedX, normalizedY, "/images/toureiffel.jpg", squareWidth, squareHeight);
-			break;
+			StdDraw.picture(normalizedX, normalizedY, "/images/house.png", squareWidth, squareHeight);
+			// break;
 		case 'b':
 			// TODO Ajouter une image pour representer une tour a canon
-			StdDraw.picture(normalizedX, normalizedY, "/images/tourtokyo.jpg", squareWidth, squareHeight);
 			break;
 		}
 		if (image != null)
@@ -384,13 +381,12 @@ public class World {
 		while (iterator.hasNext()) {
 			monster = iterator.next();
 			monster.update();
-			if (monster.position.x > 1 - squareWidth && monster.position.y > 1 - squareHeight) {
+			if (monster.reached) {
 				life--;
-				monster.reached = true;
 			}
-			if(monster.hp == 0) gold += monster.goldValue;
 		}
-		monsters.removeIf(x -> (x.reached) || (x.hp ==0));
+		monsters.removeIf(x -> (x.reached));
+		monsters.removeIf(x -> (x.hp == 0));
 	}
 
 	private void updateWave() {
@@ -487,10 +483,7 @@ public class World {
 			}
 			break;
 		case 'b':
-			if (board[myCasex(normalizedX)][myCasey(normalizedY)] == 0 && (gold > prixBombe)) {
-				gold -= prixBombe;
-				board[myCasex(normalizedX)][myCasey(normalizedY)] = 5;
-			}
+			System.out.println("Ici il faut ajouter une tour de bombes");
 			break;
 		case 'e':
 			System.out.println("Ici il est possible de faire evoluer une des tours");

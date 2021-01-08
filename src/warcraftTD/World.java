@@ -12,9 +12,9 @@ public class World {
 	// l'ensemble des monstres, pour gerer (notamment) l'affichage
 	List<Monster> monsters = new ArrayList<Monster>();
 	int reserve;
-//	List<Float> l = new ArrayList<Float>();
-//	float f;
-	// l'ensemnle des points par lequels devront passer les monstres.
+	//	List<Float> l = new ArrayList<Float>();
+	//	float f;
+	// l'ensemble des points par lequels devront passer les monstres.
 	List<Position> checkpoints = new ArrayList<Position>();
 
 	// Position par laquelle les monstres vont venir
@@ -43,7 +43,12 @@ public class World {
 
 	// Commande sur laquelle le joueur appuie (sur le clavier)
 	char key;
-
+	
+	//Affichage des FPS
+	long startTime;
+	int FPS;
+	int calculFPS;
+	
 	// Condition pour terminer la partie
 	boolean end = false;
 
@@ -346,6 +351,17 @@ public class World {
 		StdDraw.setPenColor(StdDraw.BLACK);
 		StdDraw.text(0.06, 0.98, "gold :" + gold);
 		StdDraw.text(0.04, 0.96, "life :" + life);
+		
+	}
+	
+	public void calculFPS() {
+		calculFPS++;
+		if(System.currentTimeMillis()-startTime >= 1000 ) {
+			FPS = calculFPS;
+			startTime = System.currentTimeMillis();
+			calculFPS = 0;
+		}
+		StdDraw.text(0.04, 0.94, "FPS :" + FPS);
 	}
 
 	/**
@@ -415,6 +431,7 @@ public class World {
 		drawBackground();
 		drawPath();
 		drawInfos();
+		calculFPS();
 		updateMonsters();
 		updateWave();
 		drawMouse();
@@ -459,6 +476,7 @@ public class World {
 			break;
 		case 's':
 			System.out.println("Starting game!");
+			break;
 		case 'q':
 			end = true;
 		}
@@ -503,6 +521,7 @@ public class World {
 		System.out.println("Press E to update a tower (cost 40g).");
 		System.out.println("Click on the grass to build it.");
 		System.out.println("Press S to start.");
+		System.out.println("Press Q to quit.");
 	}
 
 	/**
@@ -511,6 +530,7 @@ public class World {
 	 */
 	public void run() {
 		printCommands();
+		startTime = System.currentTimeMillis();
 		while (!end) {
 
 			StdDraw.clear();

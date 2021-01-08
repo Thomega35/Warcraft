@@ -7,6 +7,8 @@ public abstract class Monster {
 	private double speed;
 	//Points de vie du monstre
 	int hp;
+	//Valeur en gold du monstre une fois tue
+	int goldValue;
 	
 	public double getSpeed() {
 		return speed;
@@ -48,7 +50,7 @@ public abstract class Monster {
 		double lefty = 0;
 		int nplus1x = world.myCasex(nextPosition.x + signedSW);
 		int nplus1y = world.myCasey(nextPosition.y + signedSH);
-		System.out.println("nplus1x = " +nplus1x +" || nplus1y =" + nplus1y);
+		//System.out.println("nplus1x = " +nplus1x +" || nplus1y =" + nplus1y);
 		StdDraw.filledCircle(nplus1x*world.squareWidth +world.squareWidth/2, nplus1y*world.squareHeight + world.squareHeight/2, 0.01);
 //		int nplus1x = (int) ((nextPosition.x + dx)/world.squareWidth>=0?(nextPosition.x + dx*2)/world.squareWidth:-1);
 //		int nplus1y = (int) ((nextPosition.y + dy)/world.squareHeight>=0?(nextPosition.y + dy)/world.squareHeight:-1);
@@ -66,7 +68,7 @@ public abstract class Monster {
 			if (dy != 0) {
 				leftx = -dy;
 			}
-			if (world.board[(int) ((nextPosition.x + leftx*2)/world.squareWidth)][(int) ((nextPosition.y + lefty*2)/world.squareHeight)]==3) {
+			if (world.board[(int) ((nextPosition.x + leftx*2)/world.squareWidth)][(int) ((nextPosition.y + lefty*2)/world.squareHeight)]==3 || world.board[(int) ((nextPosition.x + leftx*2)/world.squareWidth)][(int) ((nextPosition.y + lefty*2)/world.squareHeight)]==2) {
 				position.x = nextPosition.x;
 				position.y = nextPosition.y;
 				nextPosition.x += leftx;

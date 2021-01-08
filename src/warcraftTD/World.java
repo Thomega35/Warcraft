@@ -158,7 +158,11 @@ public class World {
 							"/images/Tile.png", squareWidth, squareHeight);
 				} else if (board[i][j] == 4) {
 					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
-							"/images/house.png", squareWidth, squareHeight);
+							"/images/toureiffel.jpg", squareWidth, squareHeight);
+					
+				} else if (board[i][j] == 5) {
+					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
+							"/images/tourtokyo.jpg", squareWidth, squareHeight);
 				}
 			}
 		}
@@ -358,10 +362,11 @@ public class World {
 		switch (key) {
 		case 'a':
 			// TODO Ajouter une image pour representer une tour d'archers
-			StdDraw.picture(normalizedX, normalizedY, "/images/house.png", squareWidth, squareHeight);
-			// break;
+			StdDraw.picture(normalizedX, normalizedY, "/images/toureiffel.jpg", squareWidth, squareHeight);
+			break;
 		case 'b':
 			// TODO Ajouter une image pour representer une tour a canon
+			StdDraw.picture(normalizedX, normalizedY, "/images/tourtokyo.jpg", squareWidth, squareHeight);
 			break;
 		}
 		if (image != null)
@@ -383,8 +388,9 @@ public class World {
 				life--;
 				monster.reached = true;
 			}
+			if(monster.hp == 0) gold += monster.goldValue;
 		}
-		monsters.removeIf(x -> (x.reached));
+		monsters.removeIf(x -> (x.reached) || (x.hp ==0));
 	}
 
 	private void updateWave() {
@@ -481,7 +487,10 @@ public class World {
 			}
 			break;
 		case 'b':
-			System.out.println("Ici il faut ajouter une tour de bombes");
+			if (board[myCasex(normalizedX)][myCasey(normalizedY)] == 0 && (gold > prixBombe)) {
+				gold -= prixBombe;
+				board[myCasex(normalizedX)][myCasey(normalizedY)] = 5;
+			}
 			break;
 		case 'e':
 			System.out.println("Ici il est possible de faire evoluer une des tours");

@@ -4,7 +4,7 @@ public class Zerg extends Monster {
 
 	public Zerg(World w, Position p) {
 		super(w, p);
-		hp = 20;
+		hp = 200;
 		goldValue = 10;
 	}
 

@@ -9,5 +9,14 @@ public class BombTower extends Tower {
 		projectileSpeed = 2;
 		upgraded = false;
 	}
+	
+	public void upgrade() {
+		this.damage = 80;
+		this.range = 4;
+	}
+	
+	public void tir() {
+		
+	}
 
 }

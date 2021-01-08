@@ -32,6 +32,7 @@ public class World {
 	// [x][y]
 	int[][] board;
 	int[][] backboard;
+	Tower[][] towers;
 
 	// Nombre de points de vie du joueur
 	int life = 20;
@@ -40,6 +41,7 @@ public class World {
 	// Informations sur les tours
 	int prixArcher = 50;
 	int prixBombe = 60;
+	int prixUpgrade = 40;
 
 	// Commande sur laquelle le joueur appuie (sur le clavier)
 	char key;
@@ -258,6 +260,7 @@ public class World {
 				}
 			}
 		}
+		towers = new Tower[nbSquareX][nbSquareY];
 	}
 
 	public void initCheckpoints() {
@@ -435,6 +438,7 @@ public class World {
 		updateMonsters();
 		updateWave();
 		drawMouse();
+		tir();
 		return life;
 	}
 
@@ -466,13 +470,13 @@ public class World {
 		StdDraw.pause(2000);
 		switch (key) {
 		case 'a':
-			System.out.println("Arrow Tower selected (50g).");
+			System.out.println("Arrow Tower selected (" + prixArcher + ".)");
 			break;
 		case 'b':
-			System.out.println("Bomb Tower selected (60g).");
+			System.out.println("Bomb Tower selected (" + prixBombe + ".)");
 			break;
 		case 'e':
-			System.out.println("Evolution selected (40g).");
+			System.out.println("Evolution selected (" + prixUpgrade + ".)");
 			break;
 		case 's':
 			System.out.println("Starting game!");
@@ -499,13 +503,20 @@ public class World {
 			if (board[myCasex(normalizedX)][myCasey(normalizedY)] == 0 && (gold > prixArcher)) {
 				gold -= prixArcher;
 				board[myCasex(normalizedX)][myCasey(normalizedY)] = 4;
+				towers[myCasex(normalizedX)][myCasey(normalizedY)] = new ArcherTower();
 			}
 			break;
 		case 'b':
-			System.out.println("Ici il faut ajouter une tour de bombes");
+			if (board[myCasex(normalizedX)][myCasey(normalizedY)] == 0 && (gold > prixBombe)) {
+				gold -= prixBombe;
+				board[myCasex(normalizedX)][myCasey(normalizedY)] = 4;
+				towers[myCasex(normalizedX)][myCasey(normalizedY)] = new BombTower();
+			}
 			break;
 		case 'e':
-			System.out.println("Ici il est possible de faire evoluer une des tours");
+			if (towers[myCasex(normalizedX)][myCasey(normalizedY)] != null && (gold > prixUpgrade) && towers[myCasex(normalizedX)][myCasey(normalizedY)].upgraded == false) {
+				towers[myCasex(normalizedX)][myCasey(normalizedY)].upgraded = true;
+			}
 			break;
 		}
 	}
@@ -524,6 +535,27 @@ public class World {
 		System.out.println("Press Q to quit.");
 	}
 
+	public void tir() {
+		Iterator<Monster> iterator = monsters.iterator();
+		Monster monster;
+		Position position;
+		while (iterator.hasNext()) {
+			monster = iterator.next();
+			for (int i = 0; i < board.length; i++) {
+				for (int j = 0; j < board[i].length; j++) {
+					if (towers[i][j] != null) {
+						position = new Position(posCasex(i), posCasey(j));
+						System.out.println(position);
+						if(monster.position.dist(position) <= towers[i][j].range) {
+							monster.hp -= towers[i][j].damage;
+							System.out.println(monster.hp);
+						}
+					}
+				}
+			}
+		}
+	}
+	
 	/**
 	 * Recupere la touche entree au clavier ainsi que la position de la souris et
 	 * met a jour le plateau en fonction de ces interactions

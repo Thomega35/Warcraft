@@ -7,5 +7,10 @@ public abstract class Tower {
 	int attackSpeed;
 	int projectileSpeed;
 	boolean upgraded;
-
+	
+	public abstract void upgrade();
+	
+	public void tir() {
+		
+	}
 }

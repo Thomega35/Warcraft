@@ -79,6 +79,8 @@ public abstract class Monster {
 			}else {
 				//nextPosition = position.add(dist);
 				nextPosition = position.add(dist);
+				nextPosition = position.add(new Position(dist.x/4,dist.y/4));
+				//System.out.println("passe");
 			}
 		}else {
 			//TODO Arrive

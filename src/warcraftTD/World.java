@@ -150,6 +150,7 @@ public class World {
 //							squareWidth * 1.01 / 2, squareHeight * 1.01 / 2);
 					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
 							"/images/warp.png", squareWidth, squareHeight);
+					
 				} else if (board[i][j] == 2) {
 					// Arrival
 //					StdDraw.setPenColor(StdDraw.BLUE);
@@ -157,6 +158,7 @@ public class World {
 //							squareWidth * 1.01 / 2, squareHeight * 1.01 / 2);
 					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
 							"/images/house.png", squareWidth, squareHeight);
+					
 				} else if (board[i][j] == 3) {
 					// Path
 //					StdDraw.setPenColor(StdDraw.YELLOW);
@@ -164,9 +166,22 @@ public class World {
 //							squareWidth * 1.01 / 2, squareHeight * 1.01 / 2);
 					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
 							"/images/Tile.png", squareWidth, squareHeight);
+					
 				} else if (board[i][j] == 4) {
 					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
-							"/images/house.png", squareWidth, squareHeight);
+							"/images/Archer1.jpg", squareWidth, squareHeight);
+					
+				} else if (board[i][j] == 40) {
+					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
+							"/images/Archer2.jpg", squareWidth, squareHeight);
+					
+				} else if (board[i][j] == 5) {
+					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
+							"/images/Bombe1.jpg", squareWidth, squareHeight);
+					
+				} else if (board[i][j] == 50) {
+					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
+							"/images/Bombe2.jpg", squareWidth, squareHeight);
 				}
 			}
 		}
@@ -379,10 +394,11 @@ public class World {
 		switch (key) {
 		case 'a':
 			// TODO Ajouter une image pour representer une tour d'archers
-			StdDraw.picture(normalizedX, normalizedY, "/images/house.png", squareWidth, squareHeight);
+			StdDraw.picture(normalizedX, normalizedY, "/images/Archer1.jpg", squareWidth, squareHeight);
 			// break;
 		case 'b':
 			// TODO Ajouter une image pour representer une tour a canon
+			StdDraw.picture(normalizedX, normalizedY, "/images/Bombe1.jpg", squareWidth, squareHeight);
 			break;
 		}
 		if (image != null)
@@ -516,6 +532,7 @@ public class World {
 		case 'e':
 			if (towers[myCasex(normalizedX)][myCasey(normalizedY)] != null && (gold > prixUpgrade) && towers[myCasex(normalizedX)][myCasey(normalizedY)].upgraded == false) {
 				towers[myCasex(normalizedX)][myCasey(normalizedY)].upgraded = true;
+				board[myCasex(normalizedX)][myCasey(normalizedY)] = board[myCasex(normalizedX)][myCasey(normalizedY)]*10;
 			}
 			break;
 		}
@@ -544,13 +561,18 @@ public class World {
 			for (int i = 0; i < board.length; i++) {
 				for (int j = 0; j < board[i].length; j++) {
 					if (towers[i][j] != null) {
+						towers[i][j].attackDelay ++;
 						position = new Position(posCasex(i), posCasey(j));
 						System.out.println(position);
-						if(monster.position.dist(position) <= towers[i][j].range) {
-							monster.hp -= towers[i][j].damage;
+						if(towers[i][j].tir == false || towers[i][j].attackSpeed == towers[i][j].attackDelay ||monster.position.dist(position) <= towers[i][j].range * squareHeight) {
+							towers[i][j].tir(monster);
 							System.out.println(monster.hp);
+							towers[i][j].tir = true;
+							towers[i][j].attackDelay = 0;
 						}
+						towers[i][j].tir = false;
 					}
+					
 				}
 			}
 		}
@@ -576,7 +598,7 @@ public class World {
 			}
 			update();
 			StdDraw.show();
-			StdDraw.pause(20);
+			StdDraw.pause(200);
 
 			if (life <= 0)
 				end = true;

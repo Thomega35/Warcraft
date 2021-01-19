@@ -3,11 +3,13 @@ package warcraftTD;
 public class BombTower extends Tower {
 
 	public BombTower() {
-		range = 3;
+		range = 2;
 		damage = 50;
 		attackSpeed = 1;
+		attackDelay = attackSpeed-1;
 		projectileSpeed = 2;
 		upgraded = false;
+		tir = false;
 	}
 	
 	public void upgrade() {
@@ -15,8 +17,8 @@ public class BombTower extends Tower {
 		this.range = 4;
 	}
 	
-	public void tir() {
-		
+	public void tir(Monster monster) {
+		monster.hp -= this.damage;
 	}
 
 }

@@ -5,42 +5,45 @@ public abstract class Monster {
 	Position position;
 	// Vitesse du monstre
 	private double speed;
-	//Points de vie du monstre
+	// Points de vie du monstre
 	int hp = 20;
-	//Valeur en gold du monstre une fois tué
+	// Valeur en gold du monstre une fois tué
 	int goldValue;
-	
+
 	public double getSpeed() {
 		return speed;
 	}
 
 	public void setSpeed(double speed) {
 		this.speed = speed;
-		this.nextPosition = new Position(position.x + this.world.squareWidth * this.speed/*+ world.squareWidth*speed*/,position.y);
-		System.out.println(this.world.squareWidth * this.speed);
+//		this.nextPosition = new Position(
+//				position.x + this.world.squareWidth * this.speed/* + world.squareWidth*speed */, position.y);
 	}
 
 	// Position du monstre a l'instant t+1
 	Position nextPosition;
 	// Boolean pour savoir si le monstre a atteint le chateau du joueur
 	boolean reached;
-	
-	// Compteur de deplacement pour savoir si le monstre a atteint le chateau du joueur
+
+	// Compteur de deplacement pour savoir si le monstre a atteint le chateau du
+	// joueur
 	int checkpoint = 0;
-	
+
 	protected World world;
-	
+
 	public Monster(World w, Position startp) {
 		this.position = startp;
 		world = w;
-		this.nextPosition = new Position(startp.x + this.world.squareWidth * speed/*+ world.squareWidth*speed*/,startp.y);
+		this.nextPosition = new Position(startp.x + this.world.squareWidth * speed/* + world.squareWidth*speed */,
+				startp.y);
 	}
-	
+
 	/**
-	 * Deplace le monstre en fonction de sa vitesse sur l'axe des x et des y et de sa prochaine position.
+	 * Deplace le monstre en fonction de sa vitesse sur l'axe des x et des y et de
+	 * sa prochaine position.
 	 */
 	public void move() {
-		//TXT
+		// TXT
 //		prend le checkpoint qui lui correspond dans la liste avec la variable checkpoint
 //		prend la position suivante
 //		calcule le vecteur entre "position" et "obj"
@@ -50,110 +53,54 @@ public abstract class Monster {
 		if (checkpoint < world.checkpoints.size()) {
 			Position obj = world.checkpoints.get(checkpoint);
 			position = nextPosition;
-			Position dist = obj.add(new Position(-position.x,-position.y));	
-			double norme = new Position(0,0).dist(dist);
+			Position dist = obj.add(new Position(-position.x, -position.y));
+			double norme = new Position(0, 0).dist(dist);
 			System.out.println(norme);
-			System.out.println(dist.x/norme);
-			dist = new Position(dist.x/(norme*(double) world.nbSquareX*2.0),dist.y/(norme*(double) world.nbSquareY*2.0));
+			System.out.println(dist.x / norme);
+			dist = new Position(speed * dist.x / (norme * (double) world.nbSquareX * 3.0),
+					speed * dist.y / (norme * (double) world.nbSquareY * 3.0));
 //			if (obj.equals(position)) {
 //				System.out.print("[pb]");
 //				obj = world.checkpoints.get(checkpoint++);
 //			}
-			
+
 //			StdDraw.setPenColor(StdDraw.RED);
 //			StdDraw.filledCircle(obj.x, obj.y, 0.01);
 //			StdDraw.show();
-			
+
 //	PB		double norme = /*vec/*/new Position(obj.x*world.squareWidth,obj.y*world.squareHeight).dist(new Position(position.x*world.nbSquareX,position.y*world.nbSquareY)); 
-			//TODO
-			//Position vecNorme = new Position(vec.x/ norme, vec.y/ norme);
+			// TODO
+			// Position vecNorme = new Position(vec.x/ norme, vec.y/ norme);
 //			System.out.print(norme);
 //			System.out.println(vecNorme);
-			//System.out.println(world.squareWidth + " " + world.squareHeight);
+			// System.out.println(world.squareWidth + " " + world.squareHeight);
 
 //Si vec trop grand
-			if (position.dist(obj)<=world.squareWidth/2 && position.dist(obj)<=world.squareHeight/2){
+			if (position.dist(obj) <= world.squareWidth && position.dist(obj) <= world.squareHeight) {
 				nextPosition = obj;
 				checkpoint++;
-				
-			}else {
-				//nextPosition = position.add(dist);
+
+			} else {
 				nextPosition = position.add(dist);
-				nextPosition = position.add(new Position(dist.x/4,dist.y/4));
-				//System.out.println("passe");
+				nextPosition = position.add(new Position(dist.x / 4, dist.y / 4));
 			}
-		}else {
-			//TODO Arrive
+		} else {
+			// TODO Arrive
 			reached = true;
 		}
-		/*// Mesure sur quel axe le monstre se dirige.
-		double dx = nextPosition.x - position.x;
-		double dy = nextPosition.y - position.y;
-		double signedSW = dx>0?world.squareWidth:(dx<0?-world.squareWidth:0);
-		double signedSH = dy>0?world.squareHeight:(dy<0?-world.squareHeight:0);
-		double leftx = 0;
-		double lefty = 0;
-		int nplus1x = world.myCasex(nextPosition.x + signedSW);
-		int nplus1y = world.myCasey(nextPosition.y + signedSH);
-		System.out.println("nplus1x = " +nplus1x +" || nplus1y =" + nplus1y);
-		StdDraw.filledCircle(nplus1x*world.squareWidth +world.squareWidth/2, nplus1y*world.squareHeight + world.squareHeight/2, 0.01);
-//		int nplus1x = (int) ((nextPosition.x + dx)/world.squareWidth>=0?(nextPosition.x + dx*2)/world.squareWidth:-1);
-//		int nplus1y = (int) ((nextPosition.y + dy)/world.squareHeight>=0?(nextPosition.y + dy)/world.squareHeight:-1);
-		//System.out.println("[nplus1x = " + nplus1x + "][nplus1y = " + nplus1y + "]");
-		//if (nplus1x >=0 && nplus1x < world.board.length && nplus1y >= 0 && nplus1y < world.board[0].length && (world.board[nplus1x][nplus1y]==3)) {
-		if (nplus1x >= 0 && nplus1y >= 0 && nplus1x < world.board.length && nplus1y < world.board[0].length && world.board[nplus1x][nplus1y] == 3) {
-			position.x = nextPosition.x;
-			position.y = nextPosition.y;
-			nextPosition.x += dx;
-			nextPosition.y += dy;
-		}else {
-			if (dx != 0) {
-				lefty = dx;
-			}
-			if (dy != 0) {
-				leftx = -dy;
-			}
-			if (world.board[(int) ((nextPosition.x + leftx*2)/world.squareWidth)][(int) ((nextPosition.y + lefty*2)/world.squareHeight)]==3) {
-				position.x = nextPosition.x;
-				position.y = nextPosition.y;
-				nextPosition.x += leftx;
-				nextPosition.y += lefty;
-			}else {
-				position.x = nextPosition.x;
-				position.y = nextPosition.y;
-				nextPosition.x -= leftx;
-				nextPosition.y -= lefty;
-			}
-		}
-		if (dy + dx != 0){
-			// Mesure la distance a laquelle le monstre a pu se deplacer.
-			double ratioX = dx/(Math.abs(dx) + Math.abs(dy));
-			double ratioY = dy/(Math.abs(dx) + Math.abs(dy));
-			position.x += ratioX * speed;
-			position.y += ratioY * speed;
-		}*/
-		
 	}
 
-	//calcule la prochaine direction du monstre
-	public void calcul() {
-		// TODO ATTENTION BULLSHIT
-		/*if (world.board[(int) ((nextPosition.x*2 - position.x)/world.squareWidth)][(int) (nextPosition.y/world.squareWidth)] == 3) {
-			nextPosition = new Position(nextPosition.x-position.x,nextPosition.y);
-		}*/
-		this.nextPosition = new Position(this.position.x + this.world.squareWidth / 2/*+ world.squareWidth*speed*/,this.position.y);
-	}
-	
 	public void update() {
 		move();
 		draw();
-		if(this.hp == 0) {
+		if (this.hp == 0) {
 			this.world.gold += 20;
 		}
 	}
 
 	/**
-	 * Fonction abstraite qui sera instanciee dans les classes filles pour afficher le monstre sur le plateau de jeu.
+	 * Fonction abstraite qui sera instanciee dans les classes filles pour afficher
+	 * le monstre sur le plateau de jeu.
 	 */
 	public abstract void draw();
 }

@@ -61,7 +61,7 @@ public class World {
 		// Vous ne devez pas faire pareil, mais ajouter une vague comportant plusieurs
 		// monstres
 		Monster monster = new Zerg(this, new Position(spawn.x, spawn.y));
-		monster.setSpeed(0.1);
+		monster.setSpeed(10);
 		this.monsters.add(monster);
 		lastM = monster;
 	}
@@ -185,10 +185,6 @@ public class World {
 				}
 			}
 		}
-		for (Position p : checkpoints) {
-			StdDraw.filledCircle(p.x, p.y, 0.01);
-		}
-		checkpoints.size();
 	}
 
 	public void initPath() {
@@ -450,11 +446,11 @@ public class World {
 		drawBackground();
 		drawPath();
 		drawInfos();
-		calculFPS();
+		//calculFPS();
 		updateMonsters();
 		updateWave();
-		drawMouse();
-		tir();
+		//drawMouse();
+		//tir();
 		return life;
 	}
 
@@ -483,9 +479,11 @@ public class World {
 	public void keyPress(char key) {
 		key = Character.toLowerCase(key);
 		this.key = key;
-		StdDraw.pause(2000);
+		//StdDraw.pause(2000);
 		switch (key) {
 		case 'a':
+			StdDraw.save("save.png");
+			System.out.println("passz");
 			System.out.println("Arrow Tower selected (" + prixArcher + ".)");
 			break;
 		case 'b':

@@ -371,7 +371,7 @@ public class World {
 		case 'a':
 			// TODO Ajouter une image pour representer une tour d'archers
 			StdDraw.picture(normalizedX, normalizedY, "/images/Archer1.jpg", squareWidth, squareHeight);
-			// break;
+			break;
 		case 'b':
 			// TODO Ajouter une image pour representer une tour a canon
 			StdDraw.picture(normalizedX, normalizedY, "/images/Bombe1.jpg", squareWidth, squareHeight);
@@ -399,7 +399,7 @@ public class World {
 				gold += monster.goldValue;
 		}
 		monsters.removeIf(x -> (x.reached));
-		monsters.removeIf(x -> (x.hp == 0));
+		monsters.removeIf(x -> (x.hp <= 0));
 	}
 
 	private void updateWave() {
@@ -504,7 +504,7 @@ public class World {
 		case 'b':
 			if (board[myCasex(normalizedX)][myCasey(normalizedY)] == 0 && (gold > prixBombe)) {
 				gold -= prixBombe;
-				board[myCasex(normalizedX)][myCasey(normalizedY)] = 4;
+				board[myCasex(normalizedX)][myCasey(normalizedY)] = 5;
 				towers[myCasex(normalizedX)][myCasey(normalizedY)] = new BombTower();
 			}
 			break;
@@ -537,6 +537,7 @@ public class World {
 		Iterator<Monster> iterator = monsters.iterator();
 		Monster monster;
 		Position position;
+<<<<<<< Updated upstream
 		while (iterator.hasNext()) {
 			monster = iterator.next();
 			for (int i = 0; i < board.length; i++) {
@@ -547,6 +548,17 @@ public class World {
 						System.out.println(position);
 						if (towers[i][j].tir == false || towers[i][j].attackSpeed == towers[i][j].attackDelay
 								|| monster.position.dist(position) <= towers[i][j].range * squareHeight) {
+=======
+		
+		for (int i = 0; i < board.length; i++) {
+			for (int j = 0; j < board[i].length; j++) {
+				if (towers[i][j] != null) {
+					towers[i][j].attackDelay ++;
+					position = new Position(posCasex(i), posCasey(j));
+					while (iterator.hasNext()) {
+						monster = iterator.next();
+						if(towers[i][j].tir == false && towers[i][j].attackSpeed == towers[i][j].attackDelay && monster.position.dist(position) <= towers[i][j].range * squareHeight) {
+>>>>>>> Stashed changes
 							towers[i][j].tir(monster);
 							System.out.println(monster.hp);
 							towers[i][j].tir = true;
@@ -580,7 +592,11 @@ public class World {
 			}
 			update();
 			StdDraw.show();
+<<<<<<< Updated upstream
 			//StdDraw.pause(20);
+=======
+			StdDraw.pause(20);
+>>>>>>> Stashed changes
 
 			if (life <= 0)
 				end = true;

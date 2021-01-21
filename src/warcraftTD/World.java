@@ -61,7 +61,7 @@ public class World {
 		// Vous ne devez pas faire pareil, mais ajouter une vague comportant plusieurs
 		// monstres
 		Monster monster = new Zerg(this, new Position(spawn.x, spawn.y));
-		monster.setSpeed(1);
+		monster.setSpeed(0.2);
 		this.monsters.add(monster);
 		lastM = monster;
 	}
@@ -105,8 +105,9 @@ public class World {
 	/**
 	 * Definit le decor du plateau de jeu.
 	 */
-	String[] tabs = {"/images/Garden0.png","/images/Garden1.png", "/images/Garden2.png", "/images/Garden3.png"};
+	
 	public void drawBackground() {
+		String[] tabs = {"/images/Garden0.png","/images/Garden1.png", "/images/Garden2.png", "/images/Garden3.png"};
 		for (int i = 0; i < nbSquareX; i++) {
 			for (int j = 0; j < nbSquareY; j++) {
 				if (board[i][j] >= 4) {
@@ -131,12 +132,13 @@ public class World {
 	public void drawBack() {
 		StdDraw.picture(0.5,0.5, "save.png",1,1);
 	}
+
 	/**
 	 * Initialise le chemin sur la position du point de depart des monstres. Cette
 	 * fonction permet d'afficher une route qui sera differente du decor.
 	 */
-	String[] tabs2 = {"/images/Path1.png","/images/Path2.png", "/images/Path3.png"};
 	public void drawPath() {
+		String[] tabs2 = {"/images/Path1.png","/images/Path2.png", "/images/Path3.png"};
 		// dessin de Board
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board[i].length; j++) {
@@ -345,7 +347,6 @@ public class World {
 		StdDraw.setPenColor(StdDraw.BLACK);
 		StdDraw.text(0.06, 0.98, "gold :" + gold);
 		StdDraw.text(0.04, 0.96, "life :" + life);
-
 	}
 
 	public void calculFPS() {

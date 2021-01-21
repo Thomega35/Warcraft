@@ -2,7 +2,6 @@ package warcraftTD;
 
 public class BombTower extends Tower {
 	static int buildCost = 60;
-	static int upgradeCost = 40;
 
 	public BombTower(Position position) {
 		super(position);
@@ -18,6 +17,7 @@ public class BombTower extends Tower {
 	public void upgrade() {
 		this.damage = 80;
 		this.range = 4;
+		this.upgraded = true;
 	}
 	
 	public void tir(Monster monster) {

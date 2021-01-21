@@ -508,7 +508,12 @@ public class World {
 			}
 			break;
 		case 'e':
-			
+			for(Tower t : towers) {
+				if(t.position.equals(position) && gold >= t.upgradeCost && !t.upgraded ) {
+					t.upgrade();
+					gold -= t.upgradeCost;
+				}
+			}
 			break;
 		}
 	}

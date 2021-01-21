@@ -32,16 +32,13 @@ public class World {
 	// [x][y]
 	int[][] board;
 	int[][] backboard;
-	Tower[][] towers;
+	List<Tower> towers = new ArrayList<Tower>();
 
 	// Nombre de points de vie du joueur
 	int life = 20;
 	int gold = 10000;
 
-	// Informations sur les tours
-	int prixArcher = 50;
-	int prixBombe = 60;
-	int prixUpgrade = 40;
+
 
 	// Commande sur laquelle le joueur appuie (sur le clavier)
 	char key;
@@ -86,7 +83,6 @@ public class World {
 		squareHeight = (double) 1 / nbSquareY;
 		// initialisation du plateau
 		board = new int[nbSquareX][nbSquareY];
-		towers = new Tower[nbSquareX][nbSquareY];
 		StdDraw.setCanvasSize(width, height);
 		StdDraw.enableDoubleBuffering();
 		initBack();
@@ -125,12 +121,12 @@ public class World {
 		drawBackground();
 
 		StdDraw.show();
-		StdDraw.save("save.png");
+		StdDraw.save("./src/images/save.png");
 		StdDraw.clear();
 	}
 	
 	public void drawBack() {
-		StdDraw.picture(0.5,0.5, "save.png",1,1);
+		StdDraw.picture(0.5,0.5, "./src/images/save.png",1,1);
 	}
 
 	/**
@@ -153,19 +149,19 @@ public class World {
 	public void drawTower() {
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board[i].length; j++) {
-				if (board[i][j] == 4) {
+				if (board[i][j] == 10) {
 					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
 							"/images/Archer1.jpg", squareWidth, squareHeight);
 
-				} else if (board[i][j] == 40) {
+				} else if (board[i][j] == 100) {
 					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
 							"/images/Archer2.jpg", squareWidth, squareHeight);
 
-				} else if (board[i][j] == 5) {
+				} else if (board[i][j] == 20) {
 					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
 							"/images/Bombe1.jpg", squareWidth, squareHeight);
 
-				} else if (board[i][j] == 50) {
+				} else if (board[i][j] == 200) {
 					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
 							"/images/Bombe2.jpg", squareWidth, squareHeight);
 				}
@@ -428,12 +424,12 @@ public class World {
 //		drawBackground();
 //		drawPath();
 		drawBack();
-		// drawTower();
+		drawTower();
 		drawInfos();
 		calculFPS();
 		updateMonsters();
 		updateWave();
-		// drawMouse();
+		drawMouse();
 		// tir();
 		return life;
 	}
@@ -466,13 +462,13 @@ public class World {
 		// StdDraw.pause(2000);
 		switch (key) {
 		case 'a':
-			System.out.println("Arrow Tower selected (" + prixArcher + ".)");
+			System.out.println("Arrow Tower selected (" + ArcherTower.buildCost + ".)");
 			break;
 		case 'b':
-			System.out.println("Bomb Tower selected (" + prixBombe + ".)");
+			System.out.println("Bomb Tower selected (" + BombTower.buildCost + ".)");
 			break;
 		case 'e':
-			System.out.println("Evolution selected (" + prixUpgrade + ".)");
+			System.out.println("Evolution selected (" + ArcherTower.upgradeCost + ".)");
 			break;
 		case 's':
 			System.out.println("Starting game!");
@@ -494,28 +490,25 @@ public class World {
 		double normalizedX = (int) (x / squareWidth) * squareWidth + squareWidth / 2;
 		double normalizedY = (int) (y / squareHeight) * squareHeight + squareHeight / 2;
 		Position position = new Position(normalizedX, normalizedY);
+		int X = myCasex(normalizedX);
+		int Y = myCasey(normalizedY);
 		switch (key) {
 		case 'a':
-			if (board[myCasex(normalizedX)][myCasey(normalizedY)] == 0 && (gold > prixArcher)) {
-				gold -= prixArcher;
-				board[myCasex(normalizedX)][myCasey(normalizedY)] = 4;
-				towers[myCasex(normalizedX)][myCasey(normalizedY)] = new ArcherTower();
+			if (board[X][Y] > 3 && board[X][Y] < 10  && (gold > ArcherTower.buildCost)) {
+				gold -= ArcherTower.buildCost;
+				board[X][Y] = 10;
+				towers.add(new ArcherTower(position));
 			}
 			break;
 		case 'b':
-			if (board[myCasex(normalizedX)][myCasey(normalizedY)] == 0 && (gold > prixBombe)) {
-				gold -= prixBombe;
-				board[myCasex(normalizedX)][myCasey(normalizedY)] = 5;
-				towers[myCasex(normalizedX)][myCasey(normalizedY)] = new BombTower();
+			if (board[X][Y] > 3 && board[X][Y] < 10 && (gold > BombTower.buildCost)) {
+				gold -= BombTower.buildCost;
+				board[X][Y] = 20;
+				towers.add(new BombTower(position));
 			}
 			break;
 		case 'e':
-			if (towers[myCasex(normalizedX)][myCasey(normalizedY)] != null && (gold > prixUpgrade)
-					&& towers[myCasex(normalizedX)][myCasey(normalizedY)].upgraded == false) {
-				towers[myCasex(normalizedX)][myCasey(normalizedY)].upgraded = true;
-				board[myCasex(normalizedX)][myCasey(normalizedY)] = board[myCasex(normalizedX)][myCasey(normalizedY)]
-						* 10;
-			}
+			
 			break;
 		}
 	}
@@ -538,19 +531,6 @@ public class World {
 		Iterator<Monster> iterator = monsters.iterator();
 		Monster monster;
 		Position position;
-<<<<<<< Updated upstream
-		while (iterator.hasNext()) {
-			monster = iterator.next();
-			for (int i = 0; i < board.length; i++) {
-				for (int j = 0; j < board[i].length; j++) {
-					if (towers[i][j] != null) {
-						towers[i][j].attackDelay++;
-						position = new Position(posCasex(i), posCasey(j));
-						System.out.println(position);
-						if (towers[i][j].tir == false || towers[i][j].attackSpeed == towers[i][j].attackDelay
-								|| monster.position.dist(position) <= towers[i][j].range * squareHeight) {
-=======
-		
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board[i].length; j++) {
 				if (towers[i][j] != null) {
@@ -559,7 +539,6 @@ public class World {
 					while (iterator.hasNext()) {
 						monster = iterator.next();
 						if(towers[i][j].tir == false && towers[i][j].attackSpeed == towers[i][j].attackDelay && monster.position.dist(position) <= towers[i][j].range * squareHeight) {
->>>>>>> Stashed changes
 							towers[i][j].tir(monster);
 							System.out.println(monster.hp);
 							towers[i][j].tir = true;
@@ -593,11 +572,9 @@ public class World {
 			}
 			update();
 			StdDraw.show();
-<<<<<<< Updated upstream
+
 			//StdDraw.pause(20);
-=======
-			StdDraw.pause(20);
->>>>>>> Stashed changes
+
 
 			if (life <= 0)
 				end = true;

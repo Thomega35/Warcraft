@@ -7,9 +7,17 @@ public abstract class Tower {
 	int attackSpeed;
 	int attackDelay;
 	int projectileSpeed;
+	
+	//int buildCost;
+	//int upgradeCost;
+	
 	boolean upgraded;
 	boolean tir;
+	Position position;
 	
+	public Tower(Position position){
+		this.position = position;
+	}
 	public abstract void upgrade();
 	
 	public void tir(Monster monster) {

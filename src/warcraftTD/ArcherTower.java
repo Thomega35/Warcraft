@@ -1,8 +1,11 @@
 package warcraftTD;
 
 public class ArcherTower extends Tower {
+	static int buildCost = 50;
+	static int upgradeCost = 40;
 
-	public ArcherTower() {
+	public ArcherTower(Position position) {
+		super(position);
 		range = 3;
 		damage = 1;
 		attackSpeed = 30;

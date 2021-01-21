@@ -8,8 +8,7 @@ public abstract class Tower {
 	int attackDelay;
 	int projectileSpeed;
 	
-	//int buildCost;
-	//int upgradeCost;
+	static int upgradeCost = 40;
 	
 	boolean upgraded;
 	boolean tir;

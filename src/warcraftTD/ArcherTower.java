@@ -2,7 +2,6 @@ package warcraftTD;
 
 public class ArcherTower extends Tower {
 	static int buildCost = 50;
-	static int upgradeCost = 40;
 
 	public ArcherTower(Position position) {
 		super(position);
@@ -18,6 +17,7 @@ public class ArcherTower extends Tower {
 	public void upgrade() {
 		this.damage = 30;
 		this.attackSpeed = 20;
+		this.upgraded = true;
 	}
 	
 	public void tir(Monster monster) {

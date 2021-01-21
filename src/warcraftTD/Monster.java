@@ -55,8 +55,8 @@ public abstract class Monster {
 			position = nextPosition;
 			Position dist = obj.add(new Position(-position.x, -position.y));
 			double norme = new Position(0, 0).dist(dist);
-			System.out.println(norme);
-			System.out.println(dist.x / norme);
+//			System.out.println(norme);
+//			System.out.println(dist.x / norme);
 			dist = new Position(speed * dist.x / (norme * (double) world.nbSquareX * 3.0),
 					speed * dist.y / (norme * (double) world.nbSquareY * 3.0));
 //			if (obj.equals(position)) {
@@ -76,7 +76,7 @@ public abstract class Monster {
 			// System.out.println(world.squareWidth + " " + world.squareHeight);
 
 //Si vec trop grand
-			if (position.dist(obj) <= world.squareWidth && position.dist(obj) <= world.squareHeight) {
+			if (position.dist(obj) <= world.squareWidth/5 && position.dist(obj) <= world.squareHeight/5) {
 				nextPosition = obj;
 				checkpoint++;
 

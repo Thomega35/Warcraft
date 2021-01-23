@@ -13,8 +13,10 @@ public class World {
 	List<Monster> monsters;
 	// l'ensemble des points par lequels devront passer les monstres.
 	List<Position> checkpoints;
-	// l'ensemble des tous, pour gerer l'update des tours
+	// l'ensemble des tours, pour gerer l'update des tours
 	List<Tower> towers;
+	// l'ensemble des projectiles
+	List<Projectile> projectiles;
 
 	// Position par laquelle les monstres vont venir
 	Position spawn;
@@ -31,7 +33,6 @@ public class World {
 	// placer une tour
 	// [x][y]
 	int[][] board;
-	int[][] backboard;
 
 	// Nombre de points de vie du joueur
 	int life;
@@ -39,12 +40,11 @@ public class World {
 	// Argent du joueur
 	int gold;
 
-	// Vague du joueur, permet d'adapter les monstres envoyés
-	int wave;
-
-	// Nombre de monstres à envoyer avant la prochaine vague
-	int reserve;
-
+	
+	int wave;// Vague du joueur, permet d'adapter les monstres envoyés
+	int reserve;// Nombre de monstres à envoyer avant la prochaine vague
+	int spawnTime;//Temps entre 2 spawn de monstre
+	
 	// Commande sur laquelle le joueur appuie (sur le clavier)
 	char key;
 
@@ -80,11 +80,13 @@ public class World {
 		this.gold = 1000;
 		this.life = 20;
 		this.wave = 0;
+		this.spawnTime = 1000;
 		// initialisation du plateau
 		this.board = new int[nbSquareX][nbSquareY];
 		this.towers = new ArrayList<Tower>();
 		this.monsters = new ArrayList<Monster>();
 		this.checkpoints = new ArrayList<Position>();
+		this.projectiles = new ArrayList<Projectile>();
 		StdDraw.setCanvasSize(width, height);
 		StdDraw.enableDoubleBuffering();
 		initImageFond();
@@ -385,14 +387,10 @@ public class World {
 	 * position du monstre au cours du temps a l'aide du parametre nextP.
 	 */
 	public void updateMonsters() {
-		Iterator<Monster> iterator = monsters.iterator();
-		Monster monster;
-		while (iterator.hasNext()) {
-			monster = iterator.next();
+		for (Monster monster : monsters) {
 			monster.update();
-			if (monster.reached) {
+			if (monster.reached) 
 				life--;
-			}
 			if (monster.hp <= 0)
 				gold += monster.goldValue;
 		}
@@ -407,7 +405,7 @@ public class World {
 			reserve = wave;
 		}
 		// TODO changer le spawn du monstre pour un spawn to les X ticks
-		if (reserve > 0 && System.currentTimeMillis() - startTimeMonster >= 1000) {
+		if (reserve > 0 && System.currentTimeMillis() - startTimeMonster >= (spawnTime/wave + 200)) {
 			reserve--;
 			startTimeMonster = System.currentTimeMillis();
 			// monsters.add(new Zerg(this, spawn));
@@ -416,6 +414,20 @@ public class World {
 	}
 
 	// TODO changer l'ordre des fonctions pour plus de clarté
+	
+	private void updateProjectiles() {
+		// TODO Auto-generated method stub
+		for (Projectile p : projectiles) {
+			p.update();
+		}
+		projectiles.removeIf(x -> (x.out));
+	}
+	
+	private void updateTowers() {
+		drawTower();
+		tir();
+	}
+	
 	public void waveadd() {
 		// ex
 		// Ajout d'un monstre "a la main" pour afficher comment un monstre se deplaçe.
@@ -435,12 +447,12 @@ public class World {
 	public int update() {
 		//TODO mettre drawTower et tir dans update tower
 		drawImageFond();
-		drawTower();
 		drawInfos();
 		updateMonsters();
 		updateWave();
+		updateTowers();
+		updateProjectiles();
 		drawMouse();
-		// tir();
 		return life;
 	}
 
@@ -511,21 +523,21 @@ public class World {
 			if (board[X][Y] > 3 && board[X][Y] < 10 && (gold > ArcherTower.buildCost)) {
 				gold -= ArcherTower.buildCost;
 				board[X][Y] = 10;
-				towers.add(new ArcherTower(position));
+				towers.add(new ArcherTower(this, position));
 			}
 			break;
 		case 'b':
 			if (board[X][Y] > 3 && board[X][Y] < 10 && (gold > BombTower.buildCost)) {
 				gold -= BombTower.buildCost;
 				board[X][Y] = 20;
-				towers.add(new BombTower(position));
+				towers.add(new BombTower(this, position));
 			}
 			break;
 		case 'e':
 			for (Tower t : towers) {
-				if (t.position.equals(position) && gold >= t.upgradeCost && !t.upgraded) {
+				if (t.position.equals(position) && gold >= Tower.upgradeCost && !t.upgraded) {
 					t.upgrade();
-					gold -= t.upgradeCost;
+					gold -= Tower.upgradeCost;
 				}
 			}
 			break;
@@ -547,26 +559,11 @@ public class World {
 	}
 
 	public void tir() {
-		Iterator<Monster> iterator = monsters.iterator();
-		Monster monster;
-		Position position;
-		for (int i = 0; i < nbSquareX; i++) {
-			for (int j = 0; j < nbSquareY; j++) {
-				if (towers[i][j] != null) {
-					towers[i][j].attackDelay++;
-					position = new Position(posCasex(i), posCasey(j));
-					while (iterator.hasNext()) {
-						monster = iterator.next();
-						if (towers[i][j].tir == false && towers[i][j].attackSpeed == towers[i][j].attackDelay
-								&& monster.position.dist(position) <= towers[i][j].range * squareHeight) {
-							towers[i][j].tir(monster);
-							System.out.println(monster.hp);
-							towers[i][j].tir = true;
-							towers[i][j].attackDelay = 0;
-						}
-						towers[i][j].tir = false;
-					}
-
+		for (Tower t : towers) {
+			for (Monster m : monsters) {
+				if (t.position.dist(m.position) < (double)(t.range)/(double)(nbSquareX)) {
+					t.tir(m);
+					break;
 				}
 			}
 		}

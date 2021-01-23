@@ -3,8 +3,8 @@ package warcraftTD;
 public class ArcherTower extends Tower {
 	static int buildCost = 50;
 
-	public ArcherTower(Position position) {
-		super(position);
+	public ArcherTower(World world, Position position) {
+		super(world, position);
 		range = 3;
 		damage = 1;
 		attackSpeed = 30;
@@ -21,6 +21,9 @@ public class ArcherTower extends Tower {
 	}
 	
 	public void tir(Monster monster) {
-		monster.hp -= this.damage;
+		if (System.currentTimeMillis() - startTimeTir >= attackDelay) {
+			startTimeTir = System.currentTimeMillis();
+			world.projectiles.add(new Arrow(world, new Position(position.x, position.y), monster));
+		}
 	}
 }

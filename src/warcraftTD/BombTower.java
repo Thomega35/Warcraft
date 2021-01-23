@@ -3,8 +3,8 @@ package warcraftTD;
 public class BombTower extends Tower {
 	static int buildCost = 60;
 
-	public BombTower(Position position) {
-		super(position);
+	public BombTower(World world, Position position) {
+		super(world, position);
 		range = 2;
 		damage = 50;
 		attackSpeed = 1;

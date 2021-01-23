@@ -333,8 +333,7 @@ public class World {
 				break;
 			}
 		}
-		checkpoints
-				.add(new Position((double) (nbSquareX - 0.5) * squareWidth, (double) (nbSquareY - 0.5) * squareHeight));
+		checkpoints.add(new Position((double) (nbSquareX - 0.5) * squareWidth, (double) (nbSquareY - 0.5) * squareHeight));
 	}
 
 	/**
@@ -610,11 +609,9 @@ public class World {
 
 			if (StdDraw.isMousePressed()) {
 				mouseClick(StdDraw.mouseX(), StdDraw.mouseY());
-				StdDraw.pause(50);
 			}
 			update();
 			StdDraw.show();
-			//System.out.println(timer());
 
 			// StdDraw.pause(20);
 

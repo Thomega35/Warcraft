@@ -561,14 +561,12 @@ public class World {
 	public void tir() {
 		for(Tower t: towers) {
 			for(Monster m : monsters) {
-				if (timer() - t.attackDelay >= t.attackSpeed && m.position.dist(t.position) <= t.range * squareHeight) {
+				if (t.position.dist(m.position) < (double)(t.range)/(double)(nbSquareX)) {
 					t.tir(m);
 					break;
 				}
 			}
 		}
-				
-
 	}
 	
 	public long timer() {

@@ -350,7 +350,6 @@ public class World {
 		StdDraw.text(0.04, 0.92, "Wave :" + wave);
 	}
 	
-
 	public void calculFPS() {
 		calculFPS++;
 		if (System.currentTimeMillis() - startTimeFPS >= 1000) {
@@ -359,7 +358,6 @@ public class World {
 			calculFPS = 0;
 		}
 	}
-
 	
 	/**
 	 * Fonction qui recupere le positionnement de la souris et permet d'afficher une
@@ -381,7 +379,6 @@ public class World {
 		if (image != null)
 			StdDraw.picture(normalizedX, normalizedY, image, squareWidth, squareHeight);
 	}
-
 	
 	/**
 	 * Pour chaque monstre de la liste de monstres de la vague, utilise la fonction
@@ -399,7 +396,6 @@ public class World {
 		monsters.removeIf(x -> (x.reached));
 		monsters.removeIf(x -> (x.hp <= 0));
 	}
-
 	
 	private void updateWave() {
 		if (monsters.size() == 0 && reserve == 0) {
@@ -415,8 +411,7 @@ public class World {
 		}
 	}
 
-	// TODO changer l'ordre des fonctions pour plus de clarté
-	
+	// TODO changer l'ordre des fonctions pour plus de clarté	
 	private void updateProjectiles() {
 		// TODO Auto-generated method stub
 		for (Projectile p : projectiles) {

@@ -55,9 +55,11 @@ public class World {
 	
 	// Calcul temps entre 2 monstres
 	long startTimeMonster;
+	long globalStart;
 	
 	// Condition pour terminer la partie
 	boolean end = false;
+	boolean start = false;
 
 	/**
 	 * Initialisation du monde en fonction de la largeur, la hauteur et le nombre de
@@ -448,6 +450,7 @@ public class World {
 		updateTowers();
 		updateProjectiles();
 		drawMouse();
+		tir();
 		return life;
 	}
 
@@ -492,8 +495,10 @@ public class World {
 			break;
 		case 's':
 			System.out.println("Starting game!");
+			start = true;
 			break;
 		case 'q':
+			System.out.println("Game ended");
 			end = true;
 			break;
 		}
@@ -554,14 +559,20 @@ public class World {
 	}
 
 	public void tir() {
-		for (Tower t : towers) {
-			for (Monster m : monsters) {
-				if (t.position.dist(m.position) < (double)(t.range)/(double)(nbSquareX)) {
+		for(Tower t: towers) {
+			for(Monster m : monsters) {
+				if (timer() - t.attackDelay >= t.attackSpeed && m.position.dist(t.position) <= t.range * squareHeight) {
 					t.tir(m);
 					break;
 				}
 			}
 		}
+				
+
+	}
+	
+	public long timer() {
+		return (System.currentTimeMillis()-globalStart) / 1000;
 	}
 
 	/**
@@ -572,6 +583,16 @@ public class World {
 		printCommands();
 		startTimeFPS = System.currentTimeMillis();
 		startTimeMonster = System.currentTimeMillis();
+		globalStart = System.currentTimeMillis();
+		while(!start) {
+			drawImageFond();
+			drawInfos();
+			drawMouse();
+			if (StdDraw.hasNextKeyTyped()) {
+				keyPress(StdDraw.nextKeyTyped());
+			}
+			StdDraw.show();
+		}
 		while (!end) {
 
 			StdDraw.clear();
@@ -585,6 +606,7 @@ public class World {
 			}
 			update();
 			StdDraw.show();
+			System.out.println(timer());
 
 			// StdDraw.pause(20);
 

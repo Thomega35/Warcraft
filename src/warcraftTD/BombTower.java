@@ -6,14 +6,14 @@ public class BombTower extends Tower {
 	public BombTower(World world, Position position) {
 		super(world, position);
 		range = 2;
-		damage = 50;
+		damage = 150;
 		attackSpeed = 1;
 		projectileSpeed = 2;
 		upgraded = false;
 	}
 	
 	public void upgrade() {
-		this.damage = 80;
+		this.damage = 200;
 		this.range = 4;
 		this.upgraded = true;
 	}

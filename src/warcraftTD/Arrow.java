@@ -2,8 +2,8 @@ package warcraftTD;
 
 public class Arrow extends Projectile {
 
-	public Arrow(World world, Position position, Monster monster) {
-		super(world, position, monster);
+	public Arrow(World world, Position position, Monster monster, int damage, double speed) {
+		super(world, position, monster, damage, speed);
 	}
 
 	@Override

@@ -7,6 +7,7 @@ public class Zerg extends Monster {
 		this.hp = 200;
 		this.goldValue = 10;
 		this.flying = false;
+		this.speed = 0.05;
 	}
 
 	@Override

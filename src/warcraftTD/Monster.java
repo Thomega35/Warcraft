@@ -5,23 +5,13 @@ public abstract class Monster {
 	// Position du monstre a l'instant t
 	Position position;
 	// Vitesse du monstre
-	private double speed;
+	double speed;
 	// Points de vie du monstre
-	int hp = 20;
+	int hp;
 	// Valeur en gold du monstre une fois tué
 	int goldValue;
 	//Monstre volant ou non
 	boolean flying;
-
-	public double getSpeed() {
-		return speed;
-	}
-
-	public void setSpeed(double speed) {
-		this.speed = speed;
-//		this.nextPosition = new Position(
-//				position.x + this.world.squareWidth * this.speed/* + world.squareWidth*speed */, position.y);
-	}
 
 	// Position du monstre a l'instant t+1
 	Position nextPosition;
@@ -84,8 +74,8 @@ public abstract class Monster {
 				checkpoint++;
 
 			} else {
+				//nextPosition = position.add(dist);
 				nextPosition = position.add(dist);
-				nextPosition = position.add(new Position(dist.x / 4, dist.y / 4));
 			}
 		} else {
 			// Arrive

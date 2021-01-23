@@ -5,7 +5,7 @@ public abstract class Tower {
 	int range;
 	int damage;
 	double attackSpeed;
-	int projectileSpeed;
+	double projectileSpeed;
 	long startTimeTir;
 	
 	static int upgradeCost = 40;

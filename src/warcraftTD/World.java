@@ -40,11 +40,10 @@ public class World {
 	// Argent du joueur
 	int gold;
 
-	
 	int wave;// Vague du joueur, permet d'adapter les monstres envoyés
 	int reserve;// Nombre de monstres à envoyer avant la prochaine vague
-	int spawnTime;//Temps entre 2 spawn de monstre
-	
+	int spawnTime;// Temps entre 2 spawn de monstre
+
 	// Commande sur laquelle le joueur appuie (sur le clavier)
 	char key;
 
@@ -52,11 +51,11 @@ public class World {
 	long startTimeFPS;
 	int fPS;
 	int calculFPS;
-	
+
 	// Calcul temps entre 2 monstres
 	long startTimeMonster;
 	long globalStart;
-	
+
 	// Condition pour terminer la partie
 	boolean end = false;
 	boolean start = false;
@@ -183,14 +182,8 @@ public class World {
 	}
 
 	/**
-	 * Definit le decor du plateau de jeu. 
-	 * @1 = depart 
-	 * @2 = arrivee 
-	 * @3 = chemin 
-	 * @4 = garden1 
-	 * @5 = garden2 
-	 * @6 = garden3 
-	 * @7 = garden4
+	 * Definit le decor du plateau de jeu. @1 = depart @2 = arrivee @3 = chemin @4 =
+	 * garden1 @5 = garden2 @6 = garden3 @7 = garden4
 	 */
 	public void drawBackground() {
 		String[] tabs = { "/images/Depart.png", "/images/Arrivee.png", "/images/Chemin.png", "/images/Gazon_baies.png",
@@ -199,7 +192,7 @@ public class World {
 		for (int i = 0; i < nbSquareX; i++) {
 			for (int j = 0; j < nbSquareY; j++) {
 				StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
-						tabs[board[i][j] - 1], squareWidth, squareHeight);
+						tabs[board[i][j] - 1], squareWidth * 1.04, squareHeight * 1.04);
 			}
 		}
 	}
@@ -258,7 +251,7 @@ public class World {
 							(double) (j) / nbSquareY + squareHeight / 2));
 					// Up?
 					if (j + 1 == nbSquareY || board[i][j + 1] != 3) {
-						//Down
+						// Down
 						j--;
 						Lastdirection = 1;
 					} else {
@@ -278,7 +271,7 @@ public class World {
 							(double) (j) / nbSquareY + squareHeight / 2));
 					// ->?
 					if (i + 1 == nbSquareX || board[i + 1][j] != 3) {
-						//<-
+						// <-
 						i--;
 						Lastdirection = 2;
 					} else {
@@ -298,7 +291,7 @@ public class World {
 							(double) (j) / nbSquareY + squareHeight / 2));
 					// Up?
 					if (j + 1 == nbSquareY || board[i][j + 1] != 3) {
-						//Down
+						// Down
 						j--;
 						Lastdirection = 1;
 					} else {
@@ -318,7 +311,7 @@ public class World {
 							(double) (j) / nbSquareY + squareHeight / 2));
 					// ->?
 					if (i + 1 == nbSquareX || (board[i + 1][j] != 3 && board[i + 1][j] != 2)) {
-						//<-
+						// <-
 						i--;
 						Lastdirection = 2;
 					} else {
@@ -333,7 +326,8 @@ public class World {
 				break;
 			}
 		}
-		checkpoints.add(new Position((double) (nbSquareX - 0.5) * squareWidth, (double) (nbSquareY - 0.5) * squareHeight));
+		checkpoints
+				.add(new Position((double) (nbSquareX - 0.5) * squareWidth, (double) (nbSquareY - 0.5) * squareHeight));
 	}
 
 	/**
@@ -348,7 +342,7 @@ public class World {
 		StdDraw.text(0.04, 0.94, "FPS :" + fPS);
 		StdDraw.text(0.04, 0.92, "Wave :" + wave);
 	}
-	
+
 	public void calculFPS() {
 		calculFPS++;
 		if (System.currentTimeMillis() - startTimeFPS >= 1000) {
@@ -357,7 +351,7 @@ public class World {
 			calculFPS = 0;
 		}
 	}
-	
+
 	/**
 	 * Fonction qui recupere le positionnement de la souris et permet d'afficher une
 	 * image de tour en temps reel lorsque le joueur appuie sur une des touches
@@ -378,7 +372,7 @@ public class World {
 		if (image != null)
 			StdDraw.picture(normalizedX, normalizedY, image, squareWidth, squareHeight);
 	}
-	
+
 	/**
 	 * Pour chaque monstre de la liste de monstres de la vague, utilise la fonction
 	 * update() qui appelle les fonctions run() et draw() de Monster. Modifie la
@@ -387,7 +381,7 @@ public class World {
 	public void updateMonsters() {
 		for (Monster monster : monsters) {
 			monster.update();
-			if (monster.reached) 
+			if (monster.reached)
 				life--;
 			if (monster.hp <= 0)
 				gold += monster.goldValue;
@@ -395,50 +389,49 @@ public class World {
 		monsters.removeIf(x -> (x.reached));
 		monsters.removeIf(x -> (x.hp <= 0));
 	}
-	
+
 	private void updateWave() {
-		if (monsters.size() == 0 && reserve == 0) {
+		if (monsters.size() == 0 && reserve <= 0) {
 			wave++;
 			reserve = wave;
-			if(wave%5 == 0) reserve = 1 + reserve/2;
 		}
 		// TODO changer le spawn du monstre pour un spawn to les X ticks
-		if (reserve > 0 && System.currentTimeMillis() - startTimeMonster >= (spawnTime/wave + 200)) {
-			reserve--;
+		if (reserve > 0 && System.currentTimeMillis() - startTimeMonster >= (spawnTime / wave + 200)) {
 			startTimeMonster = System.currentTimeMillis();
 			// monsters.add(new Zerg(this, spawn));
 			waveadd();
 		}
 	}
 
-	// TODO changer l'ordre des fonctions pour plus de clarté	
+	// TODO changer l'ordre des fonctions pour plus de clarté
 	private void updateProjectiles() {
 		// TODO Auto-generated method stub
 		for (Projectile p : projectiles) {
 			p.update();
 		}
 		projectiles.removeIf(x -> (x.out));
+		projectiles.removeIf(x -> (x.reached));
 	}
-	
+
 	private void updateTowers() {
 		drawTower();
 		tir();
 	}
-	
+
 	public void waveadd() {
 		// ex
 		// Ajout d'un monstre "a la main" pour afficher comment un monstre se deplaçe.
 		// Vous ne devez pas faire pareil, mais ajouter une vague comportant plusieurs
 		// monstres
 		Monster monster;
-		if(wave%5 == 0) {
+		if (wave % 5 == 0) {
 			monster = new Mouche(this, new Position(spawn.x, spawn.y));
-			monster.setSpeed(0.3);
-		}else {
+			reserve = reserve - 2;
+		} else {
 			monster = new Zerg(this, new Position(spawn.x, spawn.y));
-			monster.setSpeed(0.2);
+			reserve--;
 		}
-			this.monsters.add(monster);
+		this.monsters.add(monster);
 	}
 
 	/**
@@ -448,7 +441,7 @@ public class World {
 	 * @return les points de vie restants du joueur
 	 */
 	public int update() {
-		//TODO mettre drawTower et tir dans update tower
+		// TODO mettre drawTower et tir dans update tower
 		drawImageFond();
 		drawInfos();
 		updateMonsters();
@@ -544,7 +537,7 @@ public class World {
 				if (t.position.equals(position) && gold >= Tower.upgradeCost && !t.upgraded) {
 					t.upgrade();
 					gold -= Tower.upgradeCost;
-					board[X][Y] = board[X][Y]*10;
+					board[X][Y] = board[X][Y] * 10;
 				}
 			}
 			break;
@@ -566,20 +559,19 @@ public class World {
 	}
 
 	public void tir() {
-		for(Tower t: towers) {
-			for(Monster m : monsters) {
-				if (t.position.dist(m.position) < (double)(t.range)/(double)(nbSquareX)) {
+		for (Tower t : towers) {
+			for (Monster m : monsters) {
+				if (t.position.dist(m.position) < (double) (t.range) / (double) (nbSquareX)) {
 					t.tir(m);
 					break;
 				}
 			}
 		}
-				
 
 	}
-	
+
 	public long timer() {
-		return (System.currentTimeMillis()-globalStart) / 1000;
+		return (System.currentTimeMillis() - globalStart) / 1000;
 	}
 
 	/**
@@ -591,7 +583,7 @@ public class World {
 		startTimeFPS = System.currentTimeMillis();
 		startTimeMonster = System.currentTimeMillis();
 		globalStart = System.currentTimeMillis();
-		while(!start) {
+		while (!start) {
 			drawImageFond();
 			drawInfos();
 			drawMouse();

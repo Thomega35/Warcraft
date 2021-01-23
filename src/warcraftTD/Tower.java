@@ -2,17 +2,17 @@ package warcraftTD;
 
 public abstract class Tower {
 	
-	int range;
-	int damage;
-	double attackSpeed;
-	double projectileSpeed;
-	long startTimeTir;
+	protected int range;
+	protected int damage;
+	protected double attackSpeed;
+	protected double projectileSpeed;
+	protected long startTimeTir;
 	
 	static int upgradeCost = 40;
 	
-	boolean upgraded;
-	Position position;
-	World world;
+	protected boolean upgraded;
+	protected Position position;
+	protected World world;
 	
 	public Tower(World world,Position position){
 		this.position = position;

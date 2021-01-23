@@ -12,7 +12,7 @@ public class Zerg extends Monster {
 
 	@Override
 	public void draw() {
-		StdDraw.picture(position.x, position.y, "/images/Zerg.png", world.squareWidth, world.squareHeight);
+		StdDraw.picture(position.x, position.y, "/images/Zerg.png", world.getSquareWidth(), world.getSquareHeight());
 	}
 
 }

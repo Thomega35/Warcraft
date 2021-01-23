@@ -9,7 +9,7 @@ public class Arrow extends Projectile {
 	@Override
 	public void draw() {
 		// TODO Auto-generated method stub
-		StdDraw.picture(position.x, position.y, "/images/Zerg.png", world.squareWidth, world.squareHeight);
+		StdDraw.picture(position.x, position.y, "/images/Zerg.png", world.getSquareWidth(), world.getSquareHeight());
 	}
 
 }

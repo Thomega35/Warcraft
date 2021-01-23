@@ -5,29 +5,29 @@ public abstract class Monster {
 	// Position du monstre a l'instant t
 	Position position;
 	// Vitesse du monstre
-	double speed;
+	 protected double speed;
 	// Points de vie du monstre
-	int hp;
+	protected int hp;
 	// Valeur en gold du monstre une fois tué
-	int goldValue;
+	protected int goldValue;
 	//Monstre volant ou non
-	boolean flying;
+	protected boolean flying;
 
 	// Position du monstre a l'instant t+1
 	Position nextPosition;
 	// Boolean pour savoir si le monstre a atteint le chateau du joueur
-	boolean reached;
+	protected boolean reached;
 
 	// Compteur de deplacement pour savoir si le monstre a atteint le chateau du
 	// joueur
-	int checkpoint = 0;
+	protected int checkpoint = 0;
 
 	protected World world;
 
 	public Monster(World w, Position startp) {
 		this.position = startp;
 		world = w;
-		this.nextPosition = new Position(startp.x + this.world.squareWidth * speed/* + world.squareWidth*speed */,
+		this.nextPosition = new Position(startp.x + this.world.getSquareWidth() * speed/* + world.squareWidth*speed */,
 				startp.y);
 	}
 
@@ -50,8 +50,8 @@ public abstract class Monster {
 			double norme = new Position(0, 0).dist(dist);
 //			System.out.println(norme);
 //			System.out.println(dist.x / norme);
-			dist = new Position(speed * dist.x / (norme * (double) world.nbSquareX * 3.0),
-					speed * dist.y / (norme * (double) world.nbSquareY * 3.0));
+			dist = new Position(speed * dist.x / (norme * (double) world.getNbSquareX() * 3.0),
+					speed * dist.y / (norme * (double) world.getNbSquareY() * 3.0));
 //			if (obj.equals(position)) {
 //				System.out.print("[pb]");
 //				obj = world.checkpoints.get(checkpoint++);
@@ -69,7 +69,7 @@ public abstract class Monster {
 			// System.out.println(world.squareWidth + " " + world.squareHeight);
 
 //Si vec trop grand
-			if (position.dist(obj) <= world.squareWidth/5 && position.dist(obj) <= world.squareHeight/5) {
+			if (position.dist(obj) <= world.getSquareWidth()/5 && position.dist(obj) <= world.getSquareHeight()/5) {
 				nextPosition = obj;
 				checkpoint++;
 
@@ -87,7 +87,7 @@ public abstract class Monster {
 		move();
 		draw();
 		if (this.hp == 0) {
-			this.world.gold += 20;
+			this.world.setGold(this.world.getGold() + 20);
 		}
 	}
 

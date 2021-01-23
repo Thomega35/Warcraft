@@ -2,12 +2,12 @@ package warcraftTD;
 
 public abstract class Projectile {
 
-	Position position;
-	Monster monster;
-	int damage;
-	double speed;
-	boolean reached;
-	boolean out;
+	protected Position position;
+	protected Monster monster;
+	protected int damage;
+	protected double speed;
+	protected boolean reached;
+	protected boolean out;
 	protected World world;
 	
 	public Projectile(World world, Position position, Monster monster, int damage, double speed) {
@@ -27,13 +27,13 @@ public abstract class Projectile {
 		Position dist = obj.add(new Position(-position.x, -position.y));
 		double norme = new Position(0, 0).dist(dist);
 		
-		dist = new Position(speed * dist.x / (norme * (double) world.nbSquareX * 3.0),
-				speed * dist.y / (norme * (double) world.nbSquareY * 3.0));
+		dist = new Position(speed * dist.x / (norme * (double) world.getNbSquareX() * 3.0),
+				speed * dist.y / (norme * (double) world.getNbSquareY() * 3.0));
 		position = position.add(dist);
 		
 		if (position.x > 1 && position.y > 1) {
 			out = true;
-		}else if (Math.abs(position.x-monster.position.x) < world.squareWidth && Math.abs(position.y-monster.position.y) < world.squareHeight) {
+		}else if (Math.abs(position.x-monster.position.x) < world.getSquareWidth() && Math.abs(position.y-monster.position.y) < world.getSquareHeight()) {
 			monster.hp = monster.hp-damage;
 			reached = true;
 		}

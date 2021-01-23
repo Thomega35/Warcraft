@@ -22,43 +22,243 @@ public class World {
 	Position spawn;
 
 	// Information sur la taille du plateau de jeu
-	int width;
-	int height;
-	int nbSquareX;
-	int nbSquareY;
-	double squareWidth;
-	double squareHeight;
+	private int width;
+	private int height;
+	private int nbSquareX;
+	private int nbSquareY;
+	private double squareWidth;
+	private double squareHeight;
 
 	// Plateau permettant l'initialisation du terrain et de savoir où l'on peut
 	// placer une tour
 	// [x][y]
-	int[][] board;
+	private int[][] board;
 
 	// Nombre de points de vie du joueur
-	int life;
+	private int life;
 
 	// Argent du joueur
-	int gold;
+	private int gold;
 
-	int wave;// Vague du joueur, permet d'adapter les monstres envoyés
-	int reserve;// Nombre de monstres à envoyer avant la prochaine vague
-	int spawnTime;// Temps entre 2 spawn de monstre
+	private int wave;// Vague du joueur, permet d'adapter les monstres envoyés
+	private int reserve;// Nombre de monstres à envoyer avant la prochaine vague
+	private int spawnTime;// Temps entre 2 spawn de monstre
 
 	// Commande sur laquelle le joueur appuie (sur le clavier)
-	char key;
+	private char key;
 
 	// Affichage des FPS
-	long startTimeFPS;
-	int fPS;
-	int calculFPS;
+	public long startTimeFPS;
+	public int fPS;
+	public int calculFPS;
 
 	// Calcul temps entre 2 monstres
-	long startTimeMonster;
-	long globalStart;
+	private long startTimeMonster;
+	private long globalStart;
 
 	// Condition pour terminer la partie
-	boolean end = false;
-	boolean start = false;
+	private boolean end = false;
+	private boolean start = false;
+
+	public List<Monster> getMonsters() {
+		return monsters;
+	}
+
+	public void setMonsters(List<Monster> monsters) {
+		this.monsters = monsters;
+	}
+
+	public List<Position> getCheckpoints() {
+		return checkpoints;
+	}
+
+	public void setCheckpoints(List<Position> checkpoints) {
+		this.checkpoints = checkpoints;
+	}
+
+	public List<Tower> getTowers() {
+		return towers;
+	}
+
+	public void setTowers(List<Tower> towers) {
+		this.towers = towers;
+	}
+
+	public List<Projectile> getProjectiles() {
+		return projectiles;
+	}
+
+	public void setProjectiles(List<Projectile> projectiles) {
+		this.projectiles = projectiles;
+	}
+
+	public Position getSpawn() {
+		return spawn;
+	}
+
+	public void setSpawn(Position spawn) {
+		this.spawn = spawn;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
+	}
+
+	public int getNbSquareX() {
+		return nbSquareX;
+	}
+
+	public void setNbSquareX(int nbSquareX) {
+		this.nbSquareX = nbSquareX;
+	}
+
+	public int getNbSquareY() {
+		return nbSquareY;
+	}
+
+	public void setNbSquareY(int nbSquareY) {
+		this.nbSquareY = nbSquareY;
+	}
+
+	public double getSquareWidth() {
+		return squareWidth;
+	}
+
+	public void setSquareWidth(double squareWidth) {
+		this.squareWidth = squareWidth;
+	}
+
+	public double getSquareHeight() {
+		return squareHeight;
+	}
+
+	public void setSquareHeight(double squareHeight) {
+		this.squareHeight = squareHeight;
+	}
+
+	public int[][] getBoard() {
+		return board;
+	}
+
+	public void setBoard(int[][] board) {
+		this.board = board;
+	}
+
+	public int getLife() {
+		return life;
+	}
+
+	public void setLife(int life) {
+		this.life = life;
+	}
+
+	public int getGold() {
+		return gold;
+	}
+
+	public void setGold(int gold) {
+		this.gold = gold;
+	}
+
+	public int getWave() {
+		return wave;
+	}
+
+	public void setWave(int wave) {
+		this.wave = wave;
+	}
+
+	public int getReserve() {
+		return reserve;
+	}
+
+	public void setReserve(int reserve) {
+		this.reserve = reserve;
+	}
+
+	public int getSpawnTime() {
+		return spawnTime;
+	}
+
+	public void setSpawnTime(int spawnTime) {
+		this.spawnTime = spawnTime;
+	}
+
+	public char getKey() {
+		return key;
+	}
+
+	public void setKey(char key) {
+		this.key = key;
+	}
+
+	public long getStartTimeFPS() {
+		return startTimeFPS;
+	}
+
+	public void setStartTimeFPS(long startTimeFPS) {
+		this.startTimeFPS = startTimeFPS;
+	}
+
+	public int getfPS() {
+		return fPS;
+	}
+
+	public void setfPS(int fPS) {
+		this.fPS = fPS;
+	}
+
+	public int getCalculFPS() {
+		return calculFPS;
+	}
+
+	public void setCalculFPS(int calculFPS) {
+		this.calculFPS = calculFPS;
+	}
+
+	public long getStartTimeMonster() {
+		return startTimeMonster;
+	}
+
+	public void setStartTimeMonster(long startTimeMonster) {
+		this.startTimeMonster = startTimeMonster;
+	}
+
+	public long getGlobalStart() {
+		return globalStart;
+	}
+
+	public void setGlobalStart(long globalStart) {
+		this.globalStart = globalStart;
+	}
+
+	public boolean isEnd() {
+		return end;
+	}
+
+	public void setEnd(boolean end) {
+		this.end = end;
+	}
+
+	public boolean isStart() {
+		return start;
+	}
+
+	public void setStart(boolean start) {
+		this.start = start;
+	}
 
 	/**
 	 * Initialisation du monde en fonction de la largeur, la hauteur et le nombre de

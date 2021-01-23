@@ -10,6 +10,8 @@ public abstract class Monster {
 	int hp = 20;
 	// Valeur en gold du monstre une fois tué
 	int goldValue;
+	//Monstre volant ou non
+	boolean flying;
 
 	public double getSpeed() {
 		return speed;

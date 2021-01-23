@@ -4,8 +4,9 @@ public class Zerg extends Monster {
 
 	public Zerg(World w, Position p) {
 		super(w, p);
-		hp = 200;
-		goldValue = 10;
+		this.hp = 200;
+		this.goldValue = 10;
+		this.flying = false;
 	}
 
 	@Override

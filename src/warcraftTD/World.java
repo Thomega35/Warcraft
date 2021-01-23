@@ -401,6 +401,7 @@ public class World {
 		if (monsters.size() == 0 && reserve == 0) {
 			wave++;
 			reserve = wave;
+			if(wave%5 == 0) reserve = 1 + reserve/2;
 		}
 		// TODO changer le spawn du monstre pour un spawn to les X ticks
 		if (reserve > 0 && System.currentTimeMillis() - startTimeMonster >= (spawnTime/wave + 200)) {
@@ -430,9 +431,15 @@ public class World {
 		// Ajout d'un monstre "a la main" pour afficher comment un monstre se deplaçe.
 		// Vous ne devez pas faire pareil, mais ajouter une vague comportant plusieurs
 		// monstres
-		Monster monster = new Zerg(this, new Position(spawn.x, spawn.y));
-		monster.setSpeed(0.2);
-		this.monsters.add(monster);
+		Monster monster;
+		if(wave%5 == 0) {
+			monster = new Mouche(this, new Position(spawn.x, spawn.y));
+			monster.setSpeed(0.3);
+		}else {
+			monster = new Zerg(this, new Position(spawn.x, spawn.y));
+			monster.setSpeed(0.2);
+		}
+			this.monsters.add(monster);
 	}
 
 	/**

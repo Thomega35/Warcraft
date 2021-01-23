@@ -19,6 +19,7 @@ public abstract class Tower {
 		this.world = world;
 		startTimeTir = System.currentTimeMillis();
 	}
+	
 	public abstract void upgrade();
 	
 	public abstract void tir(Monster monster);

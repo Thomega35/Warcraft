@@ -562,7 +562,7 @@ public class World {
 	public void tir() {
 		for(Tower t: towers) {
 			for(Monster m : monsters) {
-				if (timer() - t.startTimeTir >= t.attackSpeed && m.position.dist(t.position) <= t.range * squareHeight) {
+				if (t.position.dist(m.position) < (double)(t.range)/(double)(nbSquareX)) {
 					t.tir(m);
 					break;
 				}
@@ -607,7 +607,7 @@ public class World {
 			}
 			update();
 			StdDraw.show();
-			System.out.println(timer());
+			//System.out.println(timer());
 
 			// StdDraw.pause(20);
 

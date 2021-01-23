@@ -85,7 +85,7 @@ public abstract class Monster {
 				nextPosition = position.add(new Position(dist.x / 4, dist.y / 4));
 			}
 		} else {
-			// TODO Arrive
+			// Arrive
 			reached = true;
 		}
 	}

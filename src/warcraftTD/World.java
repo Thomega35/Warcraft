@@ -10,12 +10,11 @@ import java.util.Iterator;
 @SuppressWarnings("unused")
 public class World {
 	// l'ensemble des monstres, pour gerer (notamment) l'affichage
-	List<Monster> monsters = new ArrayList<Monster>();
-	int reserve;
-	// List<Float> l = new ArrayList<Float>();
-	// float f;
+	List<Monster> monsters;
 	// l'ensemble des points par lequels devront passer les monstres.
-	List<Position> checkpoints = new ArrayList<Position>();
+	List<Position> checkpoints;
+	// l'ensemble des tous, pour gerer l'update des tours
+	List<Tower> towers;
 
 	// Position par laquelle les monstres vont venir
 	Position spawn;
@@ -25,43 +24,40 @@ public class World {
 	int height;
 	int nbSquareX;
 	int nbSquareY;
-	int Wave = 0;
-	Monster lastM = null;
 	double squareWidth;
 	double squareHeight;
+
+	// Plateau permettant l'initialisation du terrain et de savoir où l'on peut
+	// placer une tour
 	// [x][y]
 	int[][] board;
 	int[][] backboard;
-	List<Tower> towers = new ArrayList<Tower>();
 
 	// Nombre de points de vie du joueur
-	int life = 20;
-	int gold = 10000;
+	int life;
 
+	// Argent du joueur
+	int gold;
 
+	// Vague du joueur, permet d'adapter les monstres envoyés
+	int wave;
+
+	// Nombre de monstres à envoyer avant la prochaine vague
+	int reserve;
 
 	// Commande sur laquelle le joueur appuie (sur le clavier)
 	char key;
 
 	// Affichage des FPS
-	long startTime;
-	int FPS;
+	long startTimeFPS;
+	int fPS;
 	int calculFPS;
-
+	
+	// Calcul temps entre 2 monstres
+	long startTimeMonster;
+	
 	// Condition pour terminer la partie
 	boolean end = false;
-
-	// TODO changer l'ordre des fonctions pour plus de clarté
-	public void waveadd() {
-		// ex
-		// Ajout d'un monstre "a la main" pour afficher comment un monstre se deplaçe.
-		// Vous ne devez pas faire pareil, mais ajouter une vague comportant plusieurs
-		// monstres
-		Monster monster = new Zerg(this, new Position(spawn.x, spawn.y));
-		monster.setSpeed(0.2);
-		this.monsters.add(monster);
-		lastM = monster;
-	}
 
 	/**
 	 * Initialisation du monde en fonction de la largeur, la hauteur et le nombre de
@@ -79,13 +75,19 @@ public class World {
 		this.height = height;
 		this.nbSquareX = nbSquareX;
 		this.nbSquareY = nbSquareY;
-		squareWidth = (double) 1 / nbSquareX;
-		squareHeight = (double) 1 / nbSquareY;
+		this.squareWidth = (double) 1 / nbSquareX;
+		this.squareHeight = (double) 1 / nbSquareY;
+		this.gold = 1000;
+		this.life = 20;
+		this.wave = 0;
 		// initialisation du plateau
-		board = new int[nbSquareX][nbSquareY];
+		this.board = new int[nbSquareX][nbSquareY];
+		this.towers = new ArrayList<Tower>();
+		this.monsters = new ArrayList<Monster>();
+		this.checkpoints = new ArrayList<Position>();
 		StdDraw.setCanvasSize(width, height);
 		StdDraw.enableDoubleBuffering();
-		initBack();
+		initImageFond();
 		initCheckpoints();
 	}
 
@@ -98,57 +100,127 @@ public class World {
 		}
 	}
 
-	/**
-	 * Definit le decor du plateau de jeu.
-	 */
-	
-	public void drawBackground() {
-		String[] tabs = {"/images/Garden0.png","/images/Garden1.png", "/images/Garden2.png", "/images/Garden3.png"};
-		for (int i = 0; i < nbSquareX; i++) {
-			for (int j = 0; j < nbSquareY; j++) {
-				if (board[i][j] >= 4) {
-					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
-							tabs[board[i][j]-4], squareWidth, squareHeight);
+	public void initPath() {
+//		0 case vide
+//		1 spawn
+//		2 fin
+//		3 chemin
+		// setup du spawn
+		int departX = 0;
+		int departY = 0;
+		spawn = new Position(departX * squareWidth + squareWidth / 2, departY * squareHeight + squareHeight / 2);
+		// setup points de passage + chemin
+		// ancien point de passage
+		int precedentX = departX;
+		int precedentY = departY;
+		for (int coordY = 0; coordY < nbSquareY; coordY = coordY + 2) {
+			int aleatX = 0;
+			// génération nb aléatoire (pas 2 fois le meme d'affilé
+			do {
+				// premiere ligne jusqu'au bout pour faire des U partout
+				if (coordY == 0) {
+					aleatX = nbSquareX - 1;
+				} else {
+					aleatX = (int) (Math.random() * nbSquareX);
+				}
+			} while (aleatX == precedentX);
+
+			// remplissage de board sur le chemin en colonnes
+			// parcours vertical pour completer les colonnes du chemin
+			for (int k = precedentY + 1; k <= coordY; k++) {
+				board[precedentX][k] = 3;
+			}
+			// cas derniere ligne si paire
+			if (nbSquareY % 2 == 0 && coordY >= nbSquareY - 2) {
+				for (int lastX = precedentX; lastX < nbSquareX; lastX++) {
+					board[lastX][nbSquareY - 1] = 3;
+				}
+			}
+			// remplissage de board sur le chemin en ligne
+			// parcours horizontal
+			for (int k = precedentX; (precedentX < aleatX ? k <= aleatX : k >= aleatX);) {
+				// cas commun (sauf fin)
+				if (k < nbSquareX && coordY < nbSquareY - 2) {
+					board[k][coordY] = 3;
+					// derniere ligne
+				} else if (nbSquareY % 2 == 1 && coordY == nbSquareY - 1) {
+					for (int X = precedentX; X < nbSquareX - 1; X++) {
+						board[X][nbSquareY - 1] = 3;
+					}
+				}
+				k = precedentX < aleatX ? k + 1 : k - 1;
+			}
+			// angle du chemin
+			if (coordY < nbSquareY - 2) {
+				board[aleatX][coordY] = 3;
+			}
+			precedentX = aleatX;
+			precedentY = coordY;
+		}
+		board[departX][departY] = 1;
+		board[nbSquareX - 1][nbSquareY - 1] = 2;
+		for (int Y = 0; Y < nbSquareY - 2; Y++) {
+			for (int X = 0; X < nbSquareX - 2; X++) {
+				// fait un U si pas de chemin au dessus:
+				// X-0-0-0-X ///X-0-0-0-X
+				// 0-0-0-0-0 => 0-3-3-3-X
+				// X-P-3-3-X ///X-3-0-3-X
+				if (board[X][Y] == 3 && board[X + 1][Y] == 3 && board[X + 2][Y] == 3 && board[X][Y + 1] != 3
+						&& board[X + 1][Y + 1] != 3 && board[X + 2][Y + 1] != 3 && board[X][Y + 2] != 3
+						&& board[X + 1][Y + 2] != 3 && board[X + 2][Y + 2] != 3 && (X <= 0 || board[X - 1][Y + 1] != 3)
+						&& (X >= nbSquareX - 3 || board[X + 3][Y + 1] != 3)) {
+					board[X + 1][Y] = (int) (Math.random() * 4) + 4;
+					board[X][Y + 1] = 3;
+					board[X + 1][Y + 1] = 3;
+					board[X + 2][Y + 1] = 3;
 				}
 			}
 		}
 	}
-	
-	public void initBack() {
-		initBackground();
-		initPath();
-		drawPath();
-		drawBackground();
 
-		StdDraw.show();
-		StdDraw.save("./src/images/save.png");
-		StdDraw.clear();
-	}
-	
-	public void drawBack() {
-		StdDraw.picture(0.5,0.5, "./src/images/save.png",1,1);
+	/**
+	 * Definit le decor du plateau de jeu. 
+	 * @1 = depart 
+	 * @2 = arrivee 
+	 * @3 = chemin 
+	 * @4 = garden1 
+	 * @5 = garden2 
+	 * @6 = garden3 
+	 * @7 = garden4
+	 */
+	public void drawBackground() {
+		String[] tabs = { "/images/Depart.png", "/images/Arrivee.png", "/images/Chemin.png", "/images/Gazon_baies.png",
+				"/images/Gazon_blue_red.png", "/images/Gazon_weed.png", "/images/Gazon_jaune.png" };
+		String[] tabs2 = {};
+		for (int i = 0; i < nbSquareX; i++) {
+			for (int j = 0; j < nbSquareY; j++) {
+				StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
+						tabs[board[i][j] - 1], squareWidth, squareHeight);
+			}
+		}
 	}
 
 	/**
 	 * Initialise le chemin sur la position du point de depart des monstres. Cette
 	 * fonction permet d'afficher une route qui sera differente du decor.
 	 */
-	public void drawPath() {
-		String[] tabs2 = {"/images/Path1.png","/images/Path2.png", "/images/Path3.png"};
-		// dessin de Board
-		for (int i = 0; i < board.length; i++) {
-			for (int j = 0; j < board[i].length; j++) {
-				if (board[i][j] > 0 && board[i][j] <= 3) {
-					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
-							tabs2[board[i][j]-1], squareWidth, squareHeight);
-				}
-			}
-		}
+	public void initImageFond() {
+		initBackground();
+		initPath();
+		drawBackground();
+
+		StdDraw.show();
+		StdDraw.save("./src/images/ImageFond.png");
+		StdDraw.clear();
+	}
+
+	public void drawImageFond() {
+		StdDraw.picture(0.5, 0.5, "./src/images/ImageFond.png", 1, 1);
 	}
 
 	public void drawTower() {
-		for (int i = 0; i < board.length; i++) {
-			for (int j = 0; j < board[i].length; j++) {
+		for (int i = 0; i < nbSquareX; i++) {
+			for (int j = 0; j < nbSquareY; j++) {
 				if (board[i][j] == 10) {
 					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
 							"/images/Archer1.jpg", squareWidth, squareHeight);
@@ -169,84 +241,6 @@ public class World {
 		}
 	}
 
-	public void initPath() {
-//		0 case vide
-//		1 spawn
-//		2 fin
-//		3 chemin
-		// setup du spawn
-		int departX = 0;
-		int departY = 0;
-		spawn = new Position(departX * squareWidth + squareWidth / 2, departY * squareHeight + squareHeight / 2);
-		// setup points de passage + chemin
-		// ancien point de passage
-		int precedentX = departX;
-		int precedentY = departY;
-		for (int coordY = 0; coordY < board[0].length; coordY = coordY + 2) {
-			int aleatX = 0;
-			// génération nb aléatoire (pas 2 fois le meme d'affilé
-			do {
-				// premiere ligne jusqu'au bout pour faire des U partout
-				if (coordY == 0) {
-					aleatX = nbSquareX - 1;
-				} else {
-					aleatX = (int) (Math.random() * nbSquareX);
-				}
-			} while (aleatX == precedentX);
-
-			// remplissage de board sur le chemin en colonnes
-			// parcours vertical pour completer les colonnes du chemin
-			for (int k = precedentY + 1; k <= coordY; k++) {
-				board[precedentX][k] = 3;
-			}
-			// cas derniere ligne si paire
-			if (nbSquareY % 2 == 0 && coordY >= board[0].length - 2) {
-				for (int lastX = precedentX; lastX < board.length; lastX++) {
-					board[lastX][board[0].length - 1] = 3;
-				}
-			}
-			// remplissage de board sur le chemin en ligne
-			// parcours horizontal
-			for (int k = precedentX; (precedentX < aleatX ? k <= aleatX : k >= aleatX);) {
-				// cas commun (sauf fin)
-				if (k < board.length && coordY < board[0].length - 2) {
-					board[k][coordY] = 3;
-					// derniere ligne
-				} else if (nbSquareY % 2 == 1 && coordY == board[0].length - 1) {
-					for (int X = precedentX; X < board.length - 1; X++) {
-						board[X][board[0].length - 1] = 3;
-					}
-				}
-				k = precedentX < aleatX ? k + 1 : k - 1;
-			}
-			// angle du chemin
-			if (coordY < board[0].length - 2) {
-				board[aleatX][coordY] = 3;
-			}
-			precedentX = aleatX;
-			precedentY = coordY;
-		}
-		board[departX][departY] = 1;
-		board[nbSquareX - 1][nbSquareY - 1] = 2;
-		for (int Y = 0; Y < board[0].length - 2; Y++) {
-			for (int X = 0; X < board.length - 2; X++) {
-				// fait un U si pas de chemin au dessus:
-				// X-0-0-0-X ///X-0-0-0-X
-				// 0-0-0-0-0 => 0-3-3-3-X
-				// X-P-3-3-X ///X-3-0-3-X
-				if (board[X][Y] == 3 && board[X + 1][Y] == 3 && board[X + 2][Y] == 3 && board[X][Y + 1] != 3
-						&& board[X + 1][Y + 1] != 3 && board[X + 2][Y + 1] != 3 && board[X][Y + 2] != 3
-						&& board[X + 1][Y + 2] != 3 && board[X + 2][Y + 2] != 3 && (X <= 0 || board[X - 1][Y + 1] != 3)
-						&& (X >= board.length - 3 || board[X + 3][Y + 1] != 3)) {
-					board[X + 1][Y] = (int) (Math.random() * 4) + 4;
-					board[X][Y + 1] = 3;
-					board[X + 1][Y + 1] = 3;
-					board[X + 2][Y + 1] = 3;
-				}
-			}
-		}
-	}
-
 	public void initCheckpoints() {
 		int i = 0; // X
 		int j = 0; // Y
@@ -255,11 +249,12 @@ public class World {
 			switch (Lastdirection) {
 			case 0: // ->
 				// non continue?
-				if (i + 1 == board.length || (board[i + 1][j] != 3 && board[i + 1][j] != 2)) {
+				if (i + 1 == nbSquareX || (board[i + 1][j] != 3 && board[i + 1][j] != 2)) {
 					checkpoints.add(new Position((double) (i) / nbSquareX + squareWidth / 2,
 							(double) (j) / nbSquareY + squareHeight / 2));
-					// non Up?
-					if (j + 1 == board[i].length || board[i][j + 1] != 3) {
+					// Up?
+					if (j + 1 == nbSquareY || board[i][j + 1] != 3) {
+						//Down
 						j--;
 						Lastdirection = 1;
 					} else {
@@ -277,8 +272,9 @@ public class World {
 				if (j == 0 || board[i][j - 1] != 3) {
 					checkpoints.add(new Position((double) (i) / nbSquareX + squareWidth / 2,
 							(double) (j) / nbSquareY + squareHeight / 2));
-					// non ->?
-					if (i + 1 == board.length || board[i + 1][j] != 3) {
+					// ->?
+					if (i + 1 == nbSquareX || board[i + 1][j] != 3) {
+						//<-
 						i--;
 						Lastdirection = 2;
 					} else {
@@ -296,8 +292,9 @@ public class World {
 				if (i == 0 || board[i - 1][j] != 3) {
 					checkpoints.add(new Position((double) (i) / nbSquareX + squareWidth / 2,
 							(double) (j) / nbSquareY + squareHeight / 2));
-					// non Up?
-					if (j + 1 == board[i].length || board[i][j + 1] != 3) {
+					// Up?
+					if (j + 1 == nbSquareY || board[i][j + 1] != 3) {
+						//Down
 						j--;
 						Lastdirection = 1;
 					} else {
@@ -312,11 +309,12 @@ public class World {
 				break;
 			case 3:// UP
 					// non continue?
-				if (j + 1 == board[i].length || board[i][j + 1] != 3) {
+				if (j + 1 == nbSquareY || board[i][j + 1] != 3 && board[i][j + 1] != 2) {
 					checkpoints.add(new Position((double) (i) / nbSquareX + squareWidth / 2,
 							(double) (j) / nbSquareY + squareHeight / 2));
-					// non ->?
-					if (i + 1 == board.length || (board[i + 1][j] != 3 && board[i + 1][j] != 2)) {
+					// ->?
+					if (i + 1 == nbSquareX || (board[i + 1][j] != 3 && board[i + 1][j] != 2)) {
+						//<-
 						i--;
 						Lastdirection = 2;
 					} else {
@@ -331,8 +329,8 @@ public class World {
 				break;
 			}
 		}
-		checkpoints.add(new Position((double) (board.length - 0.5) * squareWidth,
-				(double) (board[0].length - 0.5) * squareHeight));
+		checkpoints
+				.add(new Position((double) (nbSquareX - 0.5) * squareWidth, (double) (nbSquareY - 0.5) * squareHeight));
 	}
 
 	/**
@@ -340,21 +338,25 @@ public class World {
 	 * joueur ou son or
 	 */
 	public void drawInfos() {
+		calculFPS();
 		StdDraw.setPenColor(StdDraw.BLACK);
 		StdDraw.text(0.06, 0.98, "gold :" + gold);
 		StdDraw.text(0.04, 0.96, "life :" + life);
+		StdDraw.text(0.04, 0.94, "FPS :" + fPS);
+		StdDraw.text(0.04, 0.92, "Wave :" + wave);
 	}
+	
 
 	public void calculFPS() {
 		calculFPS++;
-		if (System.currentTimeMillis() - startTime >= 1000) {
-			FPS = calculFPS;
-			startTime = System.currentTimeMillis();
+		if (System.currentTimeMillis() - startTimeFPS >= 1000) {
+			fPS = calculFPS;
+			startTimeFPS = System.currentTimeMillis();
 			calculFPS = 0;
 		}
-		StdDraw.text(0.04, 0.94, "FPS :" + FPS);
 	}
 
+	
 	/**
 	 * Fonction qui recupere le positionnement de la souris et permet d'afficher une
 	 * image de tour en temps reel lorsque le joueur appuie sur une des touches
@@ -366,11 +368,9 @@ public class World {
 		String image = null;
 		switch (key) {
 		case 'a':
-			// TODO Ajouter une image pour representer une tour d'archers
 			StdDraw.picture(normalizedX, normalizedY, "/images/Archer1.jpg", squareWidth, squareHeight);
 			break;
 		case 'b':
-			// TODO Ajouter une image pour representer une tour a canon
 			StdDraw.picture(normalizedX, normalizedY, "/images/Bombe1.jpg", squareWidth, squareHeight);
 			break;
 		}
@@ -378,6 +378,7 @@ public class World {
 			StdDraw.picture(normalizedX, normalizedY, image, squareWidth, squareHeight);
 	}
 
+	
 	/**
 	 * Pour chaque monstre de la liste de monstres de la vague, utilise la fonction
 	 * update() qui appelle les fonctions run() et draw() de Monster. Modifie la
@@ -399,19 +400,30 @@ public class World {
 		monsters.removeIf(x -> (x.hp <= 0));
 	}
 
+	
 	private void updateWave() {
 		if (monsters.size() == 0 && reserve == 0) {
-			Wave++;
-			reserve = Wave;
+			wave++;
+			reserve = wave;
 		}
 		// TODO changer le spawn du monstre pour un spawn to les X ticks
-		if ((lastM == null || Math.sqrt(
-				Math.pow(lastM.position.x + spawn.x, 2) + Math.pow(lastM.position.y + spawn.y, 2)) >= squareWidth * 2)
-				&& reserve > 0) {
+		if (reserve > 0 && System.currentTimeMillis() - startTimeMonster >= 1000) {
 			reserve--;
+			startTimeMonster = System.currentTimeMillis();
 			// monsters.add(new Zerg(this, spawn));
 			waveadd();
 		}
+	}
+
+	// TODO changer l'ordre des fonctions pour plus de clarté
+	public void waveadd() {
+		// ex
+		// Ajout d'un monstre "a la main" pour afficher comment un monstre se deplaçe.
+		// Vous ne devez pas faire pareil, mais ajouter une vague comportant plusieurs
+		// monstres
+		Monster monster = new Zerg(this, new Position(spawn.x, spawn.y));
+		monster.setSpeed(0.2);
+		this.monsters.add(monster);
 	}
 
 	/**
@@ -421,12 +433,10 @@ public class World {
 	 * @return les points de vie restants du joueur
 	 */
 	public int update() {
-//		drawBackground();
-//		drawPath();
-		drawBack();
+		//TODO mettre drawTower et tir dans update tower
+		drawImageFond();
 		drawTower();
 		drawInfos();
-		calculFPS();
 		updateMonsters();
 		updateWave();
 		drawMouse();
@@ -464,6 +474,9 @@ public class World {
 		case 'a':
 			System.out.println("Arrow Tower selected (" + ArcherTower.buildCost + ".)");
 			break;
+		case 'w':
+			wave++;
+			break;
 		case 'b':
 			System.out.println("Bomb Tower selected (" + BombTower.buildCost + ".)");
 			break;
@@ -475,6 +488,7 @@ public class World {
 			break;
 		case 'q':
 			end = true;
+			break;
 		}
 	}
 
@@ -494,7 +508,7 @@ public class World {
 		int Y = myCasey(normalizedY);
 		switch (key) {
 		case 'a':
-			if (board[X][Y] > 3 && board[X][Y] < 10  && (gold > ArcherTower.buildCost)) {
+			if (board[X][Y] > 3 && board[X][Y] < 10 && (gold > ArcherTower.buildCost)) {
 				gold -= ArcherTower.buildCost;
 				board[X][Y] = 10;
 				towers.add(new ArcherTower(position));
@@ -508,8 +522,8 @@ public class World {
 			}
 			break;
 		case 'e':
-			for(Tower t : towers) {
-				if(t.position.equals(position) && gold >= t.upgradeCost && !t.upgraded ) {
+			for (Tower t : towers) {
+				if (t.position.equals(position) && gold >= t.upgradeCost && !t.upgraded) {
 					t.upgrade();
 					gold -= t.upgradeCost;
 				}
@@ -536,14 +550,15 @@ public class World {
 		Iterator<Monster> iterator = monsters.iterator();
 		Monster monster;
 		Position position;
-		for (int i = 0; i < board.length; i++) {
-			for (int j = 0; j < board[i].length; j++) {
+		for (int i = 0; i < nbSquareX; i++) {
+			for (int j = 0; j < nbSquareY; j++) {
 				if (towers[i][j] != null) {
-					towers[i][j].attackDelay ++;
+					towers[i][j].attackDelay++;
 					position = new Position(posCasex(i), posCasey(j));
 					while (iterator.hasNext()) {
 						monster = iterator.next();
-						if(towers[i][j].tir == false && towers[i][j].attackSpeed == towers[i][j].attackDelay && monster.position.dist(position) <= towers[i][j].range * squareHeight) {
+						if (towers[i][j].tir == false && towers[i][j].attackSpeed == towers[i][j].attackDelay
+								&& monster.position.dist(position) <= towers[i][j].range * squareHeight) {
 							towers[i][j].tir(monster);
 							System.out.println(monster.hp);
 							towers[i][j].tir = true;
@@ -563,7 +578,8 @@ public class World {
 	 */
 	public void run() {
 		printCommands();
-		startTime = System.currentTimeMillis();
+		startTimeFPS = System.currentTimeMillis();
+		startTimeMonster = System.currentTimeMillis();
 		while (!end) {
 
 			StdDraw.clear();
@@ -578,8 +594,7 @@ public class World {
 			update();
 			StdDraw.show();
 
-			//StdDraw.pause(20);
-
+			// StdDraw.pause(20);
 
 			if (life <= 0)
 				end = true;

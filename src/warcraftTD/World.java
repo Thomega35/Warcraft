@@ -538,6 +538,7 @@ public class World {
 				if (t.position.equals(position) && gold >= Tower.upgradeCost && !t.upgraded) {
 					t.upgrade();
 					gold -= Tower.upgradeCost;
+					board[X][Y] = board[X][Y]*10;
 				}
 			}
 			break;
@@ -561,7 +562,7 @@ public class World {
 	public void tir() {
 		for(Tower t: towers) {
 			for(Monster m : monsters) {
-				if (timer() - t.attackDelay >= t.attackSpeed && m.position.dist(t.position) <= t.range * squareHeight) {
+				if (timer() - t.startTimeTir >= t.attackSpeed && m.position.dist(t.position) <= t.range * squareHeight) {
 					t.tir(m);
 					break;
 				}

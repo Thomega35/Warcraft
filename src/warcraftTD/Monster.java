@@ -1,6 +1,7 @@
 package warcraftTD;
 
 public abstract class Monster {
+
 	// Position du monstre a l'instant t
 	Position position;
 	// Vitesse du monstre

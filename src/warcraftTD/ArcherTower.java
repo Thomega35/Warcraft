@@ -7,7 +7,7 @@ public class ArcherTower extends Tower {
 		super(world, position);
 		range = 3;
 		damage = 1;
-		attackSpeed = 2;
+		attackSpeed = 0.5;
 		projectileSpeed = 3;
 		upgraded = false;
 	}
@@ -19,7 +19,7 @@ public class ArcherTower extends Tower {
 	}
 	
 	public void tir(Monster monster) {
-		if (System.currentTimeMillis() - startTimeTir >= attackDelay) {
+		if (System.currentTimeMillis() - startTimeTir >= attackSpeed*1000) {
 			startTimeTir = System.currentTimeMillis();
 			world.projectiles.add(new Arrow(world, new Position(position.x, position.y), monster));
 		}

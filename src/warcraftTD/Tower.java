@@ -5,7 +5,6 @@ public abstract class Tower {
 	int range;
 	int damage;
 	double attackSpeed;
-	long attackDelay;
 	int projectileSpeed;
 	long startTimeTir;
 	

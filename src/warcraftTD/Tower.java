@@ -4,15 +4,14 @@ public abstract class Tower {
 	
 	int range;
 	int damage;
-	int attackSpeed;
-	int attackDelay;
+	double attackSpeed;
+	long attackDelay;
 	int projectileSpeed;
 	long startTimeTir;
 	
 	static int upgradeCost = 40;
 	
 	boolean upgraded;
-	boolean tir;
 	Position position;
 	World world;
 	

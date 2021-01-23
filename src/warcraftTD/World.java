@@ -6,6 +6,7 @@ import java.awt.geom.Arc2D.Float;
 import java.time.chrono.ChronoZonedDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Scanner;
 
 @SuppressWarnings("unused")
 public class World {
@@ -50,12 +51,14 @@ public class World {
 
 	// Affichage des FPS
 	long startTimeFPS;
-	int fPS;
+	int FPS;
 	int calculFPS;
 	
 	// Calcul temps entre 2 monstres
 	long startTimeMonster;
 	
+	//Valeur du début de partie
+	long globalStart;
 	// Condition pour terminer la partie
 	boolean end = false;
 
@@ -342,7 +345,7 @@ public class World {
 		StdDraw.setPenColor(StdDraw.BLACK);
 		StdDraw.text(0.06, 0.98, "gold :" + gold);
 		StdDraw.text(0.04, 0.96, "life :" + life);
-		StdDraw.text(0.04, 0.94, "FPS :" + fPS);
+		StdDraw.text(0.04, 0.94, "FPS :" + FPS);
 		StdDraw.text(0.04, 0.92, "Wave :" + wave);
 	}
 	
@@ -350,7 +353,7 @@ public class World {
 	public void calculFPS() {
 		calculFPS++;
 		if (System.currentTimeMillis() - startTimeFPS >= 1000) {
-			fPS = calculFPS;
+			FPS = calculFPS;
 			startTimeFPS = System.currentTimeMillis();
 			calculFPS = 0;
 		}
@@ -526,6 +529,7 @@ public class World {
 				if (t.position.equals(position) && gold >= t.upgradeCost && !t.upgraded) {
 					t.upgrade();
 					gold -= t.upgradeCost;
+					board[X][Y] = board[X][Y]* 10;
 				}
 			}
 			break;
@@ -547,29 +551,21 @@ public class World {
 	}
 
 	public void tir() {
-		Iterator<Monster> iterator = monsters.iterator();
-		Monster monster;
-		Position position;
-		for (int i = 0; i < nbSquareX; i++) {
-			for (int j = 0; j < nbSquareY; j++) {
-				if (towers[i][j] != null) {
-					towers[i][j].attackDelay++;
-					position = new Position(posCasex(i), posCasey(j));
-					while (iterator.hasNext()) {
-						monster = iterator.next();
-						if (towers[i][j].tir == false && towers[i][j].attackSpeed == towers[i][j].attackDelay
-								&& monster.position.dist(position) <= towers[i][j].range * squareHeight) {
-							towers[i][j].tir(monster);
-							System.out.println(monster.hp);
-							towers[i][j].tir = true;
-							towers[i][j].attackDelay = 0;
-						}
-						towers[i][j].tir = false;
-					}
-
+		for(Tower t: towers) {
+			for(Monster m : monsters) {
+				if (t.attackDelay - timer() == 1/t.attackSpeed && m.position.dist(t.position) <= t.range * squareHeight) {
+					t.tir(m);
+					System.out.println(m.hp);
+					t.attackDelay = timer();
 				}
 			}
 		}
+				
+
+	}
+	
+	public long timer() {
+		return (System.currentTimeMillis()-globalStart) * 1000;
 	}
 
 	/**
@@ -580,6 +576,7 @@ public class World {
 		printCommands();
 		startTimeFPS = System.currentTimeMillis();
 		startTimeMonster = System.currentTimeMillis();
+		globalStart = System.currentTimeMillis();
 		while (!end) {
 
 			StdDraw.clear();
@@ -589,7 +586,6 @@ public class World {
 
 			if (StdDraw.isMousePressed()) {
 				mouseClick(StdDraw.mouseX(), StdDraw.mouseY());
-				StdDraw.pause(50);
 			}
 			update();
 			StdDraw.show();

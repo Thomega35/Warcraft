@@ -8,10 +8,8 @@ public class BombTower extends Tower {
 		range = 2;
 		damage = 50;
 		attackSpeed = 1;
-		attackDelay = attackSpeed-1;
 		projectileSpeed = 2;
 		upgraded = false;
-		tir = false;
 	}
 	
 	public void upgrade() {

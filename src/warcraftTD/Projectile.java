@@ -3,6 +3,7 @@ package warcraftTD;
 public abstract class Projectile {
 
 	protected Position position;
+	protected Position obj;
 	protected Monster monster;
 	protected int damage;
 	protected double speed;
@@ -16,13 +17,13 @@ public abstract class Projectile {
 		this.world = world;
 		this.position = position;
 		this.monster = monster;
+		obj = monster.position;
 	}
 
 	public abstract void draw();
 
 	public void move() {
 		// TODO deplacement projectiles
-		Position obj = monster.position;
 		//position = nextPosition;
 		Position dist = obj.add(new Position(-position.x, -position.y));
 		double norme = new Position(0, 0).dist(dist);
@@ -30,12 +31,16 @@ public abstract class Projectile {
 		dist = new Position(speed * dist.x / (norme * (double) world.getNbSquareX() * 3.0),
 				speed * dist.y / (norme * (double) world.getNbSquareY() * 3.0));
 		position = position.add(dist);
+		obj = obj.add(dist);
 		
 		if (position.x > 1 && position.y > 1) {
 			out = true;
-		}else if (Math.abs(position.x-monster.position.x) < world.getSquareWidth() && Math.abs(position.y-monster.position.y) < world.getSquareHeight()) {
-			monster.hp = monster.hp-damage;
-			reached = true;
+		} 
+		for (Monster m : world.monsters) {
+			if (Math.abs(position.x-m.position.x) < world.getSquareWidth() && Math.abs(position.y-m.position.y) < world.getSquareHeight()) {
+				m.hp = m.hp-damage;
+				reached = true;
+			}
 		}
 	}
 

@@ -5,10 +5,10 @@ public class ArcherTower extends Tower {
 
 	public ArcherTower(World world, Position position) {
 		super(world, position);
-		range = 3;
-		damage = 50;
-		attackSpeed = 2;
-		projectileSpeed = 0.5;
+		range = 10;
+		damage = 25;
+		attackSpeed = 0.3;
+		projectileSpeed = 0.4;
 		upgraded = false;
 	}
 	

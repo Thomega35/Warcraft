@@ -19,7 +19,10 @@ public class BombTower extends Tower {
 	}
 	
 	public void tir(Monster monster) {
-		monster.hp -= this.damage;
+		if (System.currentTimeMillis() - startTimeTir >= attackSpeed*1000.0) {
+			startTimeTir = System.currentTimeMillis();
+			world.projectiles.add(new Arrow(world, new Position(position.x, position.y), monster, damage, projectileSpeed));
+		}
 	}
 
 }

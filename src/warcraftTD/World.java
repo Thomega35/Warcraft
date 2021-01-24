@@ -43,7 +43,6 @@ public class World {
 	private int wave;// Vague du joueur, permet d'adapter les monstres envoyés
 	private int reserve;// Nombre de monstres à envoyer avant la prochaine vague
 	private int spawnTime;// Temps entre 2 spawn de monstre
-	private boolean endwave;// Fin de la vague, pour le temps
 
 	// Commande sur laquelle le joueur appuie (sur le clavier)
 	private char key;
@@ -393,7 +392,7 @@ public class World {
 		for (int i = 0; i < nbSquareX; i++) {
 			for (int j = 0; j < nbSquareY; j++) {
 				StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
-						tabs[board[i][j] - 1], squareWidth * 1.04, squareHeight * 1.04);
+						tabs[board[i][j] - 1], squareWidth , squareHeight );
 			}
 		}
 	}
@@ -429,11 +428,11 @@ public class World {
 
 				} else if (board[i][j] == 20) {
 					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
-							"/images/Bombe1.jpg", squareWidth, squareHeight);
+							"/images/TourBombe1.jpg", squareWidth, squareHeight);
 
 				} else if (board[i][j] == 200) {
 					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
-							"/images/Bombe2.jpg", squareWidth, squareHeight);
+							"/images/TourBombe2.jpg", squareWidth, squareHeight);
 				}
 			}
 		}
@@ -568,7 +567,7 @@ public class World {
 			StdDraw.picture(normalizedX, normalizedY, "/images/Archer1.jpg", squareWidth, squareHeight);
 			break;
 		case 'b':
-			StdDraw.picture(normalizedX, normalizedY, "/images/Bombe1.jpg", squareWidth, squareHeight);
+			StdDraw.picture(normalizedX, normalizedY, "/images/TourBombe1.jpg", squareWidth, squareHeight);
 			break;
 		}
 		if (image != null)
@@ -600,7 +599,6 @@ public class World {
 			wave++;
 			reserve = wave;
 			projectiles = new ArrayList<Projectile>();
-			endwave = true;
 		}
 		// TODO changer le spawn du monstre pour un spawn to les Frames
 		if (reserve > 0 && System.currentTimeMillis() - startTimeMonster >= (spawnTime / wave + 200)) {
@@ -615,6 +613,10 @@ public class World {
 		// TODO Auto-generated method stub
 		for (Projectile p : projectiles) {
 			p.update();
+			if (p.reached) {
+				StdDraw.picture(p.position.x, p.position.y, "/images/Depart.png", getSquareWidth(), getSquareHeight());
+				StdDraw.show();
+			}
 		}
 		projectiles.removeIf(x -> (x.out));
 		projectiles.removeIf(x -> (x.reached));
@@ -658,6 +660,7 @@ public class World {
 			//StdDraw.pause(2000);
 			endwave = false;
 		}
+		updateMonsters();
 		updateWave();
 		updateTowers();
 		updateProjectiles();
@@ -698,6 +701,9 @@ public class World {
 			break;
 		case 'w':
 			wave++;
+			break;
+		case 'k':
+			monsters = new ArrayList<Monster>();
 			break;
 		case 'b':
 			System.out.println("Bomb Tower selected (" + BombTower.buildCost + ".)");

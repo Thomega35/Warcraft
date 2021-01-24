@@ -7,11 +7,11 @@ public class Mouche extends Monster {
 		this.hp = 200;
 		this.goldValue = 20;
 		this.flying = true;
-		this.speed = 0.1;
+		this.speed = 0.06;
 	}
 	
 	public void draw() {
-		StdDraw.picture(position.x, position.y, "/images/Mouche.png", world.getSquareWidth(), world.getSquareHeight());
+		StdDraw.picture(position.x, position.y, "/images/Dragon.png", world.getSquareWidth(), world.getSquareHeight(), rotation);
 	}
 
 }

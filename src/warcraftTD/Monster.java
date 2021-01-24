@@ -10,9 +10,11 @@ public abstract class Monster {
 	protected int hp;
 	// Valeur en gold du monstre une fois tué
 	protected int goldValue;
-	//Monstre volant ou non
+	// Monstre volant ou non
 	protected boolean flying;
-
+	//Valeur de la rotation de l'image
+	protected double rotation;
+	
 	// Position du monstre a l'instant t+1
 	Position nextPosition;
 	// Boolean pour savoir si le monstre a atteint le chateau du joueur
@@ -29,6 +31,7 @@ public abstract class Monster {
 		world = w;
 		this.nextPosition = new Position(startp.x + this.world.getSquareWidth() * speed/* + world.squareWidth*speed */,
 				startp.y);
+		this.rotation = 0;
 	}
 
 	/**
@@ -52,6 +55,18 @@ public abstract class Monster {
 //			System.out.println(dist.x / norme);
 			dist = new Position(speed * dist.x / (norme * (double) world.getNbSquareX() * 3.0),
 					speed * dist.y / (norme * (double) world.getNbSquareY() * 3.0));
+			boolean yneg = dist.y < 0;
+			boolean ypos = dist.y > 0;
+			boolean xneg = dist.x < 0;
+			if (ypos) {
+				rotation = 90;
+			}else if (yneg) {
+				rotation = - 90;
+			}else if (xneg){
+				rotation = 180;
+			}else {
+				rotation = 0;
+			}
 //			if (obj.equals(position)) {
 //				System.out.print("[pb]");
 //				obj = world.checkpoints.get(checkpoint++);

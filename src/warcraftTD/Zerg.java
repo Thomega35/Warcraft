@@ -7,12 +7,12 @@ public class Zerg extends Monster {
 		this.hp = 200;
 		this.goldValue = 10;
 		this.flying = false;
-		this.speed = 0.05;
+		this.speed = 0.03;
 	}
 
 	@Override
 	public void draw() {
-		StdDraw.picture(position.x, position.y, "/images/Zerg.png", world.getSquareWidth(), world.getSquareHeight());
+		StdDraw.picture(position.x, position.y, "/images/Zerg.png", world.getSquareWidth(), world.getSquareHeight(), rotation);
 	}
 
 }

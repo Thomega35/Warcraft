@@ -12,7 +12,7 @@ public class Bombe extends Projectile {
 		if (reached) {
 			StdDraw.picture(position.x, position.y, "/images/Depart.png", world.getSquareWidth(), world.getSquareHeight());
 		}else {
-			StdDraw.picture(position.x, position.y, "/images/fleche.png", world.getSquareWidth(), world.getSquareHeight(),
+			StdDraw.picture(position.x, position.y, "/images/Bombe.png", world.getSquareWidth()/3, world.getSquareHeight()/3,
 					rotation);
 			rotation = rotation +3;
 		}
@@ -22,7 +22,7 @@ public class Bombe extends Projectile {
 	public void reached() {
 		for (Monster m : world.monsters) {
 			if (!m.flying && Math.abs(position.x-m.position.x) < world.getSquareWidth() && Math.abs(position.y-m.position.y) < world.getSquareHeight()) {
-				m.hp = m.hp-damage;
+				//m.hp = m.hp-damage;
 				reached = true;
 			}
 		}

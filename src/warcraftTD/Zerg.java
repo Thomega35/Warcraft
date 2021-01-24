@@ -5,7 +5,7 @@ public class Zerg extends Monster {
 	public Zerg(World w, Position p) {
 		super(w, p);
 		this.hp = 200;
-		this.goldValue = 10;
+		this.goldValue = 5;
 		this.flying = false;
 		this.speed = 0.05;
 	}

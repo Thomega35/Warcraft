@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.awt.Font;
 
 public class World {
-	// l'ensemble des monstres, pour gerer (notamment) l'affichage
+	// l ensemble des monstres, pour gerer (notamment) l affichage
 	List<Monster> monsters;
-	// l'ensemble des points par lequels devront passer les monstres.
+	// l ensemble des points par lequels devront passer les monstres.
 	List<Position> checkpoints;
-	// l'ensemble des tours, pour gerer l'update des tours
+	// l ensemble des tours, pour gerer l update des tours
 	List<Tower> towers;
-	// l'ensemble des projectiles
+	// l ensemble des projectiles
 	List<Projectile> projectiles;
 
 	// Position par laquelle les monstres vont venir
@@ -25,7 +25,7 @@ public class World {
 	private double squareWidth;
 	private double squareHeight;
 
-	// Plateau permettant l'initialisation du terrain et de savoir où l'on peut
+	// Plateau permettant l initialisation du terrain et de savoir ou l on peut
 	// placer une tour
 	// [x][y]
 	private int[][] board;
@@ -36,15 +36,15 @@ public class World {
 	// Argent du joueur
 	private int gold;
 
-	private int wave;// Vague du joueur, permet d'adapter les monstres envoyés
-	private int reserve;// Nombre de monstres à envoyer avant la prochaine vague
+	private int wave;// Vague du joueur, permet d adapter les monstres envoyes
+	private int reserve;// Nombre de monstres a envoyer avant la prochaine vague
 	private int spawnTime;// Temps entre 2 spawn de monstre
 
 	// Commande sur laquelle le joueur appuie (sur le clavier)
 	private char key;
 
 	// Affichage des FPS
-	//Aucune triche possible en modifiant ces valeurs
+	// Aucune triche possible en modifiant ces valeurs => public
 	public long startTimeFPS;
 	public int fPS;
 	public int calculFPS;
@@ -53,7 +53,7 @@ public class World {
 	private long startTimeMonster;
 	private long globalStart;
 
-	// temps d'affichage de la nouvelle vague
+	// temps d affichage de la nouvelle vague
 	private long newWaveTime;
 
 	Font starting = new Font("Arial", Font.BOLD, 20);
@@ -268,10 +268,10 @@ public class World {
 	 * Initialisation du monde en fonction de la largeur, la hauteur et le nombre de
 	 * cases donnees
 	 * 
-	 * @param width largeur d'une case du monde
-	 * @param height hauteur d'une case du monde
-	 * @param nbSquareX
-	 * @param nbSquareY
+	 * @param width largeur de la fenetre du monde
+	 * @param height hauteur de la fenetre du monde
+	 * @param nbSquareX nombre de case dans la largeur du monde
+	 * @param nbSquareY nombre de case dans la hauteur du monde
 	 */
 	public World(int width, int height, int nbSquareX, int nbSquareY) {
 		this.width = width;

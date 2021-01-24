@@ -5,8 +5,8 @@ import java.util.Scanner;
 public class Main {
 
 	public static void main(String[] args) {
-		int width = 800;
-		int height = 800;
+		int width = 1200;
+		int height = 1200;
 		int nbSquareX = 12;
 		int nbSquareY = 12;	
 		Scanner sc = new Scanner(System.in);

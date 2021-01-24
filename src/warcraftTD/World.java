@@ -43,6 +43,7 @@ public class World {
 	private int wave;// Vague du joueur, permet d'adapter les monstres envoyés
 	private int reserve;// Nombre de monstres à envoyer avant la prochaine vague
 	private int spawnTime;// Temps entre 2 spawn de monstre
+	private boolean endwave;// Fin de la vague, pour le temps
 
 	// Commande sur laquelle le joueur appuie (sur le clavier)
 	private char key;
@@ -588,14 +589,19 @@ public class World {
 		}
 		monsters.removeIf(x -> (x.reached));
 		monsters.removeIf(x -> (x.hp <= 0));
+		for (Monster monster : monsters) {
+			monster.draw();
+		}
 	}
 
 	private void updateWave() {
 		if (monsters.size() == 0 && reserve <= 0) {
 			wave++;
 			reserve = wave;
+			projectiles = new ArrayList<Projectile>();
+			endwave = true;
 		}
-		// TODO changer le spawn du monstre pour un spawn to les X ticks
+		// TODO changer le spawn du monstre pour un spawn to les Frames
 		if (reserve > 0 && System.currentTimeMillis() - startTimeMonster >= (spawnTime / wave + 200)) {
 			startTimeMonster = System.currentTimeMillis();
 			// monsters.add(new Zerg(this, spawn));
@@ -645,6 +651,10 @@ public class World {
 		drawImageFond();
 		drawInfos();
 		updateMonsters();
+		if (endwave) {
+			//StdDraw.pause(2000);
+			endwave = false;
+		}
 		updateWave();
 		updateTowers();
 		updateProjectiles();
@@ -761,7 +771,7 @@ public class World {
 	public void tir() {
 		for (Tower t : towers) {
 			for (Monster m : monsters) {
-				if (t.position.dist(m.position) < (double) (t.range) / (double) (nbSquareX)) {
+				if ((t.targetFlying || !m.flying) && t.position.dist(m.position) < (double) (t.range) / (double) (nbSquareX)) {
 					t.tir(m);
 					break;
 				}

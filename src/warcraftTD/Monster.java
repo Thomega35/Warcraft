@@ -85,7 +85,7 @@ public abstract class Monster {
 
 	public void update() {
 		move();
-		draw();
+		//draw();
 		if (this.hp == 0) {
 			this.world.setGold(this.world.getGold() + 20);
 		}

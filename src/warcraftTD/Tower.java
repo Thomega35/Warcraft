@@ -7,6 +7,7 @@ public abstract class Tower {
 	protected double attackSpeed;
 	protected double projectileSpeed;
 	protected long startTimeTir;
+	public boolean targetFlying;
 	
 	static int upgradeCost = 40;
 	
@@ -22,5 +23,6 @@ public abstract class Tower {
 	
 	public abstract void upgrade();
 	
+	//TODO changer tir pour Frames
 	public abstract void tir(Monster monster);
 }

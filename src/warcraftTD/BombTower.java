@@ -5,11 +5,12 @@ public class BombTower extends Tower {
 
 	public BombTower(World world, Position position) {
 		super(world, position);
-		range = 2;
+		range = 10;
 		damage = 150;
-		attackSpeed = 1;
-		projectileSpeed = 2;
+		attackSpeed = 0.9;
+		projectileSpeed = 0.05;
 		upgraded = false;
+		targetFlying = false;
 	}
 	
 	public void upgrade() {
@@ -21,7 +22,7 @@ public class BombTower extends Tower {
 	public void tir(Monster monster) {
 		if (System.currentTimeMillis() - startTimeTir >= attackSpeed*1000.0) {
 			startTimeTir = System.currentTimeMillis();
-			world.projectiles.add(new Arrow(world, new Position(position.x, position.y), monster, damage, projectileSpeed));
+			world.projectiles.add(new Bombe(world, new Position(position.x, position.y), monster, damage, projectileSpeed));
 		}
 	}
 

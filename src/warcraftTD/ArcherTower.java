@@ -7,9 +7,10 @@ public class ArcherTower extends Tower {
 		super(world, position);
 		range = 10;
 		damage = 25;
-		attackSpeed = 0.3;
-		projectileSpeed = 0.4;
+		attackSpeed = 0.5;
+		projectileSpeed = 0.15;
 		upgraded = false;
+		targetFlying = true;
 	}
 	
 	public void upgrade() {

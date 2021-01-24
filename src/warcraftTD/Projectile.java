@@ -9,6 +9,7 @@ public abstract class Projectile {
 	protected double speed;
 	protected boolean reached;
 	protected boolean out;
+	protected double rotation;
 	protected World world;
 	
 	public Projectile(World world, Position position, Monster monster, int damage, double speed) {
@@ -36,16 +37,14 @@ public abstract class Projectile {
 		if (position.x > 1 && position.y > 1) {
 			out = true;
 		} 
-		for (Monster m : world.monsters) {
-			if (Math.abs(position.x-m.position.x) < world.getSquareWidth() && Math.abs(position.y-m.position.y) < world.getSquareHeight()) {
-				m.hp = m.hp-damage;
-				reached = true;
-			}
-		}
 	}
 
 	public void update() {
 		move();
+		reached();
 		draw();
 	}
+
+	public abstract void reached();
+	
 }

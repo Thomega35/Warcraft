@@ -296,6 +296,9 @@ public class World {
 		initCheckpoints();
 	}
 
+	/*
+	 * Cree un premier arriere-plan compose uniquement de cases d'herbes
+	 */
 	public void initBackground() {
 		for (int i = 0; i < nbSquareX; i++) {
 			for (int j = 0; j < nbSquareY; j++) {
@@ -305,6 +308,10 @@ public class World {
 		}
 	}
 
+	/*
+	 * Fonction qui cree le chemin de maniere aleatoire avec le depart et l'arrivee
+	 * fixes respectivement en bas a gauche et en haut a droite
+	 */
 	public void initPath() {
 //		0 case vide
 //		1 spawn
@@ -653,7 +660,6 @@ public class World {
 		}
 	}
 
-	// TODO changer l'ordre des fonctions pour plus de clarté
 	/*
 	 * Fonction qui gère l'affichage des projectiles et leur déplacement
 	 */
@@ -665,6 +671,9 @@ public class World {
 		projectiles.removeIf(x -> (x.reached));
 	}
 
+	/*
+	 * Rassemble toutes les fonctions d'affichage des tours et de leurs projectiles
+	 */
 	private void updateTowers() {
 		drawTower();
 		tir();
@@ -764,6 +773,10 @@ public class World {
 		case 'e':
 			System.out.println("Evolution selected (" + ArcherTower.upgradeCost + ".)");
 			break;
+		case 'd':
+			towers = new ArrayList<Tower>();
+			System.out.println("RTFM!");
+			break;
 		case 's':
 			System.out.println("Starting game!");
 			start = true;
@@ -833,13 +846,14 @@ public class World {
 	 * clavier
 	 */
 	public void printCommands() {
-		System.out.println("Press A to select Arrow Tower (cost 50g).");
-		System.out.println("Press B to select Cannon Tower (cost 60g).");
-		System.out.println("Press R to select Rocket Tower (cost 60g).");
-		System.out.println("Press E to update a tower (cost 40g).");
+		System.out.println("Press A to select Arrow Tower (cost " + ArcherTower.buildCost + "g).");
+		System.out.println("Press B to select Cannon Tower (cost " + BombTower.buildCost + "g).");
+		System.out.println("Press R to select Rocket Tower (cost " + RocketLauncher.buildCost + "g).");
+		System.out.println("Press E to update a tower (cost " + Tower.upgradeCost + "g).");
 		System.out.println("Click on the grass to build it.");
 		System.out.println("Press S to start.");
 		System.out.println("Press Q to quit.");
+		System.out.println("Please, don't try to press D. Never.");
 	}
 
 	/*
@@ -861,6 +875,9 @@ public class World {
 
 	}
 
+	/*
+	 * Donne le temps en secondes depuis le lancement du jeu
+	 */
 	public long timer() {
 		return (System.currentTimeMillis() - globalStart) / 1000;
 	}

@@ -613,8 +613,8 @@ public class World {
 			StdDraw.picture(normalizedX, normalizedY, "/images/RocketLauncher.png", squareWidth, squareHeight);
 			break;
 		case 'e':
-			StdDraw.picture(StdDraw.mouseX(), StdDraw.mouseY(), "/images/Hammer.png", squareWidth / 3,
-					squareHeight / 3);
+			StdDraw.picture(StdDraw.mouseX(), StdDraw.mouseY(), "/images/Hammer.png", squareWidth / 2,
+					squareHeight / 2);
 			break;
 		}
 	}

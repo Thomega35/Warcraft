@@ -595,24 +595,28 @@ public class World {
 			monster.draw();
 		}
 	}
-
+	
+	/*
+	 * Fonction qui permet de changer de vague
+	 * lorsque 
+	 */
 	private void updateWave() {
 		if (monsters.size() == 0 && reserve <= 0) {
 			wave++;
 			reserve = wave;
 			projectiles = new ArrayList<Projectile>();
 		}
-		// TODO changer le spawn du monstre pour un spawn to les Frames
 		if (reserve > 0 && System.currentTimeMillis() - startTimeMonster >= (spawnTime / wave + 200)) {
 			startTimeMonster = System.currentTimeMillis();
-			// monsters.add(new Zerg(this, spawn));
 			waveadd();
 		}
 	}
 
 	// TODO changer l'ordre des fonctions pour plus de clarté
+	/*
+	 * Fonction qui gère l'affichage des projectiles et leur déplacement
+	 */
 	private void updateProjectiles() {
-		// TODO Auto-generated method stub
 		for (Projectile p : projectiles) {
 			p.update();
 			if (p.reached) {
@@ -628,12 +632,10 @@ public class World {
 		drawTower();
 		tir();
 	}
-
+	/*
+	 * Fonction qui ajoute les monstres correspondant à la vague sur le plateau, au niveau du spawn
+	 */
 	public void waveadd() {
-		// ex
-		// Ajout d'un monstre "a la main" pour afficher comment un monstre se deplaçe.
-		// Vous ne devez pas faire pareil, mais ajouter une vague comportant plusieurs
-		// monstres
 		Monster monster;
 		if (wave % 10 == 0) {
 			monster = new Boss(this, new Position(spawn.x, spawn.y));
@@ -776,7 +778,12 @@ public class World {
 		System.out.println("Press S to start.");
 		System.out.println("Press Q to quit.");
 	}
-
+	/*
+	 * Fonction qui regarde la liste des tours, puis celle des monstres
+	 * pour déterminer si les tours ont un monstre à portée et si elles peuvent tirer.
+	 * Elle appelle ensuite la fonction tir() propre à chaque tour, 
+	 * qui contrôle l'animation du tir
+	 */
 	public void tir() {
 		for (Tower t : towers) {
 			for (Monster m : monsters) {
@@ -826,7 +833,6 @@ public class World {
 			update();
 			StdDraw.show();
 
-			// StdDraw.pause(20);
 
 			if (life <= 0)
 				end = true;

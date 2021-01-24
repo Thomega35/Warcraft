@@ -4,6 +4,7 @@ import java.awt.Font;
 
 public class Zerg extends Monster {
 	Font HP = new Font("Arial", Font.BOLD, 16);
+	
 	public Zerg(World w, Position p) {
 		super(w, p);
 		this.hp = 200;

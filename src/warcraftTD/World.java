@@ -646,6 +646,7 @@ public class World {
 	/*
 	 * Fonction qui permet de changer de vague lorsqu'il n'y a plus de monstres sur
 	 * le plateau et plus de monstres à envoyer
+	 * Determine aussi le type de monstre a envoyer
 	 */
 	private void updateWave() {
 		if (monsters.size() == 0 && reserve <= 0) {
@@ -666,9 +667,9 @@ public class World {
 	}
 
 	/*
-	 * Pour chaque projectiles de la liste "monstres", utilise la fonction update() qui
-	 * appelle les fonctions run() et draw() de la class Monster. 
-	 * Retire les monstres arrives ou morts 
+	 * Pour chaque projectiles de la liste "projectiles", utilise la fonction update() qui
+	 * appelle les fonctions run() et draw() de la class Projectiles. 
+	 * Retire les Projectiles arrives ou sortis
 	 */
 	private void updateProjectiles() {
 		for (Projectile p : projectiles) {
@@ -678,14 +679,17 @@ public class World {
 		projectiles.removeIf(x -> (x.reached));
 	}
 
+	/**
+	 * Appelle differentes fonction pour actualiser les tours et les faire tirer
+	 */
 	private void updateTowers() {
 		drawTower();
 		tir();
 	}
 
 	/*
-	 * Fonction qui ajoute les monstres correspondant à la vague sur le plateau, au
-	 * niveau du spawn
+	 * Fonction qui ajoute sur le plateau les monstres correspondant à la vague en cours, 
+	 * Sur la position spawn
 	 */
 	public void waveadd() {
 		Monster monster;
@@ -704,7 +708,7 @@ public class World {
 
 	/**
 	 * Met a jour toutes les informations du plateau de jeu ainsi que les
-	 * deplacements des monstres et les attaques des tours.
+	 * deplacements des monstres, les attaques des tours et les deplacements des projectiles.
 	 * 
 	 * @return les points de vie restants du joueur
 	 */
@@ -727,24 +731,40 @@ public class World {
 		return life;
 	}
 
+	/**
+	 * @param p une position
+	 * @return la valeur en x de la case correspondant à la Position p
+	 */
 	public int myCasex(double p) {
 		return (int) (p * nbSquareX);
 	}
-
+	
+	/**
+	 * @param p une position
+	 * @return la valeur en y de la case correspondant à la Position p
+	 */
 	public int myCasey(double p) {
 		return (int) (p * nbSquareY);
 	}
 
+	/**
+	 * @param n La n ieme colonne du tableau board
+	 * @return La position en x correspondant au milieu de la largeur de cette colonne
+	 */
 	public double posCasex(int n) {
 		return (double) (n * squareWidth) + squareWidth / 2;
 	}
 
+	/**
+	 * @param n La n ieme ligne du tableau board
+	 * @return La position en x correspondant au milieu de la logueur cette ligne
+	 */
 	public double posCasey(int n) {
 		return (double) (n * squareHeight) + squareHeight / 2;
 	}
 
 	/**
-	 * Recupere la touche appuyee par l'utilisateur et affiche les informations pour
+	 * Recupere la touche appuyee par l'utilisateur et effectue la commande correspondant a 
 	 * la touche selectionnee
 	 * 
 	 * @param key la touche utilisee par le joueur
@@ -761,9 +781,8 @@ public class World {
 			wave++;
 			break;
 		case 'k':
-			for (Monster m : monsters) {
+			for (Monster m : monsters) 
 				m.hp = 0;
-			}
 			break;
 		case 'g':
 			gold += 1000;

@@ -35,8 +35,7 @@ public abstract class Monster {
 	}
 
 	/**
-	 * Deplace le monstre en fonction de sa vitesse sur l'axe des x et des y et de
-	 * sa prochaine position.
+	 * Deplace le monstre dans la direction du monstre passe en parametre lors de sa creation
 	 */
 	public void move() {
 		this.rotation = 0;

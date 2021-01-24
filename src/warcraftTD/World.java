@@ -831,6 +831,7 @@ public class World {
 	public void printCommands() {
 		System.out.println("Press A to select Arrow Tower (cost 50g).");
 		System.out.println("Press B to select Cannon Tower (cost 60g).");
+		System.out.println("Press R to select Rocket Tower (cost 60g).");
 		System.out.println("Press E to update a tower (cost 40g).");
 		System.out.println("Click on the grass to build it.");
 		System.out.println("Press S to start.");

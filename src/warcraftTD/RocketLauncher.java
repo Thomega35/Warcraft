@@ -1,11 +1,11 @@
 package warcraftTD;
 
 public class RocketLauncher extends Tower {
-	static int buildCost = 50;
+	static int buildCost = 60;
 
 	public RocketLauncher(World world, Position position) {
 		super(world, position);
-		range = 4;
+		range = 6;
 		damage = 25;
 		attackSpeed = 0.5;
 		projectileSpeed = 0.15;

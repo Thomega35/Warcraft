@@ -415,10 +415,17 @@ public class World {
 		StdDraw.clear();
 	}
 
+	/*
+	 * Fonction qui affiche l'image de fond, sans les tours ni les monstres,
+	 * uniquement avec le chemin, le départ et l'arrivée
+	 */
 	public void drawImageFond() {
 		StdDraw.picture(0.5, 0.5, "./src/images/ImageFond.png", 1, 1);
 	}
-
+	
+	/*
+	 * Fonction qui affiche les tours par dessus l'image de fond
+	 */
 	public void drawTower() {
 		for (int i = 0; i < nbSquareX; i++) {
 			for (int j = 0; j < nbSquareY; j++) {
@@ -548,6 +555,11 @@ public class World {
 		StdDraw.text(0.04, 0.92, "Wave :" + wave);
 	}
 
+	/*
+	 * Fonction qui permet de calculer le nombre d'images par secondes
+	 * en ajoutant 1 à une variable à chaque tour de boucle 
+	 * et chaque image affichée, puis qui affiche ce nombre au bout d'une seconde
+	 */
 	public void calculFPS() {
 		calculFPS++;
 		if (System.currentTimeMillis() - startTimeFPS >= 1000) {
@@ -598,7 +610,8 @@ public class World {
 	
 	/*
 	 * Fonction qui permet de changer de vague
-	 * lorsque 
+	 * lorsqu'il n'y a plus de monstres sur le plateau
+	 * et plus de monstres à envoyer
 	 */
 	private void updateWave() {
 		if (monsters.size() == 0 && reserve <= 0) {

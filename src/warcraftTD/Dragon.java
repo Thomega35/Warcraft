@@ -7,7 +7,7 @@ public class Dragon extends Monster {
 
 	public Dragon(World w, Position p) {
 		super(w, p);
-		this.hp = 200;
+		this.hp = 75;
 		this.goldValue = 15;
 		this.flying = true;
 		this.speed = 0.1;

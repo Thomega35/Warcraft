@@ -6,6 +6,7 @@ import java.awt.geom.Arc2D.Float;
 import java.time.chrono.ChronoZonedDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.awt.Font;
 
 @SuppressWarnings("unused")
 public class World {
@@ -55,6 +56,9 @@ public class World {
 	// Calcul temps entre 2 monstres
 	private long startTimeMonster;
 	private long globalStart;
+	
+	Font starting = new Font("Arial", Font.BOLD, 20);
+	Font infos = new Font("Arial", Font.PLAIN, 12);
 
 	// Condition pour terminer la partie
 	private boolean end = false;
@@ -537,7 +541,7 @@ public class World {
 	public void drawInfos() {
 		calculFPS();
 		StdDraw.setPenColor(StdDraw.BLACK);
-		StdDraw.setFont();
+		StdDraw.setFont(infos);
 		StdDraw.text(0.06, 0.98, "gold :" + gold);
 		StdDraw.text(0.04, 0.96, "life :" + life);
 		StdDraw.text(0.04, 0.94, "FPS :" + fPS);
@@ -654,7 +658,6 @@ public class World {
 		drawImageFond();
 		drawInfos();
 		if (timer() > 20) updateMonsters();
-		updateMonsters();
 		updateWave();
 		updateTowers();
 		updateProjectiles();
@@ -801,6 +804,7 @@ public class World {
 		globalStart = System.currentTimeMillis();
 		while (!start) {
 			drawImageFond();
+			StdDraw.setFont(starting);
 			StdDraw.setPenColor(StdDraw.RED);
 			StdDraw.text(0.5, 0.52, "Bienvenue sur Tower Defense !");
 			StdDraw.text(0.5, 0.48, "Appuyez sur S pour commencer la partie");

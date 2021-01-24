@@ -5,7 +5,7 @@ public class Boss extends Monster {
 	public Boss(World w, Position p) {
 		super(w, p);
 		this.hp = 2400;
-		this.goldValue = 40;
+		this.goldValue = 80;
 		this.flying = false;
 		this.speed = 0.02;
 	}

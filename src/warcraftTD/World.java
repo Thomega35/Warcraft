@@ -654,10 +654,10 @@ public class World {
 			monster = new Boss(this, new Position(spawn.x, spawn.y));
 			reserve -= 10;
 		}else if (wave % 5 == 0) {
-			monster = new Mouche(this, new Position(spawn.x, spawn.y));
+			monster = new Dragon(this, new Position(spawn.x, spawn.y));
 			reserve = reserve - 2;
 		} else {
-			monster = new Zerg(this, new Position(spawn.x, spawn.y));
+			monster = new Car(this, new Position(spawn.x, spawn.y));
 			reserve--;
 		}
 		this.monsters.add(monster);
@@ -672,8 +672,10 @@ public class World {
 	public int update() {
 		drawImageFond();
 		drawInfos();
-		if (timer() > 20) updateMonsters();
-		updateWave();
+		if (timer() > 20) {
+			updateMonsters();
+			updateWave();
+		}
 		updateTowers();
 		updateProjectiles();
 		drawMouse();
@@ -791,6 +793,7 @@ public class World {
 		System.out.println("Press S to start.");
 		System.out.println("Press Q to quit.");
 	}
+	
 	/*
 	 * Fonction qui regarde la liste des tours, puis celle des monstres
 	 * pour déterminer si les tours ont un monstre à portée et si elles peuvent tirer.

@@ -18,7 +18,7 @@ public class Bombe extends Projectile {
 	public void reached() {
 		for (Monster m : world.monsters) {
 			if (!m.flying && Math.abs(position.x-m.position.x) < world.getSquareWidth() && Math.abs(position.y-m.position.y) < world.getSquareHeight()) {
-				m.hp = m.hp-damage;
+				m.hp -= damage;
 				reached = true;
 			}
 		}

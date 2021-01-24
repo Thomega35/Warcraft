@@ -619,6 +619,7 @@ public class World {
 					life = life-2;
 				}
 			}
+			if(monster.hp <= 0) gold+= monster.goldValue;
 		}
 		monsters.removeIf(x -> (x.reached));
 		monsters.removeIf(x -> (x.hp <= 0));

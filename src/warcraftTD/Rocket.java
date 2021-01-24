@@ -20,7 +20,7 @@ public class Rocket extends Projectile {
 		for (Monster m : world.monsters) {
 			if (Math.abs(position.x - m.position.x) < world.getSquareWidth() / 2
 					&& Math.abs(position.y - m.position.y) < world.getSquareHeight() / 2) {
-				m.hp = m.hp - damage;
+				m.hp -= damage;
 				reached = true;
 				touche = true;
 			}

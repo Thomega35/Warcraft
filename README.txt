@@ -1,4 +1,7 @@
-Projet Tower Defense par Thomas Delapart et Guillaume Pinault (Groupe de TP 3)
+Projet Java Defense par Thomas Delapart et Guillaume Pinault (Groupe de TP 3)
+
+
+//I GENERATION CHEMIN ALEATOIRE
 
 Le chemin parcouru par les monstres est genere aleatoirement, seules la case de depart en bas a gauche,
 et la case d arrivee, en haut a droite sont fixes. 
@@ -10,14 +13,20 @@ Une fois que ce premier chemin est genere, le tableau est parcouru de sorte que 
 sur l'une des lignes droites alors le chemin est deforme (voir schema dans la doc de la fonction). On continue jusqu'a ce que 
 le tableau soit entierement parcouruet que le chemin soit termine. 																										
 
+//II UTILISATION DU CHEMIN ET AFFICHAGE
+
 Une fois que le chemin est genere, la fonction initcheckpoints parcourt le chemin pour determiner les points par lesquelles vont passer les monstres
 puis les ajoute à la liste de checkpoints
 
+
 De plus le background (case non chemin/Arrivee/Depart) sont aussi generes aleatoirement pour un rendu plus agreable.
+(Valeurs du tableau board @1 = depart @2 = arrivee @3 = chemin @4 =garden1 @5 = garden2 @6 = garden3 @7 = garden4)
 
 Une fois que l'image de fond a ete dessinee une premiere fois, nous faisons une capture de la fenetre graphique et n'affichons plus que cette
 capture (ImageFond.png) pour de meilleures performance graphiques. 
 (Les monstres/Tours/projectiles sont affiches par dessus cette image).
+
+//III MONSTRES
 
 Il y a trois types de monstres :
 -Les voitures, le monstre de base terrestre qui arrive a toutes les vagues non speciales.
@@ -28,6 +37,8 @@ Il y a trois types de monstres :
  et le checkpoint suivant, ce vecteur est norme pour que le deplacement soit linéaire et est gere avec la variable speed.
  Les monstres sont retires de la liste si ils sont tues ou s'ils atteignent l'arrivee.
 
+//IV TOURS
+
 Il y a trois types de tours :
 -Les tours d'archers, qui tirent en monocible, rapidement et peuvent cibler les monstres aeriens.
 -Les tours a bombes, qui infligent des degats de zone, et font plus de degats mais ne peuvent pas cibler les monstres aeriens et sont plus lentes.
@@ -36,6 +47,8 @@ plus faible.
 
 Les projectiles partent de la tour et ciblent un monstre, mais si le projectile percute une autre monstre au passage alors c'est ce deuxieme qui prend
 les degats. Si le projectile manque toute les cibles alors il est supprime une fois sorti de la fenetre. 
+
+//V COMMANDES
 
 Commandes : 
  a : Tour d'archer
@@ -48,7 +61,7 @@ Commandes :
  w : Passer a la vague suivante
  g : Donne 1000 gold au joueur
 
-Repartition : 
+//VI REPARTITION 
 
 Toutes les images ont ete realisees a la main, ce qui signifie qu'elles sont libres de droit. (Thomas Delapart)
 Le chemin aleatoire et le background aleatoire (Thomas Delapart)

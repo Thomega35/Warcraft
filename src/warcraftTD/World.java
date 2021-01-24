@@ -602,6 +602,9 @@ public class World {
 		case 'r':
 			StdDraw.picture(normalizedX, normalizedY, "/images/RocketLauncher.png", squareWidth, squareHeight);
 			break;
+		case 'e':
+			StdDraw.picture(StdDraw.mouseX(), StdDraw.mouseY(), "/images/Hammer.png", squareWidth/3, squareHeight/3);
+			break;
 		}
 	}
 

@@ -56,12 +56,13 @@ public class World {
 	// Calcul temps entre 2 monstres
 	private long startTimeMonster;
 	private long globalStart;
-	
+
 	// temps d'affichage de la nouvelle vague
 	private long newWaveTime;
-	
+
 	Font starting = new Font("Arial", Font.BOLD, 20);
 	Font infos = new Font("Arial", Font.PLAIN, 12);
+	Font fontwave = new Font("Calibri", Font.BOLD, 50);
 
 	// Condition pour terminer la partie
 	private boolean end = false;
@@ -399,7 +400,7 @@ public class World {
 		for (int i = 0; i < nbSquareX; i++) {
 			for (int j = 0; j < nbSquareY; j++) {
 				StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
-						tabs[board[i][j] - 1], squareWidth , squareHeight );
+						tabs[board[i][j] - 1], squareWidth, squareHeight);
 			}
 		}
 	}
@@ -425,7 +426,7 @@ public class World {
 	public void drawImageFond() {
 		StdDraw.picture(0.5, 0.5, "./src/images/ImageFond.png", 1, 1);
 	}
-	
+
 	/*
 	 * Fonction qui affiche les tours par dessus l'image de fond
 	 */
@@ -552,16 +553,16 @@ public class World {
 		calculFPS();
 		StdDraw.setPenColor(StdDraw.BLACK);
 		StdDraw.setFont(infos);
-		StdDraw.text(0.06, 0.98, "gold :" + gold);
+		StdDraw.text(0.04, 0.98, "gold :" + gold);
 		StdDraw.text(0.04, 0.96, "life :" + life);
 		StdDraw.text(0.04, 0.94, "FPS :" + fPS);
 		StdDraw.text(0.04, 0.92, "Wave :" + wave);
 	}
 
 	/*
-	 * Fonction qui permet de calculer le nombre d'images par secondes
-	 * en ajoutant 1 à une variable à chaque tour de boucle 
-	 * et chaque image affichée, puis qui affiche ce nombre au bout d'une seconde
+	 * Fonction qui permet de calculer le nombre d'images par secondes en ajoutant 1
+	 * à une variable à chaque tour de boucle et chaque image affichée, puis qui
+	 * affiche ce nombre au bout d'une seconde
 	 */
 	public void calculFPS() {
 		calculFPS++;
@@ -610,11 +611,10 @@ public class World {
 			monster.draw();
 		}
 	}
-	
+
 	/*
-	 * Fonction qui permet de changer de vague
-	 * lorsqu'il n'y a plus de monstres sur le plateau
-	 * et plus de monstres à envoyer
+	 * Fonction qui permet de changer de vague lorsqu'il n'y a plus de monstres sur
+	 * le plateau et plus de monstres à envoyer
 	 */
 	private void updateWave() {
 		if (monsters.size() == 0 && reserve <= 0) {
@@ -624,8 +624,8 @@ public class World {
 			newWaveTime = timer();
 		}
 		if (timer() - newWaveTime < 2) {
-			StdDraw.setFont(starting);
-			StdDraw.setPenColor(StdDraw.RED);
+			StdDraw.setFont(fontwave);
+			StdDraw.setPenColor(StdDraw.DARK_GRAY);
 			StdDraw.text(0.5, 0.5, "Wave " + wave + " :");
 		}
 		if (reserve > 0 && System.currentTimeMillis() - startTimeMonster >= (spawnTime / wave + 200)) {
@@ -654,15 +654,17 @@ public class World {
 		drawTower();
 		tir();
 	}
+
 	/*
-	 * Fonction qui ajoute les monstres correspondant à la vague sur le plateau, au niveau du spawn
+	 * Fonction qui ajoute les monstres correspondant à la vague sur le plateau, au
+	 * niveau du spawn
 	 */
 	public void waveadd() {
 		Monster monster;
 		if (wave % 10 == 0) {
 			monster = new Boss(this, new Position(spawn.x, spawn.y));
 			reserve -= 10;
-		}else if (wave % 5 == 0) {
+		} else if (wave % 5 == 0) {
 			monster = new Dragon(this, new Position(spawn.x, spawn.y));
 			reserve = reserve - 2;
 		} else {
@@ -681,9 +683,14 @@ public class World {
 	public int update() {
 		drawImageFond();
 		drawInfos();
-		if (timer() > 20) {
+		if (start) {
 			updateMonsters();
 			updateWave();
+		}else {
+			StdDraw.setFont(starting);
+			StdDraw.setPenColor(StdDraw.RED);
+			StdDraw.text(0.5, 0.52, "Vous pouvez commencer à placer vos tours");
+			StdDraw.text(0.5, 0.48, "Appuyer sur S pour lancer la wave 1 :");
 		}
 		updateTowers();
 		updateProjectiles();
@@ -726,7 +733,12 @@ public class World {
 			wave++;
 			break;
 		case 'k':
-			monsters = new ArrayList<Monster>();
+			for (Monster m : monsters) {
+				m.hp = 0;
+			}
+			break;
+		case 'g':
+			gold+=1000;
 			break;
 		case 'b':
 			System.out.println("Bomb Tower selected (" + BombTower.buildCost + ".)");
@@ -802,17 +814,18 @@ public class World {
 		System.out.println("Press S to start.");
 		System.out.println("Press Q to quit.");
 	}
-	
+
 	/*
-	 * Fonction qui regarde la liste des tours, puis celle des monstres
-	 * pour déterminer si les tours ont un monstre à portée et si elles peuvent tirer.
-	 * Elle appelle ensuite la fonction tir() propre à chaque tour, 
-	 * qui contrôle l'animation du tir
+	 * Fonction qui regarde la liste des tours, puis celle des monstres pour
+	 * déterminer si les tours ont un monstre à portée et si elles peuvent tirer.
+	 * Elle appelle ensuite la fonction tir() propre à chaque tour, qui contrôle
+	 * l'animation du tir
 	 */
 	public void tir() {
 		for (Tower t : towers) {
 			for (Monster m : monsters) {
-				if ((t.targetFlying || !m.flying) && t.position.dist(m.position) < (double) (t.range) / (double) (nbSquareX)) {
+				if ((t.targetFlying || !m.flying)
+						&& t.position.dist(m.position) < (double) (t.range) / (double) (nbSquareX)) {
 					t.tir(m);
 					break;
 				}
@@ -845,6 +858,7 @@ public class World {
 			}
 			StdDraw.show();
 		}
+		start = false;
 		while (!end) {
 
 			StdDraw.clear();
@@ -857,7 +871,6 @@ public class World {
 			}
 			update();
 			StdDraw.show();
-
 
 			if (life <= 0)
 				end = true;

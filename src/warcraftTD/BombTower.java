@@ -13,6 +13,7 @@ public class BombTower extends Tower {
 		targetFlying = false;
 	}
 	
+	
 	public void upgrade() {
 		this.damage = 200;
 		this.range = 3;

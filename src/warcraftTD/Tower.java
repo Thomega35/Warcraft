@@ -21,8 +21,9 @@ public abstract class Tower {
 		startTimeTir = System.currentTimeMillis();
 	}
 	
+	//Ameliore les statistiques de la tour
 	public abstract void upgrade();
 	
-	
+	//Fonction instanciee dans les classes filles qui gere le tir de chaque tour
 	public abstract void tir(Monster monster);
 }

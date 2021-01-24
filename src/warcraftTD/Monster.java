@@ -23,7 +23,8 @@ public abstract class Monster {
 	// Compteur de deplacement pour savoir si le monstre a atteint le chateau du
 	// joueur
 	protected int checkpoint = 0;
-
+	
+	//Le monde auquel appartient le monstre
 	protected World world;
 
 	public Monster(World w, Position startp) {
@@ -71,11 +72,6 @@ public abstract class Monster {
 			// Arrive
 			reached = true;
 		}
-	}
-
-	public void update() {
-		move();
-		//draw();
 	}
 
 	/**

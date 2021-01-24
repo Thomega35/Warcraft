@@ -655,11 +655,14 @@ public class World {
 	public int update() {
 		drawImageFond();
 		drawInfos();
+<<<<<<< Updated upstream
 		if (timer() > 20) updateMonsters();
 		if (endwave) {
 			//StdDraw.pause(2000);
 			endwave = false;
 		}
+=======
+>>>>>>> Stashed changes
 		updateMonsters();
 		updateWave();
 		updateTowers();

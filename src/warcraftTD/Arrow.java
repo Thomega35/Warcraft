@@ -4,17 +4,9 @@ public class Arrow extends Projectile {
 
 	public Arrow(World world, Position position, Monster monster, int damage, double speed) {
 		super(world, position, monster, damage, speed);
-		rotation = 90;
+		rotation = 45;
 		Position vect = position.add(new Position(-monster.position.x, -monster.position.y));
-		boolean x = vect.x >= 0;
-		boolean y = vect.y >= 0;
-		if (x && !y) {
-			rotation = rotation - 90;
-		} else if (!x && !y) {
-			rotation = rotation + 180;
-		} else if (!x && y){
-			rotation = rotation + 90;
-		}
+		rotation += Math.atan2(vect.y,vect.x)/Math.PI * 180;
 	}
 
 	@Override
@@ -25,11 +17,15 @@ public class Arrow extends Projectile {
 
 	@Override
 	public void reached() {
+		boolean touche = false;
 		for (Monster m : world.monsters) {
 			if (Math.abs(position.x-m.position.x) < world.getSquareWidth()/2 && Math.abs(position.y-m.position.y) < world.getSquareHeight()/2) {
 				m.hp = m.hp-damage;
 				reached = true;
+				touche = true;
 			}
+			if (touche)
+				break;
 		}
 	}
 

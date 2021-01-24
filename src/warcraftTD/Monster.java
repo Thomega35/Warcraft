@@ -31,7 +31,6 @@ public abstract class Monster {
 		world = w;
 		this.nextPosition = new Position(startp.x + this.world.getSquareWidth() * speed/* + world.squareWidth*speed */,
 				startp.y);
-		this.rotation = 0;
 	}
 
 	/**
@@ -39,13 +38,7 @@ public abstract class Monster {
 	 * sa prochaine position.
 	 */
 	public void move() {
-		// TXT
-//		prend le checkpoint qui lui correspond dans la liste avec la variable checkpoint
-//		prend la position suivante
-//		calcule le vecteur entre "position" et "obj"
-//	PB	NORMER LE VECTEUR? TODO
-//		Si le vecteur mouvement est superieur alors, TP sur checkpoint et ++
-//		si plus de checkpoints arrivé
+		this.rotation = 0;
 		if (checkpoint < world.checkpoints.size()) {
 			Position obj = world.checkpoints.get(checkpoint);
 			position = nextPosition;
@@ -64,26 +57,8 @@ public abstract class Monster {
 				rotation = - 90;
 			}else if (xneg){
 				rotation = 180;
-			}else {
-				rotation = 0;
 			}
-//			if (obj.equals(position)) {
-//				System.out.print("[pb]");
-//				obj = world.checkpoints.get(checkpoint++);
-//			}
-
-//			StdDraw.setPenColor(StdDraw.RED);
-//			StdDraw.filledCircle(obj.x, obj.y, 0.01);
-//			StdDraw.show();
-
-//	PB		double norme = /*vec/*/new Position(obj.x*world.squareWidth,obj.y*world.squareHeight).dist(new Position(position.x*world.nbSquareX,position.y*world.nbSquareY)); 
-			// TODO
-			// Position vecNorme = new Position(vec.x/ norme, vec.y/ norme);
-//			System.out.print(norme);
-//			System.out.println(vecNorme);
-			// System.out.println(world.squareWidth + " " + world.squareHeight);
-
-//Si vec trop grand
+//Si vec trop grand TP to checkpoint
 			if (position.dist(obj) <= world.getSquareWidth()/5 && position.dist(obj) <= world.getSquareHeight()/5) {
 				nextPosition = obj;
 				checkpoint++;

@@ -23,5 +23,6 @@ public abstract class Tower {
 	
 	public abstract void upgrade();
 	
+	
 	public abstract void tir(Monster monster);
 }

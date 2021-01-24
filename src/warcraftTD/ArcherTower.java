@@ -6,7 +6,7 @@ public class ArcherTower extends Tower {
 	public ArcherTower(World world, Position position) {
 		super(world, position);
 		range = 4;
-		damage = 25;
+		damage = 30;
 		attackSpeed = 0.5;
 		projectileSpeed = 0.15;
 		upgraded = false;
@@ -14,7 +14,7 @@ public class ArcherTower extends Tower {
 	}
 	
 	public void upgrade() {
-		this.damage = 40;
+		this.damage = 50;
 		this.attackSpeed = 0.6;
 		this.upgraded = true;
 	}

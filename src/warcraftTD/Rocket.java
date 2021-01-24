@@ -11,7 +11,7 @@ public class Rocket extends Projectile {
 
 	@Override
 	public void draw() {
-		StdDraw.picture(position.x, position.y, "/images/fleche.png", world.getSquareWidth(), world.getSquareHeight(), rotation);
+		StdDraw.picture(position.x, position.y, "/images/Rocket.png", world.getSquareWidth(), world.getSquareHeight(), rotation);
 	}
 
 	@Override

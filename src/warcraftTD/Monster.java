@@ -102,7 +102,7 @@ public abstract class Monster {
 		move();
 		//draw();
 		if (this.hp == 0) {
-			this.world.setGold(this.world.getGold() + 20);
+			this.world.setGold(this.world.getGold() + this.goldValue);
 		}
 	}
 

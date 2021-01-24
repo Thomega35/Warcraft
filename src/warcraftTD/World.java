@@ -584,8 +584,6 @@ public class World {
 			monster.update();
 			if (monster.reached)
 				life--;
-			if (monster.hp <= 0)
-				gold += monster.goldValue;
 		}
 		monsters.removeIf(x -> (x.reached));
 		monsters.removeIf(x -> (x.hp <= 0));
@@ -738,6 +736,7 @@ public class World {
 				gold -= ArcherTower.buildCost;
 				board[X][Y] = 10;
 				towers.add(new ArcherTower(this, position));
+				key = 'm';
 			}
 			break;
 		case 'b':
@@ -745,6 +744,7 @@ public class World {
 				gold -= BombTower.buildCost;
 				board[X][Y] = 20;
 				towers.add(new BombTower(this, position));
+				key = 'm';
 			}
 			break;
 		case 'e':
@@ -753,6 +753,7 @@ public class World {
 					t.upgrade();
 					gold -= Tower.upgradeCost;
 					board[X][Y] = board[X][Y] * 10;
+					key = 'm';
 				}
 			}
 			break;
@@ -800,7 +801,6 @@ public class World {
 		globalStart = System.currentTimeMillis();
 		while (!start) {
 			drawImageFond();
-			StdDraw.setPenRadius(0.4);
 			StdDraw.setPenColor(StdDraw.RED);
 			StdDraw.text(0.5, 0.52, "Bienvenue sur Tower Defense !");
 			StdDraw.text(0.5, 0.48, "Appuyez sur S pour commencer la partie");

@@ -428,11 +428,11 @@ public class World {
 			for (int j = 0; j < nbSquareY; j++) {
 				if (board[i][j] == 10) {
 					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
-							"/images/Archer1.jpg", squareWidth, squareHeight);
+							"/images/Archer1.png", squareWidth, squareHeight);
 
 				} else if (board[i][j] == 100) {
 					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
-							"/images/Archer2.jpg", squareWidth, squareHeight);
+							"/images/Archer2.png", squareWidth, squareHeight);
 
 				} else if (board[i][j] == 20) {
 					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
@@ -448,7 +448,7 @@ public class World {
 
 				} else if (board[i][j] == 300) {
 					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
-							"/images/Archer2.jpg", squareWidth, squareHeight);
+							"/images/RocketLauncher_UP.png", squareWidth, squareHeight);
 				}
 			}
 		}
@@ -594,7 +594,7 @@ public class World {
 		double normalizedY = (int) (StdDraw.mouseY() / squareHeight) * squareHeight + squareHeight / 2;
 		switch (key) {
 		case 'a':
-			StdDraw.picture(normalizedX, normalizedY, "/images/Archer1.jpg", squareWidth, squareHeight);
+			StdDraw.picture(normalizedX, normalizedY, "/images/Archer1.png", squareWidth, squareHeight);
 			break;
 		case 'b':
 			StdDraw.picture(normalizedX, normalizedY, "/images/TourBombe1.jpg", squareWidth, squareHeight);

@@ -1,14 +1,9 @@
 package warcraftTD;
 
 import java.util.List;
-import java.util.LinkedList;
-import java.awt.geom.Arc2D.Float;
-import java.time.chrono.ChronoZonedDateTime;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.awt.Font;
 
-@SuppressWarnings("unused")
 public class World {
 	// l'ensemble des monstres, pour gerer (notamment) l'affichage
 	List<Monster> monsters;
@@ -49,6 +44,7 @@ public class World {
 	private char key;
 
 	// Affichage des FPS
+	//Aucune triche possible en modifiant ces valeurs
 	public long startTimeFPS;
 	public int fPS;
 	public int calculFPS;
@@ -272,12 +268,10 @@ public class World {
 	 * Initialisation du monde en fonction de la largeur, la hauteur et le nombre de
 	 * cases donnees
 	 * 
-	 * @param width
-	 * @param height
+	 * @param width largeur d'une case du monde
+	 * @param height hauteur d'une case du monde
 	 * @param nbSquareX
 	 * @param nbSquareY
-	 * @param startSquareX
-	 * @param startSquareY
 	 */
 	public World(int width, int height, int nbSquareX, int nbSquareY) {
 		this.width = width;
@@ -452,12 +446,21 @@ public class World {
 			}
 		}
 	}
-
+	
+	/**
+	 * Fonction qui parcourt le chemin en entier (de case en case) et remplit la liste "checkpoints"
+	 * avec les positions par lesquelles devront passer les monstres.
+	 * En utilisant un chemin VALIDE de [0][0] jusqu'à [nbSquareX][nbSquareY] stocké dans board
+	 */
 	public void initCheckpoints() {
+		//Coordonée où en est le parcours du chemin
 		int i = 0; // X
 		int j = 0; // Y
+		//La derniere direction prise par le parcours du chemin 
 		int Lastdirection = 0; // 0 : -> // 1 : Down // 2 : <- // 3 : UP
+		//Tant que le parcours n'a pas trouvé la fin du chemin
 		while (board[i][j] != 2) {
+			//Determine si l'on peut continuer tout droit et sinon où il faut tourner
 			switch (Lastdirection) {
 			case 0: // ->
 				// non continue?
@@ -541,6 +544,7 @@ public class World {
 				break;
 			}
 		}
+		//Rajoute le checkpoint de l'arrivé
 		checkpoints
 				.add(new Position((double) (nbSquareX - 0.5) * squareWidth, (double) (nbSquareY - 0.5) * squareHeight));
 	}

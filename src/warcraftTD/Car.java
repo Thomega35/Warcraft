@@ -22,7 +22,7 @@ public class Car extends Monster {
 		if (position.y + world.getSquareHeight() >= 1) {
 			StdDraw.text(position.x, position.y, "" + hp);
 		} else {
-			StdDraw.text(position.x, position.y + world.getSquareHeight(), "" + hp);
+			StdDraw.text(position.x, position.y + world.getSquareHeight()/2, "" + hp);
 		}
 	}
 

@@ -28,8 +28,8 @@ public abstract class Projectile {
 		Position dist = obj.add(new Position(-position.x, -position.y));
 		double norme = new Position(0, 0).dist(dist);
 		
-		dist = new Position(speed * dist.x / (norme * (double) world.getNbSquareX() * 3.0),
-				speed * dist.y / (norme * (double) world.getNbSquareY() * 3.0));
+		dist = new Position(speed * dist.x / (norme * (double) world.getNbSquareX()),
+				speed * dist.y / (norme * (double) world.getNbSquareY()));
 		position = position.add(dist);
 		obj = obj.add(dist);
 		

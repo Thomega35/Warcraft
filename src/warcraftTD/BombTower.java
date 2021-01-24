@@ -8,7 +8,7 @@ public class BombTower extends Tower {
 		range = 2;
 		damage = 150;
 		attackSpeed = 1.2;
-		projectileSpeed = 0.08;
+		projectileSpeed = 0.03;
 		upgraded = false;
 		targetFlying = false;
 	}

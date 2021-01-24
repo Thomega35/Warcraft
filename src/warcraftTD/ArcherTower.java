@@ -8,7 +8,7 @@ public class ArcherTower extends Tower {
 		range = 4;
 		damage = 30;
 		attackSpeed = 0.5;
-		projectileSpeed = 0.15;
+		projectileSpeed = 0.05;
 		upgraded = false;
 		targetFlying = true;
 	}

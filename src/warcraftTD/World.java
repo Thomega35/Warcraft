@@ -278,7 +278,7 @@ public class World {
 		this.nbSquareY = nbSquareY;
 		this.squareWidth = (double) 1 / nbSquareX;
 		this.squareHeight = (double) 1 / nbSquareY;
-		this.gold = 1000;
+		this.gold = 100;
 		this.life = 20;
 		this.wave = 0;
 		this.spawnTime = 1000;
@@ -738,14 +738,14 @@ public class World {
 		int Y = myCasey(normalizedY);
 		switch (key) {
 		case 'a':
-			if (board[X][Y] > 3 && board[X][Y] < 10 && (gold > ArcherTower.buildCost)) {
+			if (board[X][Y] > 3 && board[X][Y] < 10 && (gold >= ArcherTower.buildCost)) {
 				gold -= ArcherTower.buildCost;
 				board[X][Y] = 10;
 				towers.add(new ArcherTower(this, position));
 			}
 			break;
 		case 'b':
-			if (board[X][Y] > 3 && board[X][Y] < 10 && (gold > BombTower.buildCost)) {
+			if (board[X][Y] > 3 && board[X][Y] < 10 && (gold >= BombTower.buildCost)) {
 				gold -= BombTower.buildCost;
 				board[X][Y] = 20;
 				towers.add(new BombTower(this, position));
@@ -805,6 +805,7 @@ public class World {
 		while (!start) {
 			drawImageFond();
 			StdDraw.setPenRadius(0.4);
+			StdDraw.setPenColor(StdDraw.RED);
 			StdDraw.text(0.5, 0.52, "Bienvenue sur Tower Defense !");
 			StdDraw.text(0.5, 0.48, "Appuyez sur S pour commencer la partie");
 			if (StdDraw.hasNextKeyTyped()) {

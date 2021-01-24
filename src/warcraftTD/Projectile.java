@@ -22,9 +22,9 @@ public abstract class Projectile {
 	}
 
 	public abstract void draw();
-
+	
+	//Fonction de deplacement du projectile en fonction de sa vitesse et de la direction a suivre
 	public void move() {
-		//position = nextPosition;
 		Position dist = obj.add(new Position(-position.x, -position.y));
 		double norme = new Position(0, 0).dist(dist);
 		
@@ -38,6 +38,7 @@ public abstract class Projectile {
 		} 
 	}
 
+	//Fonction qui actualise le projectile en le deplacant, en verifiant s'il a atteint une cible puis en affichant sa nouvelle position
 	public void update() {
 		move();
 		reached();

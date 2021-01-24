@@ -13,6 +13,7 @@ public class Dragon extends Monster {
 		this.speed = 0.1;
 	}
 	
+	@Override
 	public void draw() {
 		StdDraw.picture(position.x, position.y, "/images/Dragon.png", world.getSquareWidth(), world.getSquareHeight(), rotation);
 		StdDraw.setPenColor(StdDraw.BLACK);

@@ -13,13 +13,14 @@ public class BombTower extends Tower {
 		targetFlying = false;
 	}
 	
-	
+	@Override
 	public void upgrade() {
 		this.damage = 200;
 		this.range = 3;
 		this.upgraded = true;
 	}
 	
+	@Override
 	public void tir(Monster monster) {
 		if (System.currentTimeMillis() - startTimeTir >= attackSpeed*1000.0) {
 			startTimeTir = System.currentTimeMillis();

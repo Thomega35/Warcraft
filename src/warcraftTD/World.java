@@ -436,11 +436,11 @@ public class World {
 
 				} else if (board[i][j] == 20) {
 					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
-							"/images/TourBombe1.jpg", squareWidth, squareHeight);
+							"/images/TourBombe1.png", squareWidth, squareHeight);
 
 				} else if (board[i][j] == 200) {
 					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
-							"/images/TourBombe2.jpg", squareWidth, squareHeight);
+							"/images/TourBombe2.png", squareWidth, squareHeight);
 					
 				} else if (board[i][j] == 30) {
 					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
@@ -597,7 +597,7 @@ public class World {
 			StdDraw.picture(normalizedX, normalizedY, "/images/Archer1.png", squareWidth, squareHeight);
 			break;
 		case 'b':
-			StdDraw.picture(normalizedX, normalizedY, "/images/TourBombe1.jpg", squareWidth, squareHeight);
+			StdDraw.picture(normalizedX, normalizedY, "/images/TourBombe1.png", squareWidth, squareHeight);
 			break;
 		case 'r':
 			StdDraw.picture(normalizedX, normalizedY, "/images/RocketLauncher.png", squareWidth, squareHeight);

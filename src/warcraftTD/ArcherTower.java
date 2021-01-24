@@ -13,12 +13,14 @@ public class ArcherTower extends Tower {
 		targetFlying = true;
 	}
 	
+	@Override
 	public void upgrade() {
 		this.damage = 50;
 		this.attackSpeed = 0.6;
 		this.upgraded = true;
 	}
 	
+	@Override
 	public void tir(Monster monster) {
 		if (System.currentTimeMillis() - startTimeTir >= attackSpeed*1000.0) {
 			startTimeTir = System.currentTimeMillis();

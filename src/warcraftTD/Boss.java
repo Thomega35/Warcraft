@@ -13,6 +13,7 @@ public class Boss extends Monster {
 		this.speed = 0.02;
 	}
 	
+	@Override
 	public void draw() {
 		StdDraw.picture(position.x, position.y, "/images/Boss.png", world.getSquareWidth(), world.getSquareHeight(), rotation);
 		StdDraw.setPenColor(StdDraw.BLACK);

@@ -57,6 +57,9 @@ public class World {
 	private long startTimeMonster;
 	private long globalStart;
 	
+	// temps d'affichage de la nouvelle vague
+	private long newWaveTime;
+	
 	Font starting = new Font("Arial", Font.BOLD, 20);
 	Font infos = new Font("Arial", Font.PLAIN, 12);
 
@@ -618,6 +621,12 @@ public class World {
 			wave++;
 			reserve = wave;
 			projectiles = new ArrayList<Projectile>();
+			newWaveTime = timer();
+		}
+		if (timer() - newWaveTime < 2) {
+			StdDraw.setFont(starting);
+			StdDraw.setPenColor(StdDraw.RED);
+			StdDraw.text(0.5, 0.5, "Wave " + wave + " :");
 		}
 		if (reserve > 0 && System.currentTimeMillis() - startTimeMonster >= (spawnTime / wave + 200)) {
 			startTimeMonster = System.currentTimeMillis();

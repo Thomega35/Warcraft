@@ -56,6 +56,7 @@ public class World {
 	// temps d affichage de la nouvelle vague
 	private long newWaveTime;
 
+	// Police d affichage
 	Font starting = new Font("Arial", Font.BOLD, 20);
 	Font infos = new Font("Arial", Font.PLAIN, 12);
 	Font fontwave = new Font("Calibri", Font.BOLD, 50);
@@ -265,11 +266,11 @@ public class World {
 	}
 
 	/**
-	 * Initialisation du monde en fonction de la largeur, la hauteur et le nombre de
-	 * cases donnees
+	 * Initialisation du monde en fonction des parametres Initialisation de toutes
+	 * les variables du monde Creation de l image de fond et des checkpoints
 	 * 
-	 * @param width largeur de la fenetre du monde
-	 * @param height hauteur de la fenetre du monde
+	 * @param width     largeur de la fenetre du monde
+	 * @param height    hauteur de la fenetre du monde
 	 * @param nbSquareX nombre de case dans la largeur du monde
 	 * @param nbSquareY nombre de case dans la hauteur du monde
 	 */
@@ -296,6 +297,9 @@ public class World {
 		initCheckpoints();
 	}
 
+	/**
+	 * remplit le tableau du monde (board) avec des cases de verdures [4;7]
+	 */
 	public void initBackground() {
 		for (int i = 0; i < nbSquareX; i++) {
 			for (int j = 0; j < nbSquareY; j++) {
@@ -305,24 +309,27 @@ public class World {
 		}
 	}
 
+	/**
+	 * Fabrique un chemin aleatoire dans board et le complexifie avec des U inversé
+	 */
 	public void initPath() {
-//		0 case vide
 //		1 spawn
 //		2 fin
 //		3 chemin
-		// setup du spawn
+		// difinition du spawn
 		int departX = 0;
 		int departY = 0;
 		spawn = new Position(departX * squareWidth + squareWidth / 2, departY * squareHeight + squareHeight / 2);
-		// setup points de passage + chemin
+// positionnement des angles du chemin et reliage de ces points entre eux
 		// ancien point de passage
 		int precedentX = departX;
 		int precedentY = departY;
 		for (int coordY = 0; coordY < nbSquareY; coordY = coordY + 2) {
 			int aleatX = 0;
-			// génération nb aléatoire (pas 2 fois le meme d'affilé
+			// génération nb aléatoire (pas 2 fois le meme d'affile)
 			do {
-				// premiere ligne jusqu'au bout pour faire des U partout
+				// La premiere ligne va jusqu'au bout pour maximiser le nombre de U dans la 2nd
+				// partie du programme
 				if (coordY == 0) {
 					aleatX = nbSquareX - 1;
 				} else {
@@ -355,21 +362,23 @@ public class World {
 				}
 				k = precedentX < aleatX ? k + 1 : k - 1;
 			}
-			// angle du chemin
+			// angle du chemin (points de passage)
 			if (coordY < nbSquareY - 2) {
 				board[aleatX][coordY] = 3;
 			}
 			precedentX = aleatX;
 			precedentY = coordY;
 		}
+//Creation des U inverse
 		board[departX][departY] = 1;
 		board[nbSquareX - 1][nbSquareY - 1] = 2;
 		for (int Y = 0; Y < nbSquareY - 2; Y++) {
 			for (int X = 0; X < nbSquareX - 2; X++) {
-				// fait un U si pas de chemin au dessus:
+				// fait un U inverse si pas de chemin au dessus:
 				// X-0-0-0-X ///X-0-0-0-X
 				// 0-0-0-0-0 => 0-3-3-3-X
-				// X-P-3-3-X ///X-3-0-3-X
+				// X-3-3-3-X ///X-3-0-3-X
+				// schema de la condition si dessous
 				if (board[X][Y] == 3 && board[X + 1][Y] == 3 && board[X + 2][Y] == 3 && board[X][Y + 1] != 3
 						&& board[X + 1][Y + 1] != 3 && board[X + 2][Y + 1] != 3 && board[X][Y + 2] != 3
 						&& board[X + 1][Y + 2] != 3 && board[X + 2][Y + 2] != 3 && (X <= 0 || board[X - 1][Y + 1] != 3)
@@ -384,8 +393,8 @@ public class World {
 	}
 
 	/**
-	 * Definit le decor du plateau de jeu. @1 = depart @2 = arrivee @3 = chemin @4 =
-	 * garden1 @5 = garden2 @6 = garden3 @7 = garden4
+	 * Dessine le plateau de jeu. @1 = depart @2 = arrivee @3 = chemin @4 =
+	 * garden1 @5 = garden2 @6 = garden3 @7 = garden4 En vue d en faire une photo
 	 */
 	public void drawBackground() {
 		String[] tabs = { "/images/Depart.png", "/images/Arrivee.png", "/images/Chemin.png", "/images/Gazon_baies.png",
@@ -399,8 +408,8 @@ public class World {
 	}
 
 	/**
-	 * Initialise le chemin sur la position du point de depart des monstres. Cette
-	 * fonction permet d'afficher une route qui sera differente du decor.
+	 * Appelle les fonctions definient si dessus pour fabriquer l'image de fond
+	 * ImageFond.png
 	 */
 	public void initImageFond() {
 		initBackground();
@@ -441,7 +450,7 @@ public class World {
 				} else if (board[i][j] == 200) {
 					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
 							"/images/TourBombe2.png", squareWidth, squareHeight);
-					
+
 				} else if (board[i][j] == 30) {
 					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
 							"/images/RocketLauncher.png", squareWidth, squareHeight);
@@ -453,21 +462,22 @@ public class World {
 			}
 		}
 	}
-	
+
 	/**
-	 * Fonction qui parcourt le chemin en entier (de case en case) et remplit la liste "checkpoints"
-	 * avec les positions par lesquelles devront passer les monstres.
-	 * En utilisant un chemin VALIDE de [0][0] jusqu'à [nbSquareX][nbSquareY] stocké dans board
+	 * Fonction qui parcourt le chemin en entier (de case en case) et remplit la
+	 * liste "checkpoints" avec les positions par lesquelles devront passer les
+	 * monstres. En utilisant un chemin VALIDE de [0][0] jusqu'à
+	 * [nbSquareX][nbSquareY] stocké dans board
 	 */
 	public void initCheckpoints() {
-		//Coordonée où en est le parcours du chemin
+		// Coordonée où en est le parcours du chemin
 		int i = 0; // X
 		int j = 0; // Y
-		//La derniere direction prise par le parcours du chemin 
+		// La derniere direction prise par le parcours du chemin
 		int Lastdirection = 0; // 0 : -> // 1 : Down // 2 : <- // 3 : UP
-		//Tant que le parcours n'a pas trouvé la fin du chemin
+		// Tant que le parcours n'a pas trouvé la fin du chemin
 		while (board[i][j] != 2) {
-			//Determine si l'on peut continuer tout droit et sinon où il faut tourner
+			// Determine si l'on peut continuer tout droit et sinon où il faut tourner
 			switch (Lastdirection) {
 			case 0: // ->
 				// non continue?
@@ -551,7 +561,7 @@ public class World {
 				break;
 			}
 		}
-		//Rajoute le checkpoint de l'arrivé
+		// Rajoute le checkpoint de l'arrivé
 		checkpoints
 				.add(new Position((double) (nbSquareX - 0.5) * squareWidth, (double) (nbSquareY - 0.5) * squareHeight));
 	}
@@ -603,26 +613,28 @@ public class World {
 			StdDraw.picture(normalizedX, normalizedY, "/images/RocketLauncher.png", squareWidth, squareHeight);
 			break;
 		case 'e':
-			StdDraw.picture(StdDraw.mouseX(), StdDraw.mouseY(), "/images/Hammer.png", squareWidth/3, squareHeight/3);
+			StdDraw.picture(StdDraw.mouseX(), StdDraw.mouseY(), "/images/Hammer.png", squareWidth / 3,
+					squareHeight / 3);
 			break;
 		}
 	}
 
 	/**
-	 * Pour chaque monstre de la liste de monstres de la vague, utilise la fonction
-	 * update() qui appelle les fonctions run() et draw() de Monster. Modifie la
-	 * position du monstre au cours du temps a l'aide du parametre nextP.
+	 * Pour chaque monstre de la liste "monstres", utilise la fonction update() qui
+	 * appelle les fonctions run() et draw() de la class Monster. 
+	 * Retire les monstres arrives ou morts 
 	 */
 	public void updateMonsters() {
 		for (Monster monster : monsters) {
-			monster.update();
+			monster.move();
 			if (monster.reached) {
 				life--;
 				if (monster instanceof Boss) {
-					life = life-2;
+					life = life - 2;
 				}
 			}
-			if(monster.hp <= 0) gold+= monster.goldValue;
+			if (monster.hp <= 0)
+				gold += monster.goldValue;
 		}
 		monsters.removeIf(x -> (x.reached));
 		monsters.removeIf(x -> (x.hp <= 0));
@@ -653,9 +665,10 @@ public class World {
 		}
 	}
 
-	// TODO changer l'ordre des fonctions pour plus de clarté
 	/*
-	 * Fonction qui gère l'affichage des projectiles et leur déplacement
+	 * Pour chaque projectiles de la liste "monstres", utilise la fonction update() qui
+	 * appelle les fonctions run() et draw() de la class Monster. 
+	 * Retire les monstres arrives ou morts 
 	 */
 	private void updateProjectiles() {
 		for (Projectile p : projectiles) {
@@ -701,7 +714,7 @@ public class World {
 		if (start) {
 			updateMonsters();
 			updateWave();
-		}else {
+		} else {
 			StdDraw.setFont(starting);
 			StdDraw.setPenColor(StdDraw.RED);
 			StdDraw.text(0.5, 0.52, "Vous pouvez commencer à placer vos tours");
@@ -753,7 +766,7 @@ public class World {
 			}
 			break;
 		case 'g':
-			gold+=1000;
+			gold += 1000;
 			break;
 		case 'b':
 			System.out.println("Bomb Tower selected (" + BombTower.buildCost + ".)");

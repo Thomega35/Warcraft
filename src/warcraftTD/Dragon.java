@@ -17,7 +17,11 @@ public class Dragon extends Monster {
 		StdDraw.picture(position.x, position.y, "/images/Dragon.png", world.getSquareWidth(), world.getSquareHeight(), rotation);
 		StdDraw.setPenColor(StdDraw.BLACK);
 		StdDraw.setFont(HP);
-		StdDraw.text(position.x, position.y, "" + hp);
+		if (position.y + world.getSquareHeight() >= 1) {
+			StdDraw.text(position.x, position.y, "" + hp);
+		} else {
+			StdDraw.text(position.x, position.y + world.getSquareHeight()/2, "" + hp);
+		}
 	}
 
 }

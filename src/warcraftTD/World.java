@@ -602,8 +602,12 @@ public class World {
 	public void updateMonsters() {
 		for (Monster monster : monsters) {
 			monster.update();
-			if (monster.reached)
+			if (monster.reached) {
 				life--;
+				if (monster instanceof Boss) {
+					life = life-2;
+				}
+			}
 		}
 		monsters.removeIf(x -> (x.reached));
 		monsters.removeIf(x -> (x.hp <= 0));
@@ -641,10 +645,6 @@ public class World {
 	private void updateProjectiles() {
 		for (Projectile p : projectiles) {
 			p.update();
-			if (p.reached) {
-				StdDraw.picture(p.position.x, p.position.y, "/images/Depart.png", getSquareWidth(), getSquareHeight());
-				StdDraw.show();
-			}
 		}
 		projectiles.removeIf(x -> (x.out));
 		projectiles.removeIf(x -> (x.reached));

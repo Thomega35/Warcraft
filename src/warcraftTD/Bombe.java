@@ -9,13 +9,9 @@ public class Bombe extends Projectile {
 
 	@Override
 	public void draw() {
-		if (reached) {
-			StdDraw.picture(position.x, position.y, "/images/Depart.png", world.getSquareWidth(), world.getSquareHeight());
-		}else {
 			StdDraw.picture(position.x, position.y, "/images/Bombe.png", world.getSquareWidth()/3, world.getSquareHeight()/3,
 					rotation);
 			rotation = rotation +3;
-		}
 	}
 
 	@Override

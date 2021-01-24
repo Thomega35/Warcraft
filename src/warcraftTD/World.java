@@ -538,6 +538,7 @@ public class World {
 	public void drawInfos() {
 		calculFPS();
 		StdDraw.setPenColor(StdDraw.BLACK);
+		StdDraw.setFont();
 		StdDraw.text(0.06, 0.98, "gold :" + gold);
 		StdDraw.text(0.04, 0.96, "life :" + life);
 		StdDraw.text(0.04, 0.94, "FPS :" + fPS);
@@ -630,7 +631,10 @@ public class World {
 		// Vous ne devez pas faire pareil, mais ajouter une vague comportant plusieurs
 		// monstres
 		Monster monster;
-		if (wave % 5 == 0) {
+		if (wave % 10 == 0) {
+			monster = new Boss(this, new Position(spawn.x, spawn.y));
+			reserve -= 10;
+		}else if (wave % 5 == 0) {
 			monster = new Mouche(this, new Position(spawn.x, spawn.y));
 			reserve = reserve - 2;
 		} else {
@@ -647,10 +651,9 @@ public class World {
 	 * @return les points de vie restants du joueur
 	 */
 	public int update() {
-		// TODO mettre drawTower et tir dans update tower
 		drawImageFond();
 		drawInfos();
-		updateMonsters();
+		if (timer() > 20) updateMonsters();
 		if (endwave) {
 			//StdDraw.pause(2000);
 			endwave = false;
@@ -795,8 +798,9 @@ public class World {
 		globalStart = System.currentTimeMillis();
 		while (!start) {
 			drawImageFond();
-			drawInfos();
-			drawMouse();
+			StdDraw.setPenRadius(0.4);
+			StdDraw.text(0.5, 0.52, "Bienvenue sur Tower Defense !");
+			StdDraw.text(0.5, 0.48, "Appuyez sur S pour commencer la partie");
 			if (StdDraw.hasNextKeyTyped()) {
 				keyPress(StdDraw.nextKeyTyped());
 			}

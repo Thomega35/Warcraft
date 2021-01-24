@@ -11,7 +11,7 @@ public class Boss extends Monster {
 	}
 	
 	public void draw() {
-		StdDraw.picture(position.x, position.y, "/images/Boss.png", world.getSquareWidth(), world.getSquareHeight());
+		StdDraw.picture(position.x, position.y, "/images/Boss.png", world.getSquareWidth(), world.getSquareHeight(), rotation);
 	}
 	
 

@@ -23,6 +23,5 @@ public abstract class Tower {
 	
 	public abstract void upgrade();
 	
-	//TODO changer tir pour Frames
 	public abstract void tir(Monster monster);
 }

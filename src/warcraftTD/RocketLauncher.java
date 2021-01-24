@@ -1,9 +1,9 @@
 package warcraftTD;
 
-public class ArcherTower extends Tower {
+public class RocketLauncher extends Tower {
 	static int buildCost = 50;
 
-	public ArcherTower(World world, Position position) {
+	public RocketLauncher(World world, Position position) {
 		super(world, position);
 		range = 4;
 		damage = 25;
@@ -22,7 +22,8 @@ public class ArcherTower extends Tower {
 	public void tir(Monster monster) {
 		if (System.currentTimeMillis() - startTimeTir >= attackSpeed*1000.0) {
 			startTimeTir = System.currentTimeMillis();
-			world.projectiles.add(new Arrow(world, new Position(position.x, position.y), monster, damage, projectileSpeed));
+			world.projectiles.add(new Rocket(world, new Position(position.x, position.y), monster, damage, projectileSpeed));
 		}
 	}
+
 }

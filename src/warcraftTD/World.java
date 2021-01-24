@@ -390,7 +390,6 @@ public class World {
 	public void drawBackground() {
 		String[] tabs = { "/images/Depart.png", "/images/Arrivee.png", "/images/Chemin.png", "/images/Gazon_baies.png",
 				"/images/Gazon_blue_red.png", "/images/Gazon_weed.png", "/images/Gazon_jaune.png" };
-		String[] tabs2 = {};
 		for (int i = 0; i < nbSquareX; i++) {
 			for (int j = 0; j < nbSquareY; j++) {
 				StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
@@ -442,6 +441,14 @@ public class World {
 				} else if (board[i][j] == 200) {
 					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
 							"/images/TourBombe2.jpg", squareWidth, squareHeight);
+					
+				} else if (board[i][j] == 30) {
+					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
+							"/images/Archer1.jpg", squareWidth, squareHeight);
+
+				} else if (board[i][j] == 300) {
+					StdDraw.picture(i * squareWidth + squareWidth / 2, j * squareHeight + squareHeight / 2,
+							"/images/Archer2.jpg", squareWidth, squareHeight);
 				}
 			}
 		}
@@ -585,7 +592,6 @@ public class World {
 	public void drawMouse() {
 		double normalizedX = (int) (StdDraw.mouseX() / squareWidth) * squareWidth + squareWidth / 2;
 		double normalizedY = (int) (StdDraw.mouseY() / squareHeight) * squareHeight + squareHeight / 2;
-		String image = null;
 		switch (key) {
 		case 'a':
 			StdDraw.picture(normalizedX, normalizedY, "/images/Archer1.jpg", squareWidth, squareHeight);
@@ -593,9 +599,10 @@ public class World {
 		case 'b':
 			StdDraw.picture(normalizedX, normalizedY, "/images/TourBombe1.jpg", squareWidth, squareHeight);
 			break;
+		case 'r':
+			StdDraw.picture(normalizedX, normalizedY, "/images/Archer1.jpg", squareWidth, squareHeight);
+			break;
 		}
-		if (image != null)
-			StdDraw.picture(normalizedX, normalizedY, image, squareWidth, squareHeight);
 	}
 
 	/**
@@ -747,6 +754,9 @@ public class World {
 		case 'b':
 			System.out.println("Bomb Tower selected (" + BombTower.buildCost + ".)");
 			break;
+		case 'r':
+			System.out.println("Rocket Launcher selected (" + RocketLauncher.buildCost + ".)");
+			break;
 		case 'e':
 			System.out.println("Evolution selected (" + ArcherTower.upgradeCost + ".)");
 			break;
@@ -789,6 +799,14 @@ public class World {
 				gold -= BombTower.buildCost;
 				board[X][Y] = 20;
 				towers.add(new BombTower(this, position));
+				key = 'm';
+			}
+			break;
+		case 'r':
+			if (board[X][Y] > 3 && board[X][Y] < 10 && (gold >= RocketLauncher.buildCost)) {
+				gold -= RocketLauncher.buildCost;
+				board[X][Y] = 30;
+				towers.add(new RocketLauncher(this, position));
 				key = 'm';
 			}
 			break;

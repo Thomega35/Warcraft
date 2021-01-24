@@ -5,12 +5,12 @@ import java.util.Scanner;
 public class Main {
 
 	public static void main(String[] args) {
-		int width = 1200;
-		int height = 1200;
+		int width = 800;
+		int height = 800;
 		int nbSquareX = 12;
 		int nbSquareY = 12;	
 		Scanner sc = new Scanner(System.in);
-		System.out.println("Choisissez la taille du plateau (valeur par défaut : 12x12) :");
+		System.out.println("Choisissez la taille du plateau, largeur puis hauteur (Valeur conseillée : 12 puis 12) :");
 		nbSquareX = sc.nextInt();
 		nbSquareY = sc.nextInt();
 		sc.close();

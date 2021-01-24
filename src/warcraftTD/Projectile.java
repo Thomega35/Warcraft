@@ -24,7 +24,6 @@ public abstract class Projectile {
 	public abstract void draw();
 
 	public void move() {
-		// TODO deplacement projectiles
 		//position = nextPosition;
 		Position dist = obj.add(new Position(-position.x, -position.y));
 		double norme = new Position(0, 0).dist(dist);

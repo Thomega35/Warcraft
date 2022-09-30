@@ -417,7 +417,7 @@ public class World {
 		drawBackground();
 
 		StdDraw.show();
-		StdDraw.save("./src/images/ImageFond.png");
+		StdDraw.save("./ImageFond.png");
 		StdDraw.clear();
 	}
 
@@ -426,7 +426,7 @@ public class World {
 	 * uniquement avec le chemin, le départ et l'arrivée
 	 */
 	public void drawImageFond() {
-		StdDraw.picture(0.5, 0.5, "./src/images/ImageFond.png", 1, 1);
+		StdDraw.picture(0.5, 0.5, "./ImageFond.png", 1, 1);
 	}
 
 	/*

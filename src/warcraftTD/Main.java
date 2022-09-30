@@ -1,6 +1,6 @@
 package warcraftTD;
 
-import java.util.Scanner;
+//import java.util.Scanner;
 
 public class Main {
 
@@ -9,11 +9,11 @@ public class Main {
 		int height = 800;
 		int nbSquareX = 12;
 		int nbSquareY = 12;	
-		Scanner sc = new Scanner(System.in);
-		System.out.println("Choisissez la taille du plateau, largeur puis hauteur (Valeur conseillée : 12 puis 12) :");
-		nbSquareX = sc.nextInt();
-		nbSquareY = sc.nextInt();
-		sc.close();
+//		Scanner sc = new Scanner(System.in);
+//		System.out.println("Choisissez la taille du plateau, largeur puis hauteur (Valeur conseillée : 12 puis 12) :");
+		nbSquareX = 12;//sc.nextInt();
+		nbSquareY = 12;//sc.nextInt();
+//		sc.close();
 
 		World world = new World(width, height, nbSquareX, nbSquareY);
 
